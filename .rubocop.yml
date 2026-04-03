@@ -1,0 +1,22 @@
+# Style guide: https://rubystyle.guide
+# Config docs: https://docs.rubocop.org
+# Config: https://github.com/rubocop/rubocop/blob/master/config/default.yml
+
+---
+require:
+  - rubocop-ordered_methods
+  - standard
+
+plugins:
+  - rubocop-performance
+  - rubocop-rake
+  - rubocop-rubyfmt
+
+inherit_gem:
+  standard: config/base.yml
+
+AllCops:
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  NewCops: enable
+  TargetRubyVersion: 4.0
