@@ -30,8 +30,5 @@ task :init do
     end
   end
 
-  FileUtils.mkdir_p("posts")
-
   puts "Site scaffolding installed."
-  puts "Edit config.yml and .template.html, then run `rake` to build."
 end

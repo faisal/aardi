@@ -8,6 +8,7 @@ require:
   - standard
 
 plugins:
+  - rubocop-minitest
   - rubocop-performance
   - rubocop-rake
   - rubocop-rubyfmt
