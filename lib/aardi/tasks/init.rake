@@ -2,7 +2,7 @@
 
 INIT_FILES_DIR = File.expand_path("../init_files", __dir__)
 
-desc("Scaffold a new aardi site")
+desc("Scaffold a new Aardi site")
 task :init do
   Dir.glob("#{INIT_FILES_DIR}/**/*", File::FNM_DOTMATCH).each do |src|
     next if File.directory?(src)
