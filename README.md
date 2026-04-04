@@ -6,23 +6,20 @@ Aardi is a static site generator.
 
 1. Create a Gemfile:
 
-  ```
-  source "https://rubygems.org"
-  gem "aardi", path: "../aardi"
-
-  ```
+   ```
+   source "https://rubygems.org"
+   gem "aardi"
+   ```
 
 2. Create a Rakefile:
 
-  ```
-  require "bundler/setup"
-  Bundler.require(:default)
-  require "aardi/tasks"
-  ```
+   ```
+   require "bundler/setup"
+   Bundler.require(:default)
+   require "aardi/tasks"
+   ```
 
-3. Initialie the site:
-
-  `rake init`
+3. Initialize the site: rake init`
 
 4. Edit config.yml and .template.html to suit your needs.
 
