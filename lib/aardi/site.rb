@@ -8,8 +8,8 @@ module Aardi
 
     # :reek:FeatureEnvy
     def blog
-      config = Aardi.config
-      @blog ||= Blog.new(config[:blog_posts_path], config[:blog_archive_path])
+      aardi_config = Aardi.config
+      @blog ||= Blog.new(aardi_config[:blog_posts_path], aardi_config[:blog_archive_path])
     end
 
     def render

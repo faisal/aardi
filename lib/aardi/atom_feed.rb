@@ -14,13 +14,15 @@ module Aardi
 
     # :reek:TooManyStatements
     def feed_details(feed)
-      config = Aardi.config
+      aardi_config = Aardi.config
+
       feed.author do
-        name(config[:site_author])
+        name(aardi_config[:site_author])
       end
 
-      subnodes = {id: feed_url, link: {href: feed_url, rel: "self"}, title: config[:site_title],
-                  updated: updated.iso8601}
+      subnodes = {id: feed_url, link: {href: feed_url, rel: "self"},
+                  title: aardi_config[:site_title], updated: updated.iso8601}
+
       subnodes.each do |node, value|
         feed.public_send node, value
       end

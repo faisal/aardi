@@ -3,9 +3,9 @@
 module Aardi
   class JSONFeed < AbstractFeed
     def content
-      config = Aardi.config
-      feed_content = {version: "https://jsonfeed.org/version/1.1", title: config[:site_title],
-                      home_page_url: config[:site_url], feed_url:}
+      aardi_config = Aardi.config
+      feed_content = {version: "https://jsonfeed.org/version/1.1", title: aardi_config[:site_title],
+                      home_page_url: aardi_config[:site_url], feed_url:}
       feed_content[:items] = @posts.map { |post| post_details(post) }
 
       JSON.pretty_generate(feed_content)
