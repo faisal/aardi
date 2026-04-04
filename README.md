@@ -39,16 +39,7 @@ Aardi is a static site generator.
 - Unless it's in the blog posts, in which case it will be rendered as a blog post. Use `rake new` to create a new post, then write in the file.
 - The title of the page is extracted from the first line of the .md file content. You can override this with a Title: directive in the metadata.
 - Pages can have metadata, which is a key-value block followed by an empty line and then `----` on a line by itself. See the results of `rake new` for a basic example. Useful keywords there are:
-
-  `Creation:`
-  : The creation date and time for a blog posts.
-
-  `Updated:`
-  : The updated date and time for a blog post. You can get this information easily with `rake now`.
-
-  `Title:`
-  : The page title, overriding what was in the first line of the content.
-
-  `Description:`
-  : The page description, for the HTML `<meta name="description" ...` block.
-
+  - `Creation:` The creation date and time for a blog posts.
+  - `Updated:` The updated date and time for a blog post. You can get this information easily with `rake now`.
+  - `Title:` The page title, overriding what was in the first line of the content.
+  - `Description:` The page description, for the HTML `<meta name="description" ...` block.
