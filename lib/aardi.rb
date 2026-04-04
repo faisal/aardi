@@ -38,6 +38,8 @@ require_relative "aardi/sitemap"
 require_relative "aardi/orphanage"
 require_relative "aardi/site"
 
+RubyVM::YJIT.enable if RUBY_ENGINE == "ruby" && RUBY_VERSION.to_f >= 3.1
+
 module Aardi
   class << self
     def config = @config ||= Config.new
