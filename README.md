@@ -19,7 +19,7 @@ Aardi is a static site generator.
    require "aardi/tasks"
    ```
 
-3. Initialize the site: rake init`
+3. Initialize the site: `rake init`
 
 4. Edit config.yml and .template.html to suit your needs.
 
