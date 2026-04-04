@@ -1,0 +1,26 @@
+site_title: My Site
+site_url: http://localhost:8000
+site_author: Author Name
+files_to_exclude:
+  - ./blog
+  - ./posts
+ignore_orphans: []
+template_path: .template.html
+blog_archive_path: blog
+blog_posts_path: posts
+blog_feed_posts: 10
+blog_recent_posts: 10
+blog_archive_title: Blog Archive
+blog_home_title: My Site
+blog_home_posts: 10
+sitemap_entries:
+  /: daily
+markup_options:
+  autolink: false
+  fenced_code_blocks: true
+  footnotes: true
+  no_intra_emphasis: true
+  strikethrough: true
+  superscript: true
+  tables: true
+content_hashes_path: .content_hashes.txt

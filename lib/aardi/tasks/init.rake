@@ -1,64 +1,37 @@
 # frozen_string_literal: true
 
+INIT_FILES_DIR = File.expand_path("../init_files", __dir__)
+
 desc("Scaffold a new aardi site")
 task :init do
-  if File.exist?("config.yml")
-    puts "config.yml already exists, skipping"
-  else
-    File.write("config.yml", <<~YAML)
-      site_title: My Site
-      site_url: http://localhost:8000
-      site_author: Author Name
-      files_to_exclude:
-        - ./a
-        - ./posts
-      ignore_orphans: []
-      template_path: .template.html
-      blog_archive_path: a
-      blog_posts_path: posts
-      blog_feed_posts: 10
-      blog_recent_posts: 10
-      blog_archive_title: Blog Archive
-      blog_home_title: My Site
-      blog_home_posts: 10
-      sitemap_entries:
-        /: daily
-      markup_options:
-        autolink: false
-        fenced_code_blocks: true
-        footnotes: true
-        no_intra_emphasis: true
-        strikethrough: true
-        superscript: true
-        tables: true
-      content_hashes_path: .content_hashes.txt
-    YAML
-    puts "Created config.yml"
-  end
+  Dir.glob("#{INIT_FILES_DIR}/**/*", File::FNM_DOTMATCH).each do |src|
+    next if File.directory?(src)
 
-  if File.exist?(".template.html")
-    puts ".template.html already exists, skipping"
-  else
-    File.write(".template.html", <<~HTML)
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-        <title></title>
-      </head>
-      <body>
-        <main>
-        </main>
-      </body>
-      </html>
-    HTML
-    puts "Created .template.html"
+    dest = File.basename(src)
+
+    unless File.exist?(dest)
+      FileUtils.cp(src, dest)
+      puts "Created #{dest}"
+      next
+    end
+
+    loop do
+      print "#{dest} already exists. Overwrite? [y]es / [n]o: "
+      answer = $stdin.gets&.strip&.downcase
+      case answer
+      when "y"
+        FileUtils.cp(src, dest)
+        puts "Overwrote #{dest}"
+        break
+      when "n"
+        puts "Skipped #{dest}"
+        break
+      end
+    end
   end
 
   FileUtils.mkdir_p("posts")
-  puts "Created posts/ directory" unless Dir.empty?("posts")
 
-  puts "Site scaffolded. Edit config.yml, then run `rake` to build."
+  puts "Site scaffolding installed."
+  puts "Edit config.yml and .template.html, then run `rake` to build."
 end
