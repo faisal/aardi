@@ -1,0 +1,25 @@
+site_url: http://example.com
+site_title: Test Site
+site_author: Test Author
+blog_archive_path: blog
+blog_posts_path: posts
+blog_feed_posts: 10
+blog_recent_posts: 10
+blog_archive_title: Blog Archive
+blog_home_title: Test Site
+blog_home_posts: 10
+files_to_exclude:
+  - ./blog
+  - ./posts
+ignore_orphans: []
+template_path: .template.html
+content_hashes_path: .content_hashes.txt
+sitemap_entries:
+  /: daily
+markup_options:
+  autolink: false
+  fenced_code_blocks: true
+  no_intra_emphasis: true
+  strikethrough: true
+  superscript: true
+  tables: true
