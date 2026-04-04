@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.license = "MIT"
   s.files = Dir["lib/**/*"]
   s.required_ruby_version = ">= 4.0"
+  s.metadata = {"source_code_uri" => "https://www.github.com/faisal/aardi"}
 
   s.add_dependency "git"
   s.add_dependency "nokogiri"
