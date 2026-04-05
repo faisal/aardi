@@ -70,6 +70,12 @@ PreCommit:
     on_warn: fail
     requires_modified_files: false
 
+  Spec:
+    command: ['bundle', 'exec', 'rake', 'spec']
+    enabled: true
+    on_warn: fail
+    requires_modified_files: false
+
 #PreCommit:
 #  RuboCop:
 #    enabled: true
