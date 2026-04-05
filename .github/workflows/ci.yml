@@ -5,6 +5,72 @@ on:
   - push
 
 jobs:
+  HardTabs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Check for hard tabs
+        run: |
+          git grep -I -Pl $'\t' -- '*.md' '*.txt' '*.html' && echo "Hard tabs found" && exit 1 || true
+
+  LineEndings:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Check for Windows line endings
+        run: |
+          git grep -I -Pl $'\r' -- '*.md' '*.txt' '*.html' && echo "Windows line endings found" && exit 1 || true
+
+  TrailingWhitespace:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Check for trailing whitespace
+        run: |
+          git grep -I -Pl ' +$' -- '*.md' '*.txt' '*.html' && echo "Trailing whitespace found" && exit 1 || true
+
+  Bundle:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ['3.3', '3.4', '4.0', 'head']
+        include:
+          - ruby: head
+            experimental: true
+    continue-on-error: ${{ matrix.experimental == true }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Check bundle
+        run: |
+          bundle check
+
+  Spec:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ['3.3', '3.4', '4.0', 'head']
+        include:
+          - ruby: head
+            experimental: true
+    continue-on-error: ${{ matrix.experimental == true }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Run specs
+        run: |
+          bundle exec rake spec
+
   RuboCop:
     runs-on: ubuntu-latest
     steps:

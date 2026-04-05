@@ -28,28 +28,24 @@ CommitMsg:
 PreCommit:
   HardTabs:
     enabled: true
-    exclude:
-      - '*.xcodeproj/**/*'
+    include:
+      - '**/*.md'
+      - '**/*.txt'
+      - '**/*.html'
 
   LineEndings:
     enabled: true
-    exclude:
-      - '**/*.ico'
-      - '**/*.gif'
-      - '**/*.gz'
-      - '**/*.jpg'
-      - '**/*.mov'
-      - '**/*.mp3'
-      - '**/*.png'
-      - '**/*.xls'
-      - '**/*.zip'
-      - '**/*.xcuserstate'
-      - 'db/*.sqlite3*'
+    include:
+      - '**/*.md'
+      - '**/*.txt'
+      - '**/*.html'
     requires_modified_files: false
 
   TrailingWhitespace:
     enabled: true
-    exclude:
+    include:
+      - '**/*.md'
+      - '**/*.txt'
       - '**/*.html'
     requires_modified_files: false
 
