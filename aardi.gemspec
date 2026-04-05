@@ -7,6 +7,7 @@ Gem::Specification.new do |s|
   s.version = Aardi::VERSION
   s.summary = "A static site generator."
   s.authors = ["Faisal N Jawdat"]
+  s.email = "aardi@faisal.com"
   s.license = "MIT"
   s.files = Dir["lib/**/*"]
   s.required_ruby_version = ">= 4.0"
@@ -18,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency "redcarpet"
   s.add_dependency "webrick"
 
+  s.add_development_dependency "flog"
   s.add_development_dependency "reek"
   s.add_development_dependency "rubocop-minitest"
   s.add_development_dependency "rubocop-ordered_methods"
