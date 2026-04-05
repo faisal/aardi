@@ -4,7 +4,9 @@ require "spec_helper"
 
 class ArchiveSpec < Minitest::Spec
   describe Aardi::Archive do
-    before { setup_config }
+    before do
+      setup_config
+    end
 
     def make_archive(posts)
       Aardi::Archive.new(posts, "blog")
@@ -13,26 +15,30 @@ class ArchiveSpec < Minitest::Spec
     describe "#title" do
       it "returns the blog_archive_title from config" do
         archive = make_archive([])
+
         expect(archive.title).must_equal "Blog Archive"
       end
     end
 
     describe "#target_path" do
       it "uses the archive_path" do
-        expect(make_archive([]).target_path).must_equal "./blog/index.html"
+        target_path = make_archive([]).target_path
+
+        expect(target_path).must_equal "./blog/index.html"
       end
     end
 
     describe "#content" do
-      it "includes a markdown table header row" do
+      it "includes a archive table header row" do
         content = make_archive([]).content
-        expect(content).must_include "|Jan|"
-        expect(content).must_include "|Dec|"
+
+        expect(content).must_match(/\|Jan\|.*\|Dec\|/)
       end
 
       it "includes the archive title as a heading" do
         content = make_archive([]).content
-        expect(content).must_include "# Blog Archive"
+
+        expect(content).must_match(/\A# Blog Archive/)
       end
 
       it "includes rows for each year that has posts" do
@@ -41,6 +47,7 @@ class ArchiveSpec < Minitest::Spec
           StubPost.new(Time.utc(2024, 3, 1))
         ]
         content = make_archive(posts).content
+
         expect(content).must_include "2023"
         expect(content).must_include "2024"
       end
@@ -51,6 +58,7 @@ class ArchiveSpec < Minitest::Spec
           StubPost.new(Time.utc(2024, 1, 1))
         ]
         content = make_archive(posts).content
+
         expect(content.index("2024")).must_be :<, content.index("2022")
       end
     end
