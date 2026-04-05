@@ -7,51 +7,41 @@ class ConfigSpec < Minitest::Spec
     before { Aardi.reset! }
 
     describe "#load" do
-      it "transforms top-level string keys to symbols" do
-        Tempfile.create(["cfg", ".yml"]) do |file|
-          file.write({"site_url" => "http://test.com", "site_title" => "T"}.to_yaml)
+      it "reads config from file" do
+        Tempfile.create(["config", ".yml"]) do |file|
+          file.write({"site_url" => "http://example.com"}.to_yaml)
           file.flush
 
           Aardi.config.load(file.path)
         end
 
-        expect(Aardi.config[:site_url]).must_equal "http://test.com"
+        expect(Aardi.config[:site_url]).must_equal "http://example.com"
+      end
+
+      it "transforms top-level string keys to symbols" do
+        config_yaml = {"site_url" => "http://example.com", "site_title" => "T"}.to_yaml
+        Aardi.config.prepare config_yaml
+
+        expect(Aardi.config[:site_url]).must_equal "http://example.com"
       end
 
       it "transforms markup_options keys to symbols" do
-        Tempfile.create(["cfg", ".yml"]) do |file|
-          file.write({"markup_options" => {"fenced_code_blocks" => true}}.to_yaml)
-          file.flush
-
-          Aardi.config.load(file.path)
-        end
+        config_yaml = {"markup_options" => {"fenced_code_blocks" => true}}.to_yaml
+        Aardi.config.prepare config_yaml
 
         expect(Aardi.config[:markup_options][:fenced_code_blocks]).must_equal true
       end
 
       it "freezes data after loading" do
-        Tempfile.create(["cfg", ".yml"]) do |file|
-          file.write({"site_url" => "http://test.com"}.to_yaml)
-          file.flush
+        config_yaml = {"site_url" => "http://example.com"}.to_yaml
+        Aardi.config.prepare config_yaml
 
-          Aardi.config.load(file.path)
-        end
-
-        Tempfile.create(["cfg2", ".yml"]) do |file|
-          file.write({"site_url" => "http://other.com"}.to_yaml)
-          file.flush
-
-          expect(proc { Aardi.config.load(file.path) }).must_raise FrozenError
-        end
+        expect(proc { Aardi.config.prepare config_yaml }).must_raise FrozenError
       end
 
       it "returns nil for missing keys" do
-        Tempfile.create(["cfg", ".yml"]) do |file|
-          file.write({}.to_yaml)
-          file.flush
-
-          Aardi.config.load(file.path)
-        end
+        config_yaml = {}.to_yaml
+        Aardi.config.prepare config_yaml
 
         expect(Aardi.config[:nonexistent]).must_be_nil
       end
