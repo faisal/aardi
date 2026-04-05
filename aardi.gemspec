@@ -11,7 +11,13 @@ Gem::Specification.new do |s|
   s.license = "MIT"
   s.files = Dir["lib/**/*"]
   s.required_ruby_version = ">= 3.3"
-  s.metadata = {"source_code_uri" => "https://www.github.com/faisal/aardi"}
+  s.metadata = {
+    "homepage_uri" => "https://github.com/faisal/aardi",
+    "source_code_uri" => "https://github.com/faisal/aardi",
+    "bug_tracker_uri" => "https://github.com/faisal/aardi/issues",
+    "changelog_uri" => "https://github.com/faisal/aardi/blob/main/CHANGELOG.md",
+    "documentation_uri" => "https://github.com/faisal/aardi/blob/main/README.md"
+  }
 
   s.add_dependency "git"
   s.add_dependency "nokogiri"
