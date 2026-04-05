@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email = "aardi@faisal.com"
   s.license = "MIT"
   s.files = Dir["lib/**/*"]
-  s.required_ruby_version = ">= 4.0"
+  s.required_ruby_version = ">= 3.3"
   s.metadata = {"source_code_uri" => "https://www.github.com/faisal/aardi"}
 
   s.add_dependency "git"
