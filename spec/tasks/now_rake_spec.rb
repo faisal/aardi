@@ -12,13 +12,13 @@ class NowRakeSpec < Minitest::Spec
 
     it "outputs a line beginning with 'Updated: '" do
       out, = capture_io { Rake.application[:now].invoke }
-      expect(out).must_match(/^Updated: /)
+      _(out).must_match(/^Updated: /)
     end
 
     it "includes a UTC ISO8601 timestamp" do
       out, = capture_io { Rake.application[:now].invoke }
       # ISO8601 format: YYYY-MM-DDTHH:MM:SSZ
-      expect(out.chomp).must_match(/^Updated: \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/)
+      _(out.chomp).must_match(/^Updated: \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/)
     end
   end
 end

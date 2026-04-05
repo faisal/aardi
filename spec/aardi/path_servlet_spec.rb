@@ -29,31 +29,33 @@ class PathServletSpec < Minitest::Spec
       server
     end
 
-    subject { Aardi::PathServlet.new(fake_server, {}) }
+    subject do
+      Aardi::PathServlet.new(fake_server, {})
+    end
 
     it "serves index.html when the request path ends with '/'" do
       File.write("./index.html", "<html>home</html>")
       res = FakeResponse.new
       subject.service(FakeRequest.new("/"), res)
-      expect(res.body).must_include "home"
+      _(res.body).must_include "home"
     end
 
     it "serves an existing file directly" do
       File.write("./about.html", "<html>about</html>")
       res = FakeResponse.new
       subject.service(FakeRequest.new("/about.html"), res)
-      expect(res.body).must_include "about"
+      _(res.body).must_include "about"
     end
 
     it "appends .html and serves when path.html exists" do
       File.write("./contact.html", "<html>contact</html>")
       res = FakeResponse.new
       subject.service(FakeRequest.new("/contact"), res)
-      expect(res.body).must_include "contact"
+      _(res.body).must_include "contact"
     end
 
     it "raises NotFound when neither the path nor path.html exists" do
-      expect(proc { subject.service(FakeRequest.new("/missing"), FakeResponse.new) })
+      _(proc { subject.service(FakeRequest.new("/missing"), FakeResponse.new) })
         .must_raise WEBrick::HTTPStatus::NotFound
     end
   end

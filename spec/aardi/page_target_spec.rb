@@ -11,7 +11,9 @@ class PageTargetSpec < Minitest::Spec
       Aardi.ledger[:content_hashes] = Aardi::ContentHashes.new(File.join(@tmpdir, "hashes.txt"))
     end
 
-    after { FileUtils.rm_rf(@tmpdir) }
+    after do
+      FileUtils.rm_rf(@tmpdir)
+    end
 
     def target_path(name = "page.html")
       File.join(@tmpdir, name)
@@ -23,7 +25,7 @@ class PageTargetSpec < Minitest::Spec
       Aardi.ledger[:html_files].add(path)
       Aardi.ledger[:content_hashes][path] = src.output_hash
       capture_io { Aardi::PageTarget.new(src, path).write }
-      expect(Aardi.ledger[:html_files]).wont_include path
+      _(Aardi.ledger[:html_files]).wont_include path
     end
 
     it "uses html_files to determine if the file exists (not the filesystem)" do
@@ -35,8 +37,8 @@ class PageTargetSpec < Minitest::Spec
       Aardi.ledger[:content_hashes][path] = src.output_hash
       out, = capture_io { Aardi::PageTarget.new(src, path).write }
       # Should not write (treated as existing with matching hash)
-      expect(out).must_be_empty
-      expect(File.exist?(path)).must_equal false
+      _(out).must_be_empty
+      _(File.exist?(path)).must_equal false
     end
 
     it "writes and removes path from html_files when path is not in html_files" do
@@ -44,8 +46,8 @@ class PageTargetSpec < Minitest::Spec
       # Path not in html_files → treated as new → should write
       src = Aardi::PageContent.new("# Title\n", "Title")
       capture_io { Aardi::PageTarget.new(src, path).write }
-      expect(File.exist?(path)).must_equal true
-      expect(Aardi.ledger[:html_files]).wont_include path
+      _(File.exist?(path)).must_equal true
+      _(Aardi.ledger[:html_files]).wont_include path
     end
   end
 end

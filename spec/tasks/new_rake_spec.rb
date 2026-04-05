@@ -28,30 +28,30 @@ class NewRakeSpec < Minitest::Spec
       it "creates a new markdown file under the posts directory" do
         capture_io { create_new_post }
         post_files = Dir.glob("posts/**/*.md")
-        expect(post_files).wont_be_empty
+        _(post_files).wont_be_empty
       end
 
       it "prints the path of the created file" do
         out, = capture_io { create_new_post }
-        expect(out.chomp).must_match(%r{^posts/.+\.md$})
+        _(out.chomp).must_match(%r{^posts/.+\.md$})
       end
 
       it "includes a Creation timestamp in the file content" do
         capture_io { create_new_post }
         content = File.read(Dir.glob("posts/**/*.md").first)
-        expect(content).must_match(/^Creation: \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/)
+        _(content).must_match(/^Creation: \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/)
       end
 
       it "uses the ---- separator between YAML and content" do
         capture_io { create_new_post }
         content = File.read(Dir.glob("posts/**/*.md").first)
-        expect(content).must_include "\n----\n"
+        _(content).must_include "\n----\n"
       end
 
       it "includes a title placeholder in the content" do
         capture_io { create_new_post }
         content = File.read(Dir.glob("posts/**/*.md").first)
-        expect(content).must_include "### title"
+        _(content).must_include "### title"
       end
     end
   end

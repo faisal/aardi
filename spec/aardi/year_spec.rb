@@ -4,7 +4,9 @@ require "spec_helper"
 
 class YearSpec < Minitest::Spec
   describe Aardi::Year do
-    before { setup_config }
+    before do
+      setup_config
+    end
 
     def make_year(year_int = 2024)
       Aardi::Year.new(year_int, "blog")
@@ -20,19 +22,19 @@ class YearSpec < Minitest::Spec
         fmt_year = "%<year>s"
         fmt_month = "%<month>s(%<count>s)"
         row = year.archive_row(fmt_year, fmt_month)
-        expect(row).must_include "2"    # March has 2 posts
+        _(row).must_include "2"    # March has 2 posts
       end
     end
 
     describe "#title" do
       it "returns the year as a string" do
-        expect(make_year(2023).title).must_equal "2023"
+        _(make_year(2023).title).must_equal "2023"
       end
     end
 
     describe "#target_path" do
       it "includes archive_path, year, and index.html" do
-        expect(make_year(2022).target_path).must_equal "./blog/2022/index.html"
+        _(make_year(2022).target_path).must_equal "./blog/2022/index.html"
       end
     end
 
@@ -42,7 +44,7 @@ class YearSpec < Minitest::Spec
         year_fmt = "| %<year>s | %<months>s\n"
         month_fmt = "[%<count>s](http://example.com/blog/%<year>s/%<month>s/)"
         row = year.archive_row(year_fmt, month_fmt)
-        expect(row).must_include "| 2024 |"
+        _(row).must_include "| 2024 |"
       end
     end
 
@@ -51,8 +53,8 @@ class YearSpec < Minitest::Spec
         year = make_year(2024)
         year << StubPost.new(Time.utc(2024, 6, 1))
         content = year.content
-        expect(content).must_include "# 2024"
-        expect(content).must_include "June"
+        _(content).must_include "# 2024"
+        _(content).must_include "June"
       end
     end
   end

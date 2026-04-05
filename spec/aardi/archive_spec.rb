@@ -16,7 +16,7 @@ class ArchiveSpec < Minitest::Spec
       it "returns the blog_archive_title from config" do
         archive = make_archive([])
 
-        expect(archive.title).must_equal "Blog Archive"
+        _(archive.title).must_equal "Blog Archive"
       end
     end
 
@@ -24,7 +24,7 @@ class ArchiveSpec < Minitest::Spec
       it "uses the archive_path" do
         target_path = make_archive([]).target_path
 
-        expect(target_path).must_equal "./blog/index.html"
+        _(target_path).must_equal "./blog/index.html"
       end
     end
 
@@ -32,13 +32,13 @@ class ArchiveSpec < Minitest::Spec
       it "includes a archive table header row" do
         content = make_archive([]).content
 
-        expect(content).must_match(/\|Jan\|.*\|Dec\|/)
+        _(content).must_match(/\|Jan\|.*\|Dec\|/)
       end
 
       it "includes the archive title as a heading" do
         content = make_archive([]).content
 
-        expect(content).must_match(/\A# Blog Archive/)
+        _(content).must_match(/\A# Blog Archive/)
       end
 
       it "includes rows for each year that has posts" do
@@ -48,8 +48,8 @@ class ArchiveSpec < Minitest::Spec
         ]
         content = make_archive(posts).content
 
-        expect(content).must_include "2023"
-        expect(content).must_include "2024"
+        _(content).must_include "2023"
+        _(content).must_include "2024"
       end
 
       it "lists years in reverse chronological order" do
@@ -59,7 +59,7 @@ class ArchiveSpec < Minitest::Spec
         ]
         content = make_archive(posts).content
 
-        expect(content.index("2024")).must_be :<, content.index("2022")
+        _(content.index("2024")).must_be :<, content.index("2022")
       end
     end
   end

@@ -15,7 +15,7 @@ class DaySpec < Minitest::Spec
         day = make_day
         post = StubPost.new(Time.utc(2024, 1, 15))
         day << post
-        expect(day.count).must_equal 1
+        _(day.count).must_equal 1
       end
     end
 
@@ -24,7 +24,7 @@ class DaySpec < Minitest::Spec
         day = make_day
         day << StubPost.new(Time.utc(2024, 1, 15))
         day << StubPost.new(Time.utc(2024, 1, 15))
-        expect(day.count).must_equal 2
+        _(day.count).must_equal 2
       end
     end
 
@@ -32,15 +32,15 @@ class DaySpec < Minitest::Spec
       it "formats the date as a human-readable string" do
         day = make_day(15)
         # 2024-01-15 is a Monday
-        expect(day.title).must_include "January 2024"
-        expect(day.title).must_include "15"
+        _(day.title).must_include "January 2024"
+        _(day.title).must_include "15"
       end
     end
 
     describe "#target_path" do
       it "includes archive_path, year, month, day, and index.html" do
         day = make_day(5)
-        expect(day.target_path).must_equal "./blog/2024/01/05/index.html"
+        _(day.target_path).must_equal "./blog/2024/01/05/index.html"
       end
     end
 
@@ -48,16 +48,16 @@ class DaySpec < Minitest::Spec
       it "includes a heading with the day title" do
         day = make_day
         day << StubPost.new(Time.utc(2024, 1, 15))
-        expect(day.content).must_include "# "
-        expect(day.content).must_include "January 2024"
+        _(day.content).must_include "# "
+        _(day.content).must_include "January 2024"
       end
 
       it "includes content from all posts" do
         day = make_day
         day << StubPost.new(Time.utc(2024, 1, 15), title: "First")
         day << StubPost.new(Time.utc(2024, 1, 15), title: "Second")
-        expect(day.content).must_include "First"
-        expect(day.content).must_include "Second"
+        _(day.content).must_include "First"
+        _(day.content).must_include "Second"
       end
 
       it "orders posts reverse chronologically (newest first)" do
@@ -67,7 +67,7 @@ class DaySpec < Minitest::Spec
         day << older
         day << newer
         content = day.content
-        expect(content.index("Newer")).must_be :<, content.index("Older")
+        _(content.index("Newer")).must_be :<, content.index("Older")
       end
     end
   end

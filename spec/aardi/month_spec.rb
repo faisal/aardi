@@ -14,7 +14,7 @@ class MonthSpec < Minitest::Spec
         month = make_month
         post = StubPost.new(Time.utc(2024, 1, 15))
         month << post
-        expect(month.count).must_equal 1
+        _(month.count).must_equal 1
       end
     end
 
@@ -24,34 +24,36 @@ class MonthSpec < Minitest::Spec
         month << StubPost.new(Time.utc(2024, 1, 10))
         month << StubPost.new(Time.utc(2024, 1, 10))
         month << StubPost.new(Time.utc(2024, 1, 20))
-        expect(month.count).must_equal 3
+        _(month.count).must_equal 3
       end
 
       it "returns zero when no posts" do
-        expect(make_month.count).must_equal 0
+        _(make_month.count).must_equal 0
       end
     end
 
     describe "#title" do
       it "formats as month name and year" do
-        expect(make_month(3).title).must_equal "March 2024"
+        _(make_month(3).title).must_equal "March 2024"
       end
     end
 
     describe "#target_path" do
       it "includes archive_path, year, month, and index.html" do
         month = make_month(4)
-        expect(month.target_path).must_equal "./blog/2024/04/index.html"
+        _(month.target_path).must_equal "./blog/2024/04/index.html"
       end
     end
 
     describe "#archive_cell" do
-      before { setup_config }
+      before do
+        setup_config
+      end
 
       it "returns ' |' for a month with no posts" do
         month = make_month
         fmt = "[%<count>s](http://example.com/blog/%<year>s/%<month>s/)"
-        expect(month.archive_cell(fmt)).must_equal " |"
+        _(month.archive_cell(fmt)).must_equal " |"
       end
 
       it "returns a formatted link for a month with posts" do
@@ -59,8 +61,8 @@ class MonthSpec < Minitest::Spec
         month << StubPost.new(Time.utc(2024, 2, 1))
         fmt = "[%<count>s](/blog/%<year>s/%<month>s/)"
         cell = month.archive_cell(fmt)
-        expect(cell).must_include "1"
-        expect(cell).must_include "/blog/2024/02/"
+        _(cell).must_include "1"
+        _(cell).must_include "/blog/2024/02/"
       end
     end
 
@@ -68,7 +70,7 @@ class MonthSpec < Minitest::Spec
       it "includes the month title heading" do
         month = make_month(5)
         month << StubPost.new(Time.utc(2024, 5, 1))
-        expect(month.content).must_include "# May 2024"
+        _(month.content).must_include "# May 2024"
       end
     end
   end

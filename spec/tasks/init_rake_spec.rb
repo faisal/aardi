@@ -23,22 +23,22 @@ class InitRakeSpec < Minitest::Spec
 
     it "creates config.yml in the current directory" do
       capture_io { Rake.application[:init].invoke }
-      expect(File.exist?("config.yml")).must_equal true
+      _(File.exist?("config.yml")).must_equal true
     end
 
     it "creates .template.html in the current directory" do
       capture_io { Rake.application[:init].invoke }
-      expect(File.exist?(".template.html")).must_equal true
+      _(File.exist?(".template.html")).must_equal true
     end
 
     it "prints a message confirming scaffolding was installed" do
       out, = capture_io { Rake.application[:init].invoke }
-      expect(out).must_include "scaffolding installed"
+      _(out).must_include "scaffolding installed"
     end
 
     it "prints 'Created' for each new file" do
       out, = capture_io { Rake.application[:init].invoke }
-      expect(out).must_include "Created"
+      _(out).must_include "Created"
     end
 
     it "does not overwrite existing files without prompting" do
@@ -50,8 +50,8 @@ class InitRakeSpec < Minitest::Spec
       ensure
         $stdin = original_stdin
       end
-      expect(out).must_include "Skipped"
-      expect(File.read("config.yml")).must_include "original: content"
+      _(out).must_include "Skipped"
+      _(File.read("config.yml")).must_include "original: content"
     end
   end
 end
