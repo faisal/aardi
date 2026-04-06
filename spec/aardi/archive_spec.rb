@@ -42,10 +42,7 @@ class ArchiveSpec < Minitest::Spec
       end
 
       it "includes rows for each year that has posts" do
-        posts = [
-          StubPost.new(Time.utc(2023, 5, 1)),
-          StubPost.new(Time.utc(2024, 3, 1))
-        ]
+        posts = [StubPost.new(Time.utc(2023, 5, 1)), StubPost.new(Time.utc(2024, 3, 1))]
         content = make_archive(posts).content
 
         _(content).must_include "2023"
@@ -53,10 +50,7 @@ class ArchiveSpec < Minitest::Spec
       end
 
       it "lists years in reverse chronological order" do
-        posts = [
-          StubPost.new(Time.utc(2022, 1, 1)),
-          StubPost.new(Time.utc(2024, 1, 1))
-        ]
+        posts = [StubPost.new(Time.utc(2022, 1, 1)), StubPost.new(Time.utc(2024, 1, 1))]
         content = make_archive(posts).content
 
         _(content.index("2024")).must_be :<, content.index("2022")

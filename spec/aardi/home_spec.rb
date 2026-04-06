@@ -38,10 +38,7 @@ class HomeSpec < Minitest::Spec
       end
 
       it "groups posts by day with a day heading" do
-        posts = [
-          StubPost.new(Time.utc(2024, 1, 15, 9, 0), title: "Morning"),
-          StubPost.new(Time.utc(2024, 1, 15, 18, 0), title: "Evening")
-        ]
+        posts = [StubPost.new(Time.utc(2024, 1, 15, 9, 0), title: "Morning"), StubPost.new(Time.utc(2024, 1, 15, 18, 0), title: "Evening")]
         content = make_home(posts).content
         _(content).must_include "## "
         _(content).must_include "Morning"
@@ -49,10 +46,7 @@ class HomeSpec < Minitest::Spec
       end
 
       it "includes posts from different days separately" do
-        posts = [
-          StubPost.new(Time.utc(2024, 1, 10), title: "Jan 10 Post"),
-          StubPost.new(Time.utc(2024, 1, 15), title: "Jan 15 Post")
-        ]
+        posts = [StubPost.new(Time.utc(2024, 1, 10), title: "Jan 10 Post"), StubPost.new(Time.utc(2024, 1, 15), title: "Jan 15 Post")]
         content = make_home(posts).content
         _(content).must_include "Jan 10 Post"
         _(content).must_include "Jan 15 Post"

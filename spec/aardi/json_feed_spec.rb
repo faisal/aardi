@@ -44,10 +44,7 @@ class JSONFeedSpec < Minitest::Spec
       end
 
       it "includes an item for each post" do
-        posts = [
-          StubPost.new(Time.utc(2024, 1, 15), title: "Alpha"),
-          StubPost.new(Time.utc(2024, 2, 10), title: "Beta")
-        ]
+        posts = [StubPost.new(Time.utc(2024, 1, 15), title: "Alpha"), StubPost.new(Time.utc(2024, 2, 10), title: "Beta")]
         items = parsed(posts)["items"]
         titles = items.map { |item| item["title"] }
         _(titles).must_include "Alpha"

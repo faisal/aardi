@@ -44,10 +44,7 @@ class AtomFeedSpec < Minitest::Spec
       end
 
       it "includes an entry for each post" do
-        posts = [
-          StubPost.new(Time.utc(2024, 1, 15), title: "Post One"),
-          StubPost.new(Time.utc(2024, 2, 10), title: "Post Two")
-        ]
+        posts = [StubPost.new(Time.utc(2024, 1, 15), title: "Post One"), StubPost.new(Time.utc(2024, 2, 10), title: "Post Two")]
         content = make_feed(posts).content
         _(content).must_include "Post One"
         _(content).must_include "Post Two"
