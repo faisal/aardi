@@ -31,7 +31,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rubocop-ordered_methods"
   s.add_development_dependency "rubocop-performance"
   s.add_development_dependency "rubocop-rake"
-  s.add_development_dependency "rubocop-rubyfmt"
   s.add_development_dependency "rubocop"
   s.add_development_dependency "minitest"
   s.add_development_dependency "standard", ">= 1.35.1"

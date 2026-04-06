@@ -11,7 +11,6 @@ plugins:
   - rubocop-minitest
   - rubocop-performance
   - rubocop-rake
-  - rubocop-rubyfmt
 
 inherit_gem:
   standard: config/base.yml
