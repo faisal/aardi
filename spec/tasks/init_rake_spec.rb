@@ -10,8 +10,6 @@ class InitRakeSpec < Minitest::Spec
       @original_dir = Dir.pwd
       Dir.chdir(@tmpdir)
       Rake.application = Rake::Application.new
-      # init.rake defines INIT_FILES_DIR as a top-level constant; remove it before
-      # each load to avoid repeated-load warnings.
       Object.send(:remove_const, :INIT_FILES_DIR) if Object.const_defined?(:INIT_FILES_DIR)
       load File.expand_path("../../lib/aardi/tasks/init.rake", __dir__)
     end
@@ -23,21 +21,25 @@ class InitRakeSpec < Minitest::Spec
 
     it "creates config.yml in the current directory" do
       capture_io { Rake.application[:init].invoke }
+
       _(File.exist?("config.yml")).must_equal true
     end
 
     it "creates .template.html in the current directory" do
       capture_io { Rake.application[:init].invoke }
+
       _(File.exist?(".template.html")).must_equal true
     end
 
     it "prints a message confirming scaffolding was installed" do
       out, = capture_io { Rake.application[:init].invoke }
+
       _(out).must_include "scaffolding installed"
     end
 
     it "prints 'Created' for each new file" do
       out, = capture_io { Rake.application[:init].invoke }
+
       _(out).must_include "Created"
     end
 
@@ -50,6 +52,7 @@ class InitRakeSpec < Minitest::Spec
       ensure
         $stdin = original_stdin
       end
+
       _(out).must_include "Skipped"
       _(File.read("config.yml")).must_include "original: content"
     end

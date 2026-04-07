@@ -12,8 +12,9 @@ class MonthSpec < Minitest::Spec
     describe "#<<" do
       it "routes a post to the correct day" do
         month = make_month
-        post = StubPost.new(Time.utc(2024, 1, 15))
+        post = StubPost.new(Time.now)
         month << post
+
         _(month.count).must_equal 1
       end
     end
@@ -21,9 +22,10 @@ class MonthSpec < Minitest::Spec
     describe "#count" do
       it "sums post counts across all days" do
         month = make_month
-        month << StubPost.new(Time.utc(2024, 1, 10))
-        month << StubPost.new(Time.utc(2024, 1, 10))
-        month << StubPost.new(Time.utc(2024, 1, 20))
+        month << StubPost.new(Time.now)
+        month << StubPost.new(Time.now)
+        month << StubPost.new(Time.now)
+
         _(month.count).must_equal 3
       end
 
@@ -41,6 +43,7 @@ class MonthSpec < Minitest::Spec
     describe "#target_path" do
       it "includes archive_path, year, month, and index.html" do
         month = make_month(4)
+
         _(month.target_path).must_equal "./blog/2024/04/index.html"
       end
     end
@@ -53,14 +56,16 @@ class MonthSpec < Minitest::Spec
       it "returns ' |' for a month with no posts" do
         month = make_month
         fmt = "[%<count>s](http://example.com/blog/%<year>s/%<month>s/)"
+
         _(month.archive_cell(fmt)).must_equal " |"
       end
 
       it "returns a formatted link for a month with posts" do
         month = make_month(2)
-        month << StubPost.new(Time.utc(2024, 2, 1))
+        month << StubPost.new(Time.now)
         fmt = "[%<count>s](/blog/%<year>s/%<month>s/)"
         cell = month.archive_cell(fmt)
+
         _(cell).must_include "1"
         _(cell).must_include "/blog/2024/02/"
       end
@@ -69,7 +74,8 @@ class MonthSpec < Minitest::Spec
     describe "#content" do
       it "includes the month title heading" do
         month = make_month(5)
-        month << StubPost.new(Time.utc(2024, 5, 1))
+        month << StubPost.new(Time.now)
+
         _(month.content).must_include "# May 2024"
       end
     end

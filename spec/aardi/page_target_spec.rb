@@ -25,27 +25,26 @@ class PageTargetSpec < Minitest::Spec
       Aardi.ledger[:html_files].add(path)
       Aardi.ledger[:content_hashes][path] = src.output_hash
       capture_io { Aardi::PageTarget.new(src, path).write }
+
       _(Aardi.ledger[:html_files]).wont_include path
     end
 
     it "uses html_files to determine if the file exists (not the filesystem)" do
       path = target_path
-      # File doesn't exist on disk, but IS in html_files → should be treated as existing
       Aardi.ledger[:html_files].add(path)
       src = Aardi::PageContent.new("# Title\n", "Title")
-      # Seed a matching hash so the write is skipped
       Aardi.ledger[:content_hashes][path] = src.output_hash
       out, = capture_io { Aardi::PageTarget.new(src, path).write }
-      # Should not write (treated as existing with matching hash)
+
       _(out).must_be_empty
       _(File.exist?(path)).must_equal false
     end
 
     it "writes and removes path from html_files when path is not in html_files" do
       path = target_path
-      # Path not in html_files → treated as new → should write
       src = Aardi::PageContent.new("# Title\n", "Title")
       capture_io { Aardi::PageTarget.new(src, path).write }
+
       _(File.exist?(path)).must_equal true
       _(Aardi.ledger[:html_files]).wont_include path
     end

@@ -15,14 +15,13 @@ class YearSpec < Minitest::Spec
     describe "#<<" do
       it "routes a post to the correct month" do
         year = make_year
-        year << StubPost.new(Time.utc(2024, 3, 10))
-        year << StubPost.new(Time.utc(2024, 3, 15))
-        year << StubPost.new(Time.utc(2024, 7, 1))
-        # Access internal months via archive_row to check counts
-        fmt_year = "%<year>s"
-        fmt_month = "%<month>s(%<count>s)"
-        row = year.archive_row(fmt_year, fmt_month)
-        _(row).must_include "2"    # March has 2 posts
+        year << StubPost.new(Time.utc(2024, 6, 1))
+        year << StubPost.new(Time.utc(2024, 6, 15))
+        year_fmt = "%<year>s %<months>s"
+        month_fmt = "%<month>s(%<count>s)"
+        row = year.archive_row(year_fmt, month_fmt)
+
+        _(row).must_include "06(2)"
       end
     end
 
@@ -44,6 +43,7 @@ class YearSpec < Minitest::Spec
         year_fmt = "| %<year>s | %<months>s\n"
         month_fmt = "[%<count>s](http://example.com/blog/%<year>s/%<month>s/)"
         row = year.archive_row(year_fmt, month_fmt)
+
         _(row).must_include "| 2024 |"
       end
     end
@@ -53,6 +53,7 @@ class YearSpec < Minitest::Spec
         year = make_year(2024)
         year << StubPost.new(Time.utc(2024, 6, 1))
         content = year.content
+
         _(content).must_include "# 2024"
         _(content).must_include "June"
       end

@@ -3,6 +3,8 @@
 require "spec_helper"
 
 class AtomFeedSpec < Minitest::Spec
+  def posts = [StubPost.new(Time.now)]
+
   describe Aardi::ATOMFeed do
     before do
       setup_config
@@ -19,48 +21,56 @@ class AtomFeedSpec < Minitest::Spec
     end
 
     describe "#content" do
+      let(:ns) { {"atom" => "http://www.w3.org/2005/Atom"} }
+
       it "produces valid XML" do
-        posts = [StubPost.new(Time.utc(2024, 1, 15))]
         doc = Nokogiri::XML(make_feed(posts).content)
+
         _(doc.errors).must_be_empty
       end
 
       it "includes the Atom feed namespace" do
-        posts = [StubPost.new(Time.utc(2024, 1, 15))]
         content = make_feed(posts).content
+
         _(content).must_include "http://www.w3.org/2005/Atom"
       end
 
-      it "includes the site title" do
-        posts = [StubPost.new(Time.utc(2024, 1, 15))]
-        content = make_feed(posts).content
-        _(content).must_include "Test Site"
+      it "includes the site title in the feed title element" do
+        doc = Nokogiri::XML(make_feed(posts).content)
+
+        _(doc.at_xpath("//atom:title", ns).text).must_equal "Test Site"
       end
 
-      it "includes the author name" do
-        posts = [StubPost.new(Time.utc(2024, 1, 15))]
-        content = make_feed(posts).content
-        _(content).must_include "Test Author"
+      it "includes the author name in the author element" do
+        doc = Nokogiri::XML(make_feed(posts).content)
+
+        _(doc.at_xpath("//atom:author/atom:name", ns).text).must_equal "Test Author"
       end
 
       it "includes an entry for each post" do
-        posts = [StubPost.new(Time.utc(2024, 1, 15), title: "Post One"), StubPost.new(Time.utc(2024, 2, 10), title: "Post Two")]
-        content = make_feed(posts).content
-        _(content).must_include "Post One"
-        _(content).must_include "Post Two"
+        posts = [StubPost.new(Time.now, title: "Post One"), StubPost.new(Time.now, title: "Post Two")]
+        doc = Nokogiri::XML(make_feed(posts).content)
+        titles = doc.xpath("//atom:entry/atom:title", ns).map(&:text)
+
+        _(titles.length).must_equal 2
+        _(titles).must_include "Post One"
+        _(titles).must_include "Post Two"
       end
 
       it "includes the feed URL pointing to index.xml" do
-        posts = [StubPost.new(Time.utc(2024, 1, 15))]
-        content = make_feed(posts).content
-        _(content).must_include "http://example.com/index.xml"
+        doc = Nokogiri::XML(make_feed(posts).content)
+        href = doc.at_xpath("//atom:link[@rel='self']/@href", ns).value
+
+        _(href).must_equal "http://example.com/index.xml"
       end
 
       it "includes post titles and URLs in entries" do
-        post = StubPost.new(Time.utc(2024, 1, 15), title: "My Entry", name: "my-entry")
-        content = make_feed([post]).content
-        _(content).must_include "My Entry"
-        _(content).must_include post.url
+        post = StubPost.new(Time.now, title: "My Entry", name: "my-entry")
+        doc = Nokogiri::XML(make_feed([post]).content)
+        entry = doc.at_xpath("//atom:entry", ns)
+
+        _(entry.at_xpath("atom:title", ns).text).must_equal "My Entry"
+        _(entry.at_xpath("atom:link/@href", ns).value).must_equal post.url
       end
     end
   end

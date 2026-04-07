@@ -19,7 +19,6 @@ class PathServletSpec < Minitest::Spec
       FileUtils.rm_rf(@tmpdir)
     end
 
-    # WEBrick::HTTPServlet::AbstractServlet may call server.logger in initialize.
     # :reek:TooManyStatements
     def fake_server
       server = Object.new

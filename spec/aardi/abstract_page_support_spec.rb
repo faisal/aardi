@@ -2,7 +2,6 @@
 
 require "spec_helper"
 
-# Use Page / Post as concrete hosts for AbstractPageSupport
 class AbstractPageSupportSpec < Minitest::Spec
   describe Aardi::AbstractPageSupport do
     describe "#parse_source" do
@@ -32,7 +31,9 @@ class AbstractPageSupportSpec < Minitest::Spec
 
         _(page.mtime).must_equal File.mtime(page_path).utc
       end
+    end
 
+    describe "title" do
       it "extracts title from the first markdown heading when no metadata Title" do
         page = page_by_sample_path "page_heading_title.md"
 

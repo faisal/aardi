@@ -13,6 +13,7 @@ class OprhanageSpec < Minitest::Spec
         setup_config("ignore_orphans" => [])
         Aardi.ledger[:html_files] = Set.new(["./orphan.html"])
         out, = capture_io { Aardi::Orphanage.new.warn }
+
         _(out).must_include "Orphan: ./orphan.html"
       end
 
@@ -20,6 +21,7 @@ class OprhanageSpec < Minitest::Spec
         setup_config("ignore_orphans" => ["./ignored/"])
         Aardi.ledger[:html_files] = Set.new(["./ignored/page.html"])
         out, = capture_io { Aardi::Orphanage.new.warn }
+
         _(out).must_be_empty
       end
 
@@ -27,6 +29,7 @@ class OprhanageSpec < Minitest::Spec
         setup_config("ignore_orphans" => ["./ignored/"])
         Aardi.ledger[:html_files] = Set.new(["./ignored/page.html", "./visible.html"])
         out, = capture_io { Aardi::Orphanage.new.warn }
+
         _(out).must_include "visible.html"
         _(out).wont_include "ignored/page.html"
       end
@@ -35,6 +38,7 @@ class OprhanageSpec < Minitest::Spec
         setup_config
         Aardi.ledger[:html_files] = Set.new
         out, = capture_io { Aardi::Orphanage.new.warn }
+
         _(out).must_be_empty
       end
     end

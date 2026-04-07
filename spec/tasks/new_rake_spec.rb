@@ -11,8 +11,6 @@ class NewRakeSpec < Minitest::Spec
       @original_dir = Dir.pwd
       Dir.chdir(@tmpdir)
       FileUtils.mkdir_p("posts")
-      # new.rake defines create_new_post as a top-level method; silence the
-      # redefinition warning that fires on each load.
       if Object.private_method_defined?(:create_new_post) || Object.method_defined?(:create_new_post)
         Object.undef_method(:create_new_post)
       end
@@ -28,6 +26,7 @@ class NewRakeSpec < Minitest::Spec
       it "creates a new markdown file under the posts directory" do
         capture_io { create_new_post }
         post_files = Dir.glob("posts/**/*.md")
+
         _(post_files).wont_be_empty
       end
 
@@ -39,18 +38,21 @@ class NewRakeSpec < Minitest::Spec
       it "includes a Creation timestamp in the file content" do
         capture_io { create_new_post }
         content = File.read(Dir.glob("posts/**/*.md").first)
+
         _(content).must_match(/^Creation: \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/)
       end
 
       it "uses the ---- separator between YAML and content" do
         capture_io { create_new_post }
         content = File.read(Dir.glob("posts/**/*.md").first)
+
         _(content).must_include "\n----\n"
       end
 
       it "includes a title placeholder in the content" do
         capture_io { create_new_post }
         content = File.read(Dir.glob("posts/**/*.md").first)
+
         _(content).must_include "### title"
       end
     end

@@ -32,6 +32,7 @@ class ContentHashesSpec < Minitest::Spec
 
       it "stores a hash for a path" do
         subject["/foo"] = 99
+
         _(subject["/foo"]).must_equal 99
       end
     end
@@ -42,8 +43,8 @@ class ContentHashesSpec < Minitest::Spec
           path = File.join(dir, "hashes.txt")
           File.write(path, "/a: 100\n")
           hashes = Aardi::ContentHashes.new(path)
-          # Do not modify; write should be a no-op
           out, = capture_io { hashes.write }
+
           _(out).must_be_empty
           _(File.read(path)).must_equal "/a: 100\n"
         end
@@ -55,6 +56,7 @@ class ContentHashesSpec < Minitest::Spec
           hashes = Aardi::ContentHashes.new(path)
           hashes["/b"] = 200
           out, = capture_io { hashes.write }
+
           _(out).must_include "Wrote:"
           _(File.read(path)).must_include "/b: 200"
         end
@@ -68,6 +70,7 @@ class ContentHashesSpec < Minitest::Spec
           hashes["/a"] = 2
           capture_io { hashes.write }
           lines = File.readlines(path)
+
           _(lines.first).must_include "/a"
         end
       end

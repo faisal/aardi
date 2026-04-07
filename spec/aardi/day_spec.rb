@@ -13,8 +13,9 @@ class DaySpec < Minitest::Spec
     describe "#<<" do
       it "adds a post" do
         day = make_day
-        post = StubPost.new(Time.utc(2024, 1, 15))
+        post = StubPost.new(Time.now)
         day << post
+
         _(day.count).must_equal 1
       end
     end
@@ -22,8 +23,9 @@ class DaySpec < Minitest::Spec
     describe "#count" do
       it "returns the number of posts" do
         day = make_day
-        day << StubPost.new(Time.utc(2024, 1, 15))
-        day << StubPost.new(Time.utc(2024, 1, 15))
+        day << StubPost.new(Time.now)
+        day << StubPost.new(Time.now)
+
         _(day.count).must_equal 2
       end
     end
@@ -31,7 +33,7 @@ class DaySpec < Minitest::Spec
     describe "#title" do
       it "formats the date as a human-readable string" do
         day = make_day(15)
-        # 2024-01-15 is a Monday
+
         _(day.title).must_include "January 2024"
         _(day.title).must_include "15"
       end
@@ -40,6 +42,7 @@ class DaySpec < Minitest::Spec
     describe "#target_path" do
       it "includes archive_path, year, month, day, and index.html" do
         day = make_day(5)
+
         _(day.target_path).must_equal "./blog/2024/01/05/index.html"
       end
     end
@@ -47,27 +50,33 @@ class DaySpec < Minitest::Spec
     describe "#content" do
       it "includes a heading with the day title" do
         day = make_day
-        day << StubPost.new(Time.utc(2024, 1, 15))
-        _(day.content).must_include "# "
-        _(day.content).must_include "January 2024"
+        day << StubPost.new(Time.now)
+
+        _(day.content).must_match(/\A# .*January 2024/)
       end
 
       it "includes content from all posts" do
         day = make_day
-        day << StubPost.new(Time.utc(2024, 1, 15), title: "First")
-        day << StubPost.new(Time.utc(2024, 1, 15), title: "Second")
+        day << StubPost.new(Time.now, title: "First")
+        day << StubPost.new(Time.now, title: "Second")
+
         _(day.content).must_include "First"
         _(day.content).must_include "Second"
       end
 
       it "orders posts reverse chronologically (newest first)" do
         day = make_day
-        older = StubPost.new(Time.utc(2024, 1, 15, 9, 0, 0), title: "Older")
-        newer = StubPost.new(Time.utc(2024, 1, 15, 18, 0, 0), title: "Newer")
-        day << older
-        day << newer
+        base = Time.utc(2024, 1, 15, 12, 0, 0)
+        noon = StubPost.new(base, title: "Noon")
+        morning = StubPost.new(base - 3600, title: "Morning")
+        late_morning = StubPost.new(base - 1800, title: "Late Morning")
+        day << noon
+        day << morning
+        day << late_morning
         content = day.content
-        _(content.index("Newer")).must_be :<, content.index("Older")
+
+        _(content.index("Noon")).must_be :<, content.index("Late Morning")
+        _(content.index("Late Morning")).must_be :<, content.index("Morning")
       end
     end
   end

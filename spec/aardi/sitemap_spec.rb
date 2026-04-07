@@ -22,8 +22,9 @@ class SitemapSpec < Minitest::Spec
 
     describe "#update_mtime" do
       it "sets lastmod on the URL entry" do
-        time = Time.utc(2024, 6, 1, 12, 0, 0)
+        time = Time.now
         subject.update_mtime("/", time)
+
         _(subject.urls["/"][:lastmod]).must_equal time.iso8601
       end
     end
@@ -37,6 +38,7 @@ class SitemapSpec < Minitest::Spec
     describe "#content" do
       it "produces valid XML with a urlset element" do
         doc = Nokogiri::XML(subject.content)
+
         _(doc.errors).must_be_empty
         _(doc.at_xpath("//xmlns:urlset",
           "xmlns" => "http://www.sitemaps.org/schemas/sitemap/0.9")).wont_be_nil
@@ -45,20 +47,23 @@ class SitemapSpec < Minitest::Spec
       it "includes a loc element for each sitemap entry" do
         doc = Nokogiri::XML(subject.content)
         locs = doc.xpath("//xmlns:loc", "xmlns" => "http://www.sitemaps.org/schemas/sitemap/0.9").map(&:text)
+
         _(locs.any? { |loc| loc.include?("example.com") }).must_equal true
       end
 
       it "includes changefreq when present" do
         doc = Nokogiri::XML(subject.content)
         freqs = doc.xpath("//xmlns:changefreq", "xmlns" => "http://www.sitemaps.org/schemas/sitemap/0.9")
+
         _(freqs).wont_be_empty
       end
 
       it "includes lastmod when update_mtime has been called" do
-        time = Time.utc(2024, 6, 1)
+        time = Time.now
         subject.update_mtime("/", time)
         doc = Nokogiri::XML(subject.content)
         lastmods = doc.xpath("//xmlns:lastmod", "xmlns" => "http://www.sitemaps.org/schemas/sitemap/0.9")
+
         _(lastmods).wont_be_empty
       end
     end

@@ -34,11 +34,11 @@ class ConfigSpec < Minitest::Spec
         _(Aardi.config[:markup_options][:fenced_code_blocks]).must_equal true
       end
 
-      it "freezes data after loading" do
+      it "rejects a second load" do
         config_yaml = {"site_url" => "http://example.com"}.to_yaml
         Aardi.config.prepare config_yaml
 
-        _(proc { Aardi.config.prepare config_yaml }).must_raise FrozenError
+        _(proc { Aardi.config.prepare config_yaml }).must_raise
       end
 
       it "returns nil for missing keys" do

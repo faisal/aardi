@@ -19,12 +19,8 @@ class JSONFeedSpec < Minitest::Spec
     end
 
     describe "#content" do
-      def parsed(posts = [StubPost.new(Time.utc(2024, 1, 15))])
+      def parsed(posts = [StubPost.new(Time.now)])
         JSON.parse(make_feed(posts).content)
-      end
-
-      it "produces valid JSON" do
-        _(proc { parsed }).must_be_silent
       end
 
       it "uses JSON Feed version 1.1" do
@@ -44,9 +40,10 @@ class JSONFeedSpec < Minitest::Spec
       end
 
       it "includes an item for each post" do
-        posts = [StubPost.new(Time.utc(2024, 1, 15), title: "Alpha"), StubPost.new(Time.utc(2024, 2, 10), title: "Beta")]
+        posts = [StubPost.new(Time.now, title: "Alpha"), StubPost.new(Time.now, title: "Beta")]
         items = parsed(posts)["items"]
         titles = items.map { |item| item["title"] }
+
         _(titles).must_include "Alpha"
         _(titles).must_include "Beta"
       end
@@ -54,21 +51,23 @@ class JSONFeedSpec < Minitest::Spec
       it "item includes required fields: id, url, title, date_published, content_html" do
         item = parsed.dig("items", 0)
         %w[id url title date_published content_html].each do |field|
-          _(item.key?(field)).must_equal true, "expected item to have field #{field}"
+          _(item).must_include field
         end
       end
 
       it "omits date_modified when creation equals updated" do
-        post = StubPost.new(Time.utc(2024, 1, 15))
+        post = StubPost.new(Time.now)
         item = parsed([post]).dig("items", 0)
-        _(item.key?("date_modified")).must_equal false
+
+        _(item).wont_include "date_modified"
       end
 
       it "includes date_modified when updated differs from creation" do
-        post = StubPost.new(Time.utc(2024, 1, 15))
-        def post.updated = Time.utc(2024, 2, 1)
+        post = StubPost.new(Time.now)
+        def post.updated = Time.now
         item = parsed([post]).dig("items", 0)
-        _(item.key?("date_modified")).must_equal true
+
+        _(item).must_include "date_modified"
       end
     end
   end
