@@ -2,32 +2,37 @@
 
 INIT_FILES_DIR = File.expand_path("../init_files", __dir__)
 
+unless defined?(InitTask)
+  module InitTask
+    def self.install_file(src)
+      dest = File.basename(src)
+
+      if !File.exist?(dest) || prompt_overwrite?(dest)
+        FileUtils.cp(src, dest)
+        puts "Wrote #{dest}"
+      else
+        puts "Skipped #{dest}"
+      end
+    end
+
+    def self.prompt_overwrite?(filename)
+      loop do
+        print "#{filename} already exists. Overwrite? [y]es / [n]o: "
+        case $stdin.gets&.strip&.downcase
+        when "y" then return true
+        when "n" then return false
+        end
+      end
+    end
+  end
+end
+
 desc("Scaffold a new Aardi site")
 task :init do
   Dir.glob("#{INIT_FILES_DIR}/**/*", File::FNM_DOTMATCH).each do |src|
     next if File.directory?(src)
 
-    dest = File.basename(src)
-
-    unless File.exist?(dest)
-      FileUtils.cp(src, dest)
-      puts "Created #{dest}"
-      next
-    end
-
-    loop do
-      print "#{dest} already exists. Overwrite? [y]es / [n]o: "
-      answer = $stdin.gets&.strip&.downcase
-      case answer
-      when "y"
-        FileUtils.cp(src, dest)
-        puts "Overwrote #{dest}"
-        break
-      when "n"
-        puts "Skipped #{dest}"
-        break
-      end
-    end
+    InitTask.install_file(src)
   end
 
   puts "Site scaffolding installed."

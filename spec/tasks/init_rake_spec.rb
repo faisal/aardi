@@ -37,10 +37,10 @@ class InitRakeSpec < Minitest::Spec
       _(out).must_include "scaffolding installed"
     end
 
-    it "prints 'Created' for each new file" do
+    it "prints 'Wrote' for each new file" do
       out, = capture_io { Rake.application[:init].invoke }
 
-      _(out).must_include "Created"
+      _(out).must_include "Wrote"
     end
 
     it "does not overwrite existing files without prompting" do
