@@ -4,6 +4,8 @@ Aardi is a static site generator.
 
 It is a Ruby gem that provides a number of `rake` tasks for rendering markdown files into html pags.
 
+It implements as few features as reasonably possible.
+
 ## Getting started
 
 1. Create a Gemfile:
@@ -21,15 +23,17 @@ It is a Ruby gem that provides a number of `rake` tasks for rendering markdown f
    require "aardi/tasks"
    ```
 
-3. Initialize the site: `rake init`
+3. `bundle install`
 
-4. Edit config.yml and .template.html to suit your needs.
+4. Initialize the site: `rake init`
 
-5. Create .md files where you want .html files to appear.
+5. Edit config.yml and .template.html to suit your needs.
 
-6. Tun `rake render` to generate the site.
+6. Create .md files where you want .html files to appear.
 
-5. Run `rake -T` to see available commands.
+7. Tun `rake render` to generate the site.
+
+8. Run `rake -T` to see available commands.
 
 
 ## Details
@@ -56,6 +60,8 @@ It is a Ruby gem that provides a number of `rake` tasks for rendering markdown f
   - `Updated:` The updated date and time for a blog post. You can get this information easily with `rake now`.
   - `Title:` The page title, overriding what was in the first line of the content.
   - `Description:` The page description, for the HTML `<meta name="description" ...` block.
+- Aardi won't write out a file if the content is unchanged.
+- Aardi records checksums of rendered files in .content_hashes.txt, and won't write a file whose checksum maches its existing checksum. Deleting the .content_hashes.txt file may result in a more complete render pass on the next run.
 
 ## Contributing
 
