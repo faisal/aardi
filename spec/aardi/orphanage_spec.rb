@@ -8,38 +8,38 @@ class OprhanageSpec < Minitest::Spec
       Aardi.reset!
     end
 
-    describe "#warn" do
+    describe "#report" do
       it "prints paths that are in html_files but not ignored" do
         setup_config("ignore_orphans" => [])
         Aardi.ledger[:html_files] = Set.new(["./orphan.html"])
-        out, = capture_io { Aardi::Orphanage.new.warn }
+        _, err = capture_io { Aardi::Orphanage.new.report }
 
-        _(out).must_include "Orphan: ./orphan.html"
+        _(err).must_include "Orphan: ./orphan.html"
       end
 
       it "does not print paths matching an ignore_orphans prefix" do
         setup_config("ignore_orphans" => ["./ignored/"])
         Aardi.ledger[:html_files] = Set.new(["./ignored/page.html"])
-        out, = capture_io { Aardi::Orphanage.new.warn }
+        _, err = capture_io { Aardi::Orphanage.new.report }
 
-        _(out).must_be_empty
+        _(err).must_be_empty
       end
 
       it "prints non-ignored paths while silencing ignored ones" do
         setup_config("ignore_orphans" => ["./ignored/"])
         Aardi.ledger[:html_files] = Set.new(["./ignored/page.html", "./visible.html"])
-        out, = capture_io { Aardi::Orphanage.new.warn }
+        _, err = capture_io { Aardi::Orphanage.new.report }
 
-        _(out).must_include "visible.html"
-        _(out).wont_include "ignored/page.html"
+        _(err).must_include "visible.html"
+        _(err).wont_include "ignored/page.html"
       end
 
       it "does nothing when html_files is empty" do
         setup_config
         Aardi.ledger[:html_files] = Set.new
-        out, = capture_io { Aardi::Orphanage.new.warn }
+        _, err = capture_io { Aardi::Orphanage.new.report }
 
-        _(out).must_be_empty
+        _(err).must_be_empty
       end
     end
   end

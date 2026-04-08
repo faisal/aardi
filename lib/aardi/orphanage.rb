@@ -2,8 +2,8 @@
 
 module Aardi
   class Orphanage
-    def warn
-      Aardi.ledger[:html_files].each { |path| puts("Orphan: #{path}") unless ignored?(path) }
+    def report
+      Aardi.ledger[:html_files].each { |path| warn("Orphan: #{path}") unless ignored?(path) }
     end
 
     private

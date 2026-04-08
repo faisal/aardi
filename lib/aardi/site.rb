@@ -59,7 +59,7 @@ module Aardi
     end
 
     def warn_about_orphans
-      Orphanage.new.warn
+      Orphanage.new.report
     end
 
     def write_target
