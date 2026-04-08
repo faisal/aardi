@@ -7,7 +7,7 @@ module Aardi
       @normalized_path = "#{path.sub(/^\./, "")}/"
     end
 
-    def mtime = children.max_by(&:mtime).mtime
+    def mtime = children.max_by(&:mtime)&.mtime
 
     def render
       children.each(&:render)
