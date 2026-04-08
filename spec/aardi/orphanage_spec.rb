@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-class OprhanageSpec < Minitest::Spec
+class OrphanageSpec < Minitest::Spec
   describe Aardi::Orphanage do
     before do
       Aardi.reset!
