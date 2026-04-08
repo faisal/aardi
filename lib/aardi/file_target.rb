@@ -33,7 +33,7 @@ module Aardi
       return true unless file_exists?
       return false unless output_hash_changed?
 
-      @src.output != File.read(@path).strip
+      @src.output != File.read(@path).strip # in case cache missing (or corrupt) yet file good.
     end
 
     def update_hash
