@@ -41,6 +41,14 @@ class OprhanageSpec < Minitest::Spec
 
         _(err).must_be_empty
       end
+
+      it "does not crash when ignore_orphans is absent from config" do
+        setup_config("ignore_orphans" => nil)
+        Aardi.ledger[:html_files] = Set.new(["./orphan.html"])
+        _, err = capture_io { Aardi::Orphanage.new.report }
+
+        _(err).must_include "Orphan: ./orphan.html"
+      end
     end
   end
 end

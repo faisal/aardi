@@ -9,7 +9,7 @@ module Aardi
     private
 
     def ignored?(path)
-      Aardi.config[:ignore_orphans].any? { |prefix| path.start_with?(prefix) }
+      Array(Aardi.config[:ignore_orphans]).any? { |prefix| path.start_with?(prefix) }
     end
   end
 end
