@@ -1,3 +1,8 @@
+# v0.93
+
+- Orphan files warning now goes to STDERR rather than STDOUT
+- Add ruby-lsp to development dependies, for use in development.
+
 # v0.9.2
 
 - Lowered minimum Ruby to 3.3.
