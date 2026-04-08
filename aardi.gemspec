@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "flog"
   s.add_development_dependency "reek"
+  s.add_development_dependency "ruby-lsp"
   s.add_development_dependency "rubocop-minitest"
   s.add_development_dependency "rubocop-ordered_methods"
   s.add_development_dependency "rubocop-performance"
