@@ -7,6 +7,7 @@ module Aardi
     def initialize(path)
       @path = path
       parse_source path
+      raise "#{path}: missing Creation metadata" unless metadata["Creation"]
     end
 
     def content
