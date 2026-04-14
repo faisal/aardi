@@ -34,7 +34,7 @@ module Aardi
     end
 
     def header
-      "# #{Aardi.config[:blog_archive_title]}
+      "# #{title}
 
 ||Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
