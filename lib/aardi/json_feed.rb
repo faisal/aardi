@@ -26,7 +26,7 @@ module Aardi
 
       details[:date_modified] = post_updated.iso8601 unless post_creation == post_updated
 
-      details.compact
+      details
     end
   end
 end
