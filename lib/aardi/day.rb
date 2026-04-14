@@ -18,7 +18,7 @@ module Aardi
     def content
       @content ||= begin
         sorted_posts = @posts.sort_by(&:creation)
-        posts_content = sorted_posts.reverse!.map!(&:content)
+        posts_content = sorted_posts.reverse.map(&:content)
         "# #{title}\n#{posts_content.join}"
       end
     end

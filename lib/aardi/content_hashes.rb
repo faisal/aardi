@@ -25,7 +25,7 @@ module Aardi
     private
 
     def new_hashes
-      @new_hashes ||= @hashes.sort.map! { |path, hash| "#{path}: #{hash}\n" }.join
+      @new_hashes ||= @hashes.sort.map { |path, hash| "#{path}: #{hash}\n" }.join
     end
 
     def read_hashes
