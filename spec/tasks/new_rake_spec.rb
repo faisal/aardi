@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-require "spec_helper"
-require "rake"
+require 'spec_helper'
+require 'rake'
 
 class NewRakeSpec < Minitest::Spec
-  describe "rake new / create_new_post" do
+  describe 'rake new / create_new_post' do
     before do
       setup_config
       @tmpdir = Dir.mktmpdir
       @original_dir = Dir.pwd
       Dir.chdir(@tmpdir)
-      FileUtils.mkdir_p("posts")
+      FileUtils.mkdir_p('posts')
       if Object.private_method_defined?(:create_new_post) || Object.method_defined?(:create_new_post)
         Object.undef_method(:create_new_post)
       end
-      load File.expand_path("../../lib/aardi/tasks/new.rake", __dir__)
+      load File.expand_path('../../lib/aardi/tasks/new.rake', __dir__)
     end
 
     after do
@@ -22,38 +22,38 @@ class NewRakeSpec < Minitest::Spec
       FileUtils.rm_rf(@tmpdir)
     end
 
-    describe "#create_new_post" do
-      it "creates a new markdown file under the posts directory" do
+    describe '#create_new_post' do
+      it 'creates a new markdown file under the posts directory' do
         capture_io { create_new_post }
-        post_files = Dir.glob("posts/**/*.md")
+        post_files = Dir.glob('posts/**/*.md')
 
         _(post_files).wont_be_empty
       end
 
-      it "prints the path of the created file" do
+      it 'prints the path of the created file' do
         out, = capture_io { create_new_post }
         _(out.chomp).must_match(%r{^posts/.+\.md$})
       end
 
-      it "includes a Creation timestamp in the file content" do
+      it 'includes a Creation timestamp in the file content' do
         capture_io { create_new_post }
-        content = File.read(Dir.glob("posts/**/*.md").first)
+        content = File.read(Dir.glob('posts/**/*.md').first)
 
         _(content).must_match(/^Creation: \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/)
       end
 
-      it "uses the ---- separator between YAML and content" do
+      it 'uses the ---- separator between YAML and content' do
         capture_io { create_new_post }
-        content = File.read(Dir.glob("posts/**/*.md").first)
+        content = File.read(Dir.glob('posts/**/*.md').first)
 
         _(content).must_include "\n----\n"
       end
 
-      it "includes a title placeholder in the content" do
+      it 'includes a title placeholder in the content' do
         capture_io { create_new_post }
-        content = File.read(Dir.glob("posts/**/*.md").first)
+        content = File.read(Dir.glob('posts/**/*.md').first)
 
-        _(content).must_include "### title"
+        _(content).must_include '### title'
       end
     end
   end

@@ -12,11 +12,11 @@ module Aardi
     end
 
     def render
-      Aardi.ledger[:sitemap].update_mtime("/", mtime)
+      Aardi.ledger[:sitemap].update_mtime('/', mtime)
       write_target
     end
 
-    def target_path = "./index.html"
+    def target_path = './index.html'
 
     def title = Aardi.config[:blog_home_title]
 
@@ -35,11 +35,11 @@ module Aardi
     end
 
     def days_hash
-      @days_hash ||= @posts.group_by { |post| post.creation.strftime("%Y-%m-%d") }
+      @days_hash ||= @posts.group_by { |post| post.creation.strftime('%Y-%m-%d') }
     end
 
     def post_day_content(post_day)
-      date_header = post_day.first.creation.strftime("%A, %e %B %Y")
+      date_header = post_day.first.creation.strftime('%A, %e %B %Y')
       posts_content = post_day.map(&:content).join
       "## #{date_header}\n#{posts_content}"
     end

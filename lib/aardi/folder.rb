@@ -4,7 +4,7 @@ module Aardi
   class Folder
     def initialize(path)
       @path = path
-      @normalized_path = "#{path.sub(/^\./, "")}/"
+      @normalized_path = "#{path.sub(/^\./, '')}/"
     end
 
     def mtime = children.max_by(&:mtime)&.mtime
@@ -30,12 +30,12 @@ module Aardi
     end
 
     def sources
-      @sources ||= paths.filter_map { |path| Page.new(path) if path.end_with?(".md") }
+      @sources ||= paths.filter_map { |path| Page.new(path) if path.end_with?('.md') }
     end
 
     def update_sitemap
       # '.' is the top level so skip it since the homepage will register itself
-      Aardi.ledger[:sitemap].update_mtime(@normalized_path, mtime) unless @path == "."
+      Aardi.ledger[:sitemap].update_mtime(@normalized_path, mtime) unless @path == '.'
     end
   end
 end

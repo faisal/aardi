@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require "webrick"
+require 'webrick'
 
 module Aardi
   class PathServlet < WEBrick::HTTPServlet::AbstractServlet
     def service(req, res)
       # use index if folder
-      path = "./#{req.path}".sub(%r{/$}, "/index.html")
+      path = "./#{req.path}".sub(%r{/$}, '/index.html')
 
       file = path if File.exist?(path)
       file ||= "#{path}.html" if File.exist?("#{path}.html")

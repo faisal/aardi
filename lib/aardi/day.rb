@@ -29,7 +29,7 @@ module Aardi
       "./#{@archive_path}/#{@year}/#{@month}/#{self}/index.html"
     end
 
-    def title = date.strftime("%A, %-e %B %Y")
+    def title = date.strftime('%A, %-e %B %Y')
 
     private
 
@@ -39,6 +39,6 @@ module Aardi
 
     def date = Date.new(@year.key, @month.key, @key)
 
-    def to_s = @key.to_s.rjust(2, "0")
+    def to_s = @key.to_s.rjust(2, '0')
   end
 end

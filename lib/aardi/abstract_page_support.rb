@@ -5,7 +5,7 @@ module Aardi
     attr_reader :metadata, :mtime
 
     def parse_source(path)
-      File.open(path, encoding: "utf-8") do |file|
+      File.open(path, encoding: 'utf-8') do |file|
         parts = file.read.rpartition("\n----\n")
         @metadata = YAML.safe_load(parts.first, permitted_classes: [Time]) || {}
         @src_content = parts.last
@@ -14,7 +14,7 @@ module Aardi
     end
 
     def title
-      metadata["Title"] || @src_content.split("\n").first.sub(/^#+ /, "")
+      metadata['Title'] || @src_content.split("\n").first.sub(/^#+ /, '')
     end
   end
 end

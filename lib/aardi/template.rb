@@ -24,18 +24,18 @@ module Aardi
     private
 
     def add_description(dom, src)
-      description = src.metadata["Description"]
+      description = src.metadata['Description']
       return unless description
 
-      dom.at_css('meta[name="description"]')["content"] = description
+      dom.at_css('meta[name="description"]')['content'] = description
     end
 
     def add_main(dom, src)
-      dom.at_css("main").add_child(Aardi.ledger[:markdown_renderer].render(src.content))
+      dom.at_css('main').add_child(Aardi.ledger[:markdown_renderer].render(src.content))
     end
 
     def add_title(dom, src)
-      dom.at_css("title").content += " #{src.title}"
+      dom.at_css('title').content += " #{src.title}"
     end
   end
 end

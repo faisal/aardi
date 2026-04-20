@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-require "aardi"
+require 'aardi'
 
-Dir[File.join(__dir__, "tasks", "*.rake")].each { |f| load f }
+Dir[File.join(__dir__, 'tasks', '*.rake')].each { |f| load f }

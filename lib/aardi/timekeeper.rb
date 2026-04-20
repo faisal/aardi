@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "git"
+require 'git'
 
 module Aardi
   # :reek:TooManyInstanceVariables

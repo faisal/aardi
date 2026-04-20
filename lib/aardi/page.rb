@@ -19,7 +19,7 @@ module Aardi
     end
 
     def target_path
-      @path.pathmap("%X.html")
+      @path.pathmap('%X.html')
     end
   end
 end

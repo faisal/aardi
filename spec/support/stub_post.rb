@@ -5,7 +5,7 @@
 class StubPost
   attr_reader :mtime, :creation, :updated, :year, :month, :day, :title, :name, :url, :path
 
-  def initialize(creation_time, title: "Test Post", name: "test-post")
+  def initialize(creation_time, title: 'Test Post', name: 'test-post')
     @creation = creation_time
     @updated = creation_time
     @year = creation_time.year
@@ -13,7 +13,7 @@ class StubPost
     @day = creation_time.day
     @title = title
     @name = name
-    @url = "http://example.com/blog/#{format("%04d/%02d/%02d", @year, @month, @day)}/#{name}"
+    @url = "http://example.com/blog/#{format('%<y>04d/%<m>02d/%<d>02d', y: @year, m: @month, d: @day)}/#{name}"
     @mtime = creation_time
     @path = "posts/#{name}.md"
   end
@@ -27,6 +27,6 @@ class StubPost
   end
 
   def report_field_summary
-    puts "#{@creation.strftime("%-e %b %Y")} | #{@path} | #{@title}"
+    puts "#{@creation.strftime('%-e %b %Y')} | #{@path} | #{@title}"
   end
 end

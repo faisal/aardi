@@ -21,7 +21,7 @@ module Aardi
     private
 
     def children
-      [Folder.new("."), blog, sitemap]
+      [Folder.new('.'), blog, sitemap]
     end
 
     def content_hashes
@@ -33,7 +33,7 @@ module Aardi
     end
 
     def html_files
-      @html_files ||= Dir.glob("./**/*.html").to_set
+      @html_files ||= Dir.glob('./**/*.html').to_set
     end
 
     def initialize_ledger
@@ -41,7 +41,7 @@ module Aardi
       # set up content hashes so they're in place while building out the rest
       ledger[:content_hashes] = content_hashes
 
-      {custom_renderer:, markdown_renderer:, html_files:, sitemap:, template:}.each do |message, value|
+      { custom_renderer:, markdown_renderer:, html_files:, sitemap:, template: }.each do |message, value|
         ledger[message] = value
       end
     end
@@ -62,7 +62,6 @@ module Aardi
       Orphanage.new.report
     end
 
-    def write_target
-    end
+    def write_target; end
   end
 end

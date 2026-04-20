@@ -1,3 +1,5 @@
+- Switched from Standard Ruby to plain Rubocop for linting.
+
 # v0.93
 
 - Orphan files warning now goes to STDERR rather than STDOUT

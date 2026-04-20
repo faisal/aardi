@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-INIT_FILES_DIR = File.expand_path("../init_files", __dir__)
+INIT_FILES_DIR = File.expand_path('../init_files', __dir__)
 
 unless defined?(InitTask)
   module InitTask
@@ -19,15 +19,15 @@ unless defined?(InitTask)
       loop do
         print "#{filename} already exists. Overwrite? [y]es / [n]o: "
         case $stdin.gets&.strip&.downcase
-        when "y" then return true
-        when "n" then return false
+        when 'y' then return true
+        when 'n' then return false
         end
       end
     end
   end
 end
 
-desc("Scaffold a new Aardi site")
+desc('Scaffold a new Aardi site')
 task :init do
   Dir.glob("#{INIT_FILES_DIR}/**/*", File::FNM_DOTMATCH).each do |src|
     next if File.directory?(src)
@@ -35,5 +35,5 @@ task :init do
     InitTask.install_file(src)
   end
 
-  puts "Site scaffolding installed."
+  puts 'Site scaffolding installed.'
 end

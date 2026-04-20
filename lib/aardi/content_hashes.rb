@@ -29,9 +29,9 @@ module Aardi
     end
 
     def read_hashes
-      @original_hashes = File.exist?(@path) ? File.read(@path) : ""
+      @original_hashes = File.exist?(@path) ? File.read(@path) : ''
       @hashes = @original_hashes.split("\n").to_h do |line|
-        path, hash = line.split(":", 2)
+        path, hash = line.split(':', 2)
         [path.strip, hash.to_i]
       end
     end

@@ -1,46 +1,46 @@
 # frozen_string_literal: true
 
-require "spec_helper"
+require 'spec_helper'
 
 class ContentHashesSpec < Minitest::Spec
   describe Aardi::ContentHashes do
-    describe "when file does not exist" do
+    describe 'when file does not exist' do
       subject do
-        Aardi::ContentHashes.new("/nonexistent_hashes_file")
+        Aardi::ContentHashes.new('/nonexistent_hashes_file')
       end
 
-      it "starts with no stored hashes" do
-        _(subject["/some/path"]).must_be_nil
+      it 'starts with no stored hashes' do
+        _(subject['/some/path']).must_be_nil
       end
     end
 
-    describe "when file exists" do
-      it "reads existing hashes" do
-        Tempfile.create(["hashes", ".txt"]) do |file|
+    describe 'when file exists' do
+      it 'reads existing hashes' do
+        Tempfile.create(['hashes', '.txt']) do |file|
           file.write("/path/to/file: 12345\n")
           file.flush
           hashes = Aardi::ContentHashes.new(file.path)
-          _(hashes["/path/to/file"]).must_equal 12_345
+          _(hashes['/path/to/file']).must_equal 12_345
         end
       end
     end
 
-    describe "#[]=" do
+    describe '#[]=' do
       subject do
-        Aardi::ContentHashes.new("/nonexistent_hashes_file")
+        Aardi::ContentHashes.new('/nonexistent_hashes_file')
       end
 
-      it "stores a hash for a path" do
-        subject["/foo"] = 99
+      it 'stores a hash for a path' do
+        subject['/foo'] = 99
 
-        _(subject["/foo"]).must_equal 99
+        _(subject['/foo']).must_equal 99
       end
     end
 
-    describe "#write" do
-      it "does not write when hashes are unchanged" do
+    describe '#write' do
+      it 'does not write when hashes are unchanged' do
         Dir.mktmpdir do |dir|
-          path = File.join(dir, "hashes.txt")
+          path = File.join(dir, 'hashes.txt')
           File.write(path, "/a: 100\n")
           hashes = Aardi::ContentHashes.new(path)
           out, = capture_io { hashes.write }
@@ -50,28 +50,28 @@ class ContentHashesSpec < Minitest::Spec
         end
       end
 
-      it "writes updated hashes and prints a message" do
+      it 'writes updated hashes and prints a message' do
         Dir.mktmpdir do |dir|
-          path = File.join(dir, "hashes.txt")
+          path = File.join(dir, 'hashes.txt')
           hashes = Aardi::ContentHashes.new(path)
-          hashes["/b"] = 200
+          hashes['/b'] = 200
           out, = capture_io { hashes.write }
 
-          _(out).must_include "Wrote:"
-          _(File.read(path)).must_include "/b: 200"
+          _(out).must_include 'Wrote:'
+          _(File.read(path)).must_include '/b: 200'
         end
       end
 
-      it "sorts hashes alphabetically when writing" do
+      it 'sorts hashes alphabetically when writing' do
         Dir.mktmpdir do |dir|
-          path = File.join(dir, "hashes.txt")
+          path = File.join(dir, 'hashes.txt')
           hashes = Aardi::ContentHashes.new(path)
-          hashes["/z"] = 1
-          hashes["/a"] = 2
+          hashes['/z'] = 1
+          hashes['/a'] = 2
           capture_io { hashes.write }
           lines = File.readlines(path)
 
-          _(lines.first).must_include "/a"
+          _(lines.first).must_include '/a'
         end
       end
     end

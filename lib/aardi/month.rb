@@ -14,7 +14,7 @@ module Aardi
     end
 
     def archive_cell(month_fmt)
-      cell = count.zero? ? "" : format(month_fmt, count:, archive_path: @archive_path, year: @year, month: self)
+      cell = count.zero? ? '' : format(month_fmt, count:, archive_path: @archive_path, year: @year, month: self)
       "#{cell} |"
     end
 
@@ -31,9 +31,9 @@ module Aardi
       "./#{@archive_path}/#{@year}/#{self}/index.html"
     end
 
-    def title = Date.new(@year.key, @key).strftime("%B %Y")
+    def title = Date.new(@year.key, @key).strftime('%B %Y')
 
-    def to_s = @key.to_s.rjust(2, "0")
+    def to_s = @key.to_s.rjust(2, '0')
 
     private
 

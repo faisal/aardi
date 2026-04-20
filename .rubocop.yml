@@ -11,11 +11,26 @@ plugins:
   - rubocop-performance
   - rubocop-rake
 
-inherit_gem:
-  standard: config/base.yml
-
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
   NewCops: enable
   TargetRubyVersion: 3.3
+
+Lint/MissingSuper:
+  Enabled: false
+
+Metrics/AbcSize:
+  Exclude:
+    - "spec/**/*"
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
+
+Metrics/MethodLength:
+  Exclude:
+    - "spec/**/*"
+
+Style/Documentation:
+  Enabled: false
