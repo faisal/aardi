@@ -2,13 +2,9 @@
 
 module Aardi
   class Blog < AbstractBlog
-    def initialize(posts_path, archive_path)
-      @posts_path = posts_path
-      @archive_path = archive_path
-    end
-
-    def posts
-      @posts ||= Dir.glob("#{@posts_path}/**/*.md").map { |post_path| Post.new(post_path) }.sort_by(&:creation)
+    def initialize(posts, opts = {})
+      @posts = posts
+      @archive_path = opts[:archive_path] || Aardi.config[:blog_archive_path]
     end
 
     def report_recent
@@ -18,7 +14,7 @@ module Aardi
     private
 
     def archive
-      Archive.new(posts, @archive_path)
+      Archive.new(@posts, @archive_path)
     end
 
     def atom_feed
@@ -42,7 +38,7 @@ module Aardi
     end
 
     def recent_posts(conf_key)
-      posts.last(Aardi.config[conf_key]).reverse
+      @posts.last(Aardi.config[conf_key]).reverse
     end
 
     def write_target = nil

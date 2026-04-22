@@ -2,60 +2,38 @@
 
 module Aardi
   class Site < AbstractBlog
+    # rubocop:disable Metrics/AbcSize
     def initialize
-      initialize_ledger
-    end
+      @config = Aardi.config
+      @ledger = Aardi.ledger
 
-    # :reek:FeatureEnvy
+      # set up content hashes so they're in place while building out the rest
+      @ledger[:content_hashes] = ContentHashes.new @config[:content_hashes_path]
+
+      @ledger[:custom_renderer] = CustomRenderer.new
+      @ledger[:markdown_renderer] = Redcarpet::Markdown.new @ledger[:custom_renderer], @config[:markup_options]
+      @ledger[:html_files] = Dir.glob('./**/*.html').to_set
+      @ledger[:sitemap] = Sitemap.new
+      @ledger[:template] = Template.new @config[:template_path]
+
+      @posts = Dir.glob("#{@config[:blog_posts_path]}/**/*.md").map { |path| Post.new(path) }.sort_by(&:creation)
+    end
+    # rubocop:enable Metrics/AbcSize
+
     def blog
-      aardi_config = Aardi.config
-      @blog ||= Blog.new(aardi_config[:blog_posts_path], aardi_config[:blog_archive_path])
+      Blog.new @posts
     end
 
     def render
       super
-      content_hashes.write
+      @ledger[:content_hashes].write
       warn_about_orphans
     end
 
     private
 
     def children
-      [Folder.new('.'), blog, sitemap]
-    end
-
-    def content_hashes
-      @content_hashes ||= ContentHashes.new(Aardi.config[:content_hashes_path])
-    end
-
-    def custom_renderer
-      @custom_renderer ||= CustomRenderer.new
-    end
-
-    def html_files
-      @html_files ||= Dir.glob('./**/*.html').to_set
-    end
-
-    def initialize_ledger
-      ledger = Aardi.ledger
-      # set up content hashes so they're in place while building out the rest
-      ledger[:content_hashes] = content_hashes
-
-      { custom_renderer:, markdown_renderer:, html_files:, sitemap:, template: }.each do |message, value|
-        ledger[message] = value
-      end
-    end
-
-    def markdown_renderer
-      Redcarpet::Markdown.new(custom_renderer, Aardi.config[:markup_options])
-    end
-
-    def sitemap
-      @sitemap ||= Sitemap.new
-    end
-
-    def template
-      Template.new Aardi.config[:template_path]
+      [Folder.new('.'), blog, @ledger[:sitemap]]
     end
 
     def warn_about_orphans
