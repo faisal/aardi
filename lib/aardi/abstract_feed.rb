@@ -26,7 +26,7 @@ module Aardi
 
     def write_target
       source = Content.new(content)
-      FileTarget.new(source, target_path).write
+      FileTarget.new(source, target_path, ledger: Aardi.ledger).write
     end
   end
 end

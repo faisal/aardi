@@ -15,7 +15,7 @@ module Aardi
 
     def render
       page_content = PageContent.new(content, title, metadata)
-      PageTarget.new(page_content, target_path).write
+      PageTarget.new(page_content, target_path, ledger: Aardi.ledger).write
     end
 
     def target_path

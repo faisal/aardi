@@ -17,7 +17,7 @@ module Aardi
 
     def render
       source = Content.new(content)
-      FileTarget.new(source, target_path).write
+      FileTarget.new(source, target_path, ledger: Aardi.ledger).write
     end
 
     def target_path = './sitemap.xml'

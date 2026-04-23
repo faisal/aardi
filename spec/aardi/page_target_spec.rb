@@ -24,7 +24,7 @@ class PageTargetSpec < Minitest::Spec
       src = Aardi::PageContent.new("# Title\n", 'Title')
       Aardi.ledger[:html_files].add(path)
       Aardi.ledger[:content_hashes][path] = src.output_hash
-      capture_io { Aardi::PageTarget.new(src, path).write }
+      capture_io { Aardi::PageTarget.new(src, path, ledger: Aardi.ledger).write }
 
       _(Aardi.ledger[:html_files]).wont_include path
     end
@@ -34,7 +34,7 @@ class PageTargetSpec < Minitest::Spec
       Aardi.ledger[:html_files].add(path)
       src = Aardi::PageContent.new("# Title\n", 'Title')
       Aardi.ledger[:content_hashes][path] = src.output_hash
-      out, = capture_io { Aardi::PageTarget.new(src, path).write }
+      out, = capture_io { Aardi::PageTarget.new(src, path, ledger: Aardi.ledger).write }
 
       _(out).must_be_empty
       _(File.exist?(path)).must_equal false
@@ -43,7 +43,7 @@ class PageTargetSpec < Minitest::Spec
     it 'writes and removes path from html_files when path is not in html_files' do
       path = target_path
       src = Aardi::PageContent.new("# Title\n", 'Title')
-      capture_io { Aardi::PageTarget.new(src, path).write }
+      capture_io { Aardi::PageTarget.new(src, path, ledger: Aardi.ledger).write }
 
       _(File.exist?(path)).must_equal true
       _(Aardi.ledger[:html_files]).wont_include path

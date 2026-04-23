@@ -2,10 +2,11 @@
 
 module Aardi
   class FileTarget
-    def initialize(src, target_path)
+    def initialize(src, target_path, ledger:)
       @src = src
       @path = target_path
-      @content_hashes = Aardi.ledger[:content_hashes]
+      @ledger = ledger
+      @content_hashes = @ledger[:content_hashes]
     end
 
     # :reek:TooManyStatements
