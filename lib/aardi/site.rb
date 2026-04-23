@@ -2,7 +2,7 @@
 
 module Aardi
   class Site < AbstractBlog
-    def initialize(config: Aardi.config)
+    def initialize(config:)
       @config = config
       @ledger = Ledger.new
 
