@@ -1,8 +1,8 @@
-- Switched from Standard Ruby to plain Rubocop for linting.
+# v1.0.0
 
-# v0.93
-
+- 1.0
 - Orphan files warning now goes to STDERR rather than STDOUT
+- Switched from Standard Ruby to plain Rubocop for linting.
 - Add ruby-lsp to development dependies, for use in development.
 
 # v0.9.2

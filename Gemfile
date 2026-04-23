@@ -7,6 +7,7 @@ gemspec
 gem 'flog'
 gem 'minitest'
 gem 'minitest-reporters'
+gem 'overcommit'
 gem 'reek'
 gem 'rubocop'
 gem 'rubocop-minitest'
