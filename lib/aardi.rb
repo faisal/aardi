@@ -39,16 +39,3 @@ require_relative 'aardi/orphanage'
 require_relative 'aardi/site'
 
 RubyVM::YJIT.enable if RUBY_ENGINE == 'ruby'
-
-module Aardi
-  class << self
-    def config = @config ||= Config.new
-
-    def ledger = @ledger ||= Ledger.new
-
-    def reset!
-      @config = Config.new
-      @ledger = Ledger.new
-    end
-  end
-end

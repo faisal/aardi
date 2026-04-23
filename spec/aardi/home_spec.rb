@@ -5,11 +5,12 @@ require 'spec_helper'
 class HomeSpec < Minitest::Spec
   describe Aardi::Home do
     before do
-      setup_config
+      @config = setup_config
+      @ledger = Aardi::Ledger.new
     end
 
     def make_home(posts)
-      Aardi::Home.new(posts, 'blog', config: Aardi.config, ledger: Aardi.ledger)
+      Aardi::Home.new(posts, 'blog', config: @config, ledger: @ledger)
     end
 
     describe '#title' do

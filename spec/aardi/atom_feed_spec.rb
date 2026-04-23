@@ -7,11 +7,12 @@ class AtomFeedSpec < Minitest::Spec
 
   describe Aardi::ATOMFeed do
     before do
-      setup_config
+      @config = setup_config
+      @ledger = Aardi::Ledger.new
     end
 
     def make_feed(posts = [])
-      Aardi::ATOMFeed.new(posts, config: Aardi.config, ledger: Aardi.ledger)
+      Aardi::ATOMFeed.new(posts, config: @config, ledger: @ledger)
     end
 
     describe '#target_path' do

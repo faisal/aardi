@@ -4,11 +4,14 @@ require 'spec_helper'
 
 class MonthSpec < Minitest::Spec
   describe Aardi::Month do
+    before do
+      @config = setup_config
+      @ledger = Aardi::Ledger.new
+    end
+
     def make_month(month_int = 1)
-      config = Aardi.config
-      ledger = Aardi.ledger
-      year = Aardi::Year.new(2024, 'blog', config:, ledger:)
-      Aardi::Month.new(year, month_int, 'blog', config:, ledger:)
+      year = Aardi::Year.new(2024, 'blog', config: @config, ledger: @ledger)
+      Aardi::Month.new(year, month_int, 'blog', config: @config, ledger: @ledger)
     end
 
     describe '#<<' do

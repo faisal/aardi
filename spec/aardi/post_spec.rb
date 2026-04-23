@@ -5,8 +5,8 @@ require 'spec_helper'
 class PostSpec < Minitest::Spec
   describe Aardi::Post do
     before do
-      setup_config
-      setup_ledger
+      @config = setup_config
+      @ledger = setup_ledger(config: @config)
       @tmpdir = Dir.mktmpdir
     end
 
@@ -19,7 +19,7 @@ class PostSpec < Minitest::Spec
       content = "Creation: #{creation.iso8601}\n#{extra_yaml}\n----\n### #{title}\n\nBody text.\n"
       path = File.join(@tmpdir, "#{name}.md")
       File.write(path, content)
-      Aardi::Post.new(path, config: Aardi.config, ledger: Aardi.ledger)
+      Aardi::Post.new(path, config: @config, ledger: @ledger)
     end
 
     describe '#creation' do

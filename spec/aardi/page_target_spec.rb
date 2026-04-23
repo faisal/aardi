@@ -5,15 +5,14 @@ require 'spec_helper'
 class PageTargetSpec < Minitest::Spec
   describe Aardi::PageTarget do
     before do
-      setup_config
-      setup_ledger
+      seeded = setup_ledger(config: setup_config)
       @tmpdir = Dir.mktmpdir
       @content_hashes = Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
       @html_files = Set.new
       @ledger = Aardi::Ledger.new
       @ledger[:content_hashes] = @content_hashes
       @ledger[:html_files] = @html_files
-      @ledger[:template] = Aardi.ledger[:template] # still needed for PageContent.output
+      @ledger[:template] = seeded[:template] # still needed for PageContent.output
     end
 
     after do

@@ -2,6 +2,6 @@
 
 desc('Visit home page')
 task :homepage do
-  config = Aardi::Config.new.load('./config.yml')
+  config = Aardi::Config.new('./config.yml')
   system("open #{config[:site_url]}")
 end

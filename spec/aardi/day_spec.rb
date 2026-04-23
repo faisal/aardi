@@ -4,12 +4,15 @@ require 'spec_helper'
 
 class DaySpec < Minitest::Spec
   describe Aardi::Day do
+    before do
+      @config = setup_config
+      @ledger = Aardi::Ledger.new
+    end
+
     def make_day(day_int = 15)
-      config = Aardi.config
-      ledger = Aardi.ledger
-      year = Aardi::Year.new(2024, 'blog', config:, ledger:)
-      month = Aardi::Month.new(year, 1, 'blog', config:, ledger:)
-      Aardi::Day.new(year, month, day_int, 'blog', config:, ledger:)
+      year = Aardi::Year.new(2024, 'blog', config: @config, ledger: @ledger)
+      month = Aardi::Month.new(year, 1, 'blog', config: @config, ledger: @ledger)
+      Aardi::Day.new(year, month, day_int, 'blog', config: @config, ledger: @ledger)
     end
 
     describe '#<<' do

@@ -5,17 +5,16 @@ require 'spec_helper'
 class TemplateSpec < Minitest::Spec
   describe Aardi::Template do
     before do
-      setup_config
-      setup_ledger
+      @ledger = setup_ledger(config: setup_config)
     end
 
     subject do
-      Aardi.ledger[:template]
+      @ledger[:template]
     end
 
     describe '#render' do
       it 'inserts rendered markdown into the main element' do
-        src = Aardi::PageContent.new("## Hello\n\nWorld.", 'Hello', ledger: Aardi.ledger)
+        src = Aardi::PageContent.new("## Hello\n\nWorld.", 'Hello', ledger: @ledger)
         html = subject.render(src)
 
         _(html).must_include '<h2'
@@ -23,7 +22,7 @@ class TemplateSpec < Minitest::Spec
       end
 
       it 'appends the page title to the title tag' do
-        src = Aardi::PageContent.new('Body.', 'My Page Title', ledger: Aardi.ledger)
+        src = Aardi::PageContent.new('Body.', 'My Page Title', ledger: @ledger)
         html = subject.render(src)
 
         _(html).must_include 'My Page Title'
@@ -31,14 +30,14 @@ class TemplateSpec < Minitest::Spec
       end
 
       it 'sets the meta description when metadata contains Description' do
-        src = Aardi::PageContent.new('Body.', 'Title', { 'Description' => 'A short desc' }, ledger: Aardi.ledger)
+        src = Aardi::PageContent.new('Body.', 'Title', { 'Description' => 'A short desc' }, ledger: @ledger)
         html = subject.render(src)
 
         _(html).must_include 'content="A short desc"'
       end
 
       it 'leaves the meta description unchanged when no Description metadata' do
-        src = Aardi::PageContent.new('Body.', 'Title', ledger: Aardi.ledger)
+        src = Aardi::PageContent.new('Body.', 'Title', ledger: @ledger)
         html = subject.render(src)
 
         _(html).must_include 'name="description"'

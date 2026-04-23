@@ -2,16 +2,14 @@
 
 module Aardi
   class Config
-    def initialize
+    def initialize(path = './config.yml')
       @data = {}
+      prepare File.read(path)
     end
 
     def [](key) = @data[key]
 
-    def load(path)
-      config_yaml = File.read path
-      prepare config_yaml
-    end
+    private
 
     # :reek:TooManyStatements
     def prepare(config_yaml)

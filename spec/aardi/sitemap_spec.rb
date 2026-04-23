@@ -5,10 +5,8 @@ require 'spec_helper'
 class SitemapSpec < Minitest::Spec
   describe Aardi::Sitemap do
     before do
-      setup_config
-      setup_ledger
-      @config = Aardi.config
-      @ledger = Aardi.ledger
+      @config = setup_config
+      @ledger = setup_ledger(config: @config)
     end
 
     subject do

@@ -5,11 +5,12 @@ require 'spec_helper'
 class YearSpec < Minitest::Spec
   describe Aardi::Year do
     before do
-      setup_config
+      @config = setup_config
+      @ledger = Aardi::Ledger.new
     end
 
     def make_year(year_int = 2024)
-      Aardi::Year.new(year_int, 'blog', config: Aardi.config, ledger: Aardi.ledger)
+      Aardi::Year.new(year_int, 'blog', config: @config, ledger: @ledger)
     end
 
     describe '#<<' do

@@ -4,48 +4,53 @@ require 'spec_helper'
 
 class ConfigSpec < Minitest::Spec
   describe Aardi::Config do
-    before do
-      Aardi.reset!
+    def with_config_file(data)
+      Tempfile.create(['config', '.yml']) do |file|
+        file.write(data.to_yaml)
+        file.flush
+        yield file.path
+      end
     end
 
-    describe '#load' do
-      it 'reads config from file' do
-        Tempfile.create(['config', '.yml']) do |file|
-          file.write({ 'site_url' => 'http://example.com' }.to_yaml)
-          file.flush
+    describe '.new' do
+      it 'reads config from path' do
+        with_config_file('site_url' => 'http://example.com') do |path|
+          config = Aardi::Config.new(path)
 
-          Aardi.config.load(file.path)
+          _(config[:site_url]).must_equal 'http://example.com'
         end
-
-        _(Aardi.config[:site_url]).must_equal 'http://example.com'
       end
 
       it 'transforms top-level string keys to symbols' do
-        config_yaml = { 'site_url' => 'http://example.com', 'site_title' => 'T' }.to_yaml
-        Aardi.config.prepare config_yaml
+        with_config_file('site_url' => 'http://example.com', 'site_title' => 'T') do |path|
+          config = Aardi::Config.new(path)
 
-        _(Aardi.config[:site_url]).must_equal 'http://example.com'
+          _(config[:site_url]).must_equal 'http://example.com'
+        end
       end
 
       it 'transforms markup_options keys to symbols' do
-        config_yaml = { 'markup_options' => { 'fenced_code_blocks' => true } }.to_yaml
-        Aardi.config.prepare config_yaml
+        with_config_file('markup_options' => { 'fenced_code_blocks' => true }) do |path|
+          config = Aardi::Config.new(path)
 
-        _(Aardi.config[:markup_options][:fenced_code_blocks]).must_equal true
-      end
-
-      it 'rejects a second load' do
-        config_yaml = { 'site_url' => 'http://example.com' }.to_yaml
-        Aardi.config.prepare config_yaml
-
-        _(proc { Aardi.config.prepare config_yaml }).must_raise
+          _(config[:markup_options][:fenced_code_blocks]).must_equal true
+        end
       end
 
       it 'returns nil for missing keys' do
-        config_yaml = {}.to_yaml
-        Aardi.config.prepare config_yaml
+        with_config_file({}) do |path|
+          config = Aardi::Config.new(path)
 
-        _(Aardi.config[:nonexistent]).must_be_nil
+          _(config[:nonexistent]).must_be_nil
+        end
+      end
+
+      it 'freezes data so a second prepare fails' do
+        with_config_file('site_url' => 'http://example.com') do |path|
+          config = Aardi::Config.new(path)
+
+          _(proc { config.prepare({ 'x' => 'y' }.to_yaml) }).must_raise
+        end
       end
     end
   end

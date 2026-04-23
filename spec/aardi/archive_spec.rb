@@ -5,11 +5,12 @@ require 'spec_helper'
 class ArchiveSpec < Minitest::Spec
   describe Aardi::Archive do
     before do
-      setup_config
+      @config = setup_config
+      @ledger = Aardi::Ledger.new
     end
 
     def make_archive(posts)
-      Aardi::Archive.new(posts, 'blog', config: Aardi.config, ledger: Aardi.ledger)
+      Aardi::Archive.new(posts, 'blog', config: @config, ledger: @ledger)
     end
 
     describe '#title' do

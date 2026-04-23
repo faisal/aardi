@@ -5,10 +5,8 @@ require 'spec_helper'
 class FolderSpec < Minitest::Spec
   describe Aardi::Folder do
     before do
-      setup_config
-      setup_ledger
-      @config = Aardi.config
-      @ledger = Aardi.ledger
+      @config = setup_config
+      @ledger = setup_ledger(config: @config)
     end
 
     describe '.new' do

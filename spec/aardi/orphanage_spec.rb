@@ -5,15 +5,13 @@ require 'spec_helper'
 class OrphanageSpec < Minitest::Spec
   describe Aardi::Orphanage do
     before do
-      setup_config
-      @config = Aardi.config
-      @ledger = Aardi.ledger
+      @config = setup_config
+      @ledger = Aardi::Ledger.new
     end
 
     describe '#report' do
       it 'prints paths that are in html_files but not ignored' do
-        setup_config ignore_orphans: []
-        @config = Aardi.config
+        @config = setup_config ignore_orphans: []
         @ledger[:html_files] = Set.new(['./orphan.html'])
         _, err = capture_io { Aardi::Orphanage.new(config: @config, ledger: @ledger).report }
 
@@ -21,8 +19,7 @@ class OrphanageSpec < Minitest::Spec
       end
 
       it 'does not print paths matching an ignore_orphans prefix' do
-        setup_config ignore_orphans: ['./ignored/']
-        @config = Aardi.config
+        @config = setup_config ignore_orphans: ['./ignored/']
         @ledger[:html_files] = Set.new(['./ignored/page.html'])
         _, err = capture_io { Aardi::Orphanage.new(config: @config, ledger: @ledger).report }
 
@@ -30,8 +27,7 @@ class OrphanageSpec < Minitest::Spec
       end
 
       it 'prints non-ignored paths while silencing ignored ones' do
-        setup_config ignore_orphans: ['./ignored/']
-        @config = Aardi.config
+        @config = setup_config ignore_orphans: ['./ignored/']
         @ledger[:html_files] = Set.new(['./ignored/page.html', './visible.html'])
         _, err = capture_io { Aardi::Orphanage.new(config: @config, ledger: @ledger).report }
 
@@ -47,8 +43,7 @@ class OrphanageSpec < Minitest::Spec
       end
 
       it 'does not crash when ignore_orphans is absent from config' do
-        setup_config ignore_orphans: nil
-        @config = Aardi.config
+        @config = setup_config ignore_orphans: nil
         @ledger[:html_files] = Set.new(['./orphan.html'])
         _, err = capture_io { Aardi::Orphanage.new(config: @config, ledger: @ledger).report }
 

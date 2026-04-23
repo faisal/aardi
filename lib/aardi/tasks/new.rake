@@ -12,6 +12,6 @@ end
 
 desc('Create a new blog post and reveal it in Finder')
 task :new do
-  config = Aardi::Config.new.load('./config.yml')
+  config = Aardi::Config.new('./config.yml')
   create_new_post(config)
 end
