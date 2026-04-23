@@ -4,7 +4,7 @@ module SpecHelpers
   SAMPLES_DIR = File.expand_path('../samples', __dir__)
 
   def page_by_sample_path(filename)
-    Aardi::Page.new sample_path(filename)
+    Aardi::Page.new sample_path(filename), ledger: Aardi.ledger
   end
 
   def sample_path(filename)

@@ -34,7 +34,7 @@ module Aardi
     end
 
     def sources
-      @sources ||= paths.filter_map { |path| Page.new(path) if path.end_with?('.md') }
+      @sources ||= paths.filter_map { |path| Page.new(path, ledger: @ledger) if path.end_with?('.md') }
     end
 
     def update_sitemap
