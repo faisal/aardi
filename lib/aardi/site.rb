@@ -35,7 +35,7 @@ module Aardi
     private
 
     def children
-      [Folder.new('.'), blog, @ledger[:sitemap]]
+      [Folder.new('.', config: @config, ledger: @ledger), blog, @ledger[:sitemap]]
     end
 
     def warn_about_orphans
