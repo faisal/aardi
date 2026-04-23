@@ -6,12 +6,13 @@ Gem::Specification.new do |s|
   s.name = 'aardi'
   s.version = Aardi::VERSION
   s.summary = 'A static site generator.'
+  s.homepage = 'https://github.com/faisal/aardi'
   s.authors = ['Faisal N Jawdat']
   s.email = 'aardi@faisal.com'
   s.license = 'MIT'
   s.required_ruby_version = '>= 3.3'
 
-  s.metadata['homepage_uri'] = 'https://github.com/faisal/aardi'
+  pp s.metadata
   s.metadata['source_code_uri'] = s.homepage
   s.metadata['bug_tracker_uri'] = "#{s.homepage}/issues"
   s.metadata['changelog_uri'] = "#{s.homepage}/blob/main/CHANGELOG.md"
