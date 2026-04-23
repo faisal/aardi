@@ -12,7 +12,6 @@ Gem::Specification.new do |s|
   s.license = 'MIT'
   s.required_ruby_version = '>= 3.3'
 
-  pp s.metadata
   s.metadata['source_code_uri'] = s.homepage
   s.metadata['bug_tracker_uri'] = "#{s.homepage}/issues"
   s.metadata['changelog_uri'] = "#{s.homepage}/blob/main/CHANGELOG.md"
