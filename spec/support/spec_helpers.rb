@@ -40,7 +40,7 @@ module SpecHelpers
     Tempfile.create(['template', '.html']) do |file|
       file.write(html)
       file.flush
-      Aardi.ledger[:template] = Aardi::Template.new(file.path)
+      Aardi.ledger[:template] = Aardi::Template.new(file.path, ledger: Aardi.ledger)
     end
   end
 end
