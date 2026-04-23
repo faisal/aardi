@@ -2,11 +2,14 @@
 
 module Aardi
   class Month < AbstractBlog
-    def initialize(year, key, archive_path)
+    def initialize(year, key, archive_path, config:, ledger:)
+      super(config:, ledger:)
       @year = year
       @key = key
       @archive_path = archive_path
-      @index = Hash.new { |hash, day| hash[day] = Day.new(year, self, day, archive_path) }
+      @index = Hash.new do |hash, day|
+        hash[day] = Day.new(year, self, day, archive_path, config: config, ledger: ledger)
+      end
     end
 
     def <<(post)

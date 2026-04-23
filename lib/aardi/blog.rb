@@ -2,9 +2,11 @@
 
 module Aardi
   class Blog < AbstractBlog
-    def initialize(posts, opts = {})
+    # :reek:ControlParameter
+    def initialize(posts, config:, ledger:, archive_path: nil)
+      super(config:, ledger:)
       @posts = posts
-      @archive_path = opts[:archive_path] || Aardi.config[:blog_archive_path]
+      @archive_path = archive_path || config[:blog_archive_path]
     end
 
     def report_recent
@@ -14,11 +16,11 @@ module Aardi
     private
 
     def archive
-      Archive.new(@posts, @archive_path)
+      Archive.new(@posts, @archive_path, config: @config, ledger: @ledger)
     end
 
     def atom_feed
-      ATOMFeed.new(feed_posts)
+      ATOMFeed.new(feed_posts, config: @config, ledger: @ledger)
     end
 
     def children
@@ -30,15 +32,15 @@ module Aardi
     end
 
     def home
-      Home.new(recent_posts(:blog_home_posts), @archive_path)
+      Home.new(recent_posts(:blog_home_posts), @archive_path, config: @config, ledger: @ledger)
     end
 
     def json_feed
-      JSONFeed.new(feed_posts)
+      JSONFeed.new(feed_posts, config: @config, ledger: @ledger)
     end
 
     def recent_posts(conf_key)
-      @posts.last(Aardi.config[conf_key]).reverse
+      @posts.last(@config[conf_key]).reverse
     end
 
     def write_target = nil

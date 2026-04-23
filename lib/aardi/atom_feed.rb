@@ -15,14 +15,14 @@ module Aardi
     # :reek:TooManyStatements
     # rubocop:disable Metrics/MethodLength
     def feed_details(feed)
-      aardi_config = Aardi.config
+      config = @config
 
       feed.author do
-        name(aardi_config[:site_author])
+        name(config[:site_author])
       end
 
       subnodes = { id: feed_url, link: { href: feed_url, rel: 'self' },
-                   title: aardi_config[:site_title], updated: updated.iso8601 }
+                   title: config[:site_title], updated: updated.iso8601 }
 
       subnodes.each do |node, value|
         feed.public_send node, value

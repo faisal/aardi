@@ -2,10 +2,13 @@
 
 module Aardi
   class Year < AbstractBlog
-    def initialize(key, archive_path)
+    def initialize(key, archive_path, config:, ledger:)
+      super(config:, ledger:)
       @key = key
       @archive_path = archive_path
-      @index = Hash.new { |hash, month| hash[month] = Month.new(self, month, archive_path) }
+      @index = Hash.new do |hash, month|
+        hash[month] = Month.new(self, month, archive_path, config: config, ledger: ledger)
+      end
     end
 
     def <<(post)
@@ -34,7 +37,7 @@ module Aardi
     end
 
     def month_link(month)
-      "- [#{Date::MONTHNAMES[month.key]}](#{Aardi.config[:site_url]}/#{@archive_path}/#{self}/#{month}/)"
+      "- [#{Date::MONTHNAMES[month.key]}](#{@config[:site_url]}/#{@archive_path}/#{self}/#{month}/)"
     end
 
     def months

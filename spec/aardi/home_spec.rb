@@ -9,7 +9,7 @@ class HomeSpec < Minitest::Spec
     end
 
     def make_home(posts)
-      Aardi::Home.new(posts, 'blog')
+      Aardi::Home.new(posts, 'blog', config: Aardi.config, ledger: Aardi.ledger)
     end
 
     describe '#title' do

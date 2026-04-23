@@ -2,7 +2,8 @@
 
 module Aardi
   class AbstractFeed < AbstractBlog
-    def initialize(posts)
+    def initialize(posts, config:, ledger:)
+      super(config:, ledger:)
       @posts = posts
     end
 
@@ -20,13 +21,13 @@ module Aardi
 
     def creation = children.max_by(&:creation)&.creation
 
-    def feed_url = "#{Aardi.config[:site_url]}/#{feed_file}"
+    def feed_url = "#{@config[:site_url]}/#{feed_file}"
 
     def updated = children.max_by(&:updated)&.updated
 
     def write_target
       source = Content.new(content)
-      FileTarget.new(source, target_path, ledger: Aardi.ledger).write
+      FileTarget.new(source, target_path, ledger: @ledger).write
     end
   end
 end

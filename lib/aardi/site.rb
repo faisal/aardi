@@ -2,7 +2,7 @@
 
 module Aardi
   class Site < AbstractBlog
-    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def initialize
       @config = Aardi.config
       @ledger = Aardi.ledger
@@ -16,12 +16,14 @@ module Aardi
       @ledger[:sitemap] = Sitemap.new
       @ledger[:template] = Template.new @config[:template_path], ledger: @ledger
 
-      @posts = Dir.glob("#{@config[:blog_posts_path]}/**/*.md").map { |path| Post.new(path) }.sort_by(&:creation)
+      @posts = Dir.glob("#{@config[:blog_posts_path]}/**/*.md")
+                  .map { |path| Post.new(path, config: @config, ledger: @ledger) }
+                  .sort_by(&:creation)
     end
-    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     def blog
-      Blog.new @posts
+      Blog.new @posts, config: @config, ledger: @ledger
     end
 
     def render

@@ -9,7 +9,7 @@ class JSONFeedSpec < Minitest::Spec
     end
 
     def make_feed(posts = [])
-      Aardi::JSONFeed.new(posts)
+      Aardi::JSONFeed.new(posts, config: Aardi.config, ledger: Aardi.ledger)
     end
 
     describe '#target_path' do

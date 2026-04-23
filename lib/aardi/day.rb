@@ -2,14 +2,18 @@
 
 module Aardi
   # :reek:TooManyInstanceVariables
+  # :reek:LongParameterList
   class Day < AbstractBlog
-    def initialize(year, month, key, archive_path)
+    # rubocop:disable Metrics/ParameterLists
+    def initialize(year, month, key, archive_path, config:, ledger:)
+      super(config:, ledger:)
       @year = year
       @month = month
       @key = key
       @archive_path = archive_path
       @posts = []
     end
+    # rubocop:enable Metrics/ParameterLists
 
     def <<(post)
       @posts << post

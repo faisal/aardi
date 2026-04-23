@@ -2,7 +2,8 @@
 
 module Aardi
   class Home < AbstractBlog
-    def initialize(posts, archive_path)
+    def initialize(posts, archive_path, config:, ledger:)
+      super(config:, ledger:)
       @posts = posts
       @archive_path = archive_path
     end
@@ -12,13 +13,13 @@ module Aardi
     end
 
     def render
-      Aardi.ledger[:sitemap].update_mtime('/', mtime)
+      @ledger[:sitemap].update_mtime('/', mtime)
       write_target
     end
 
     def target_path = './index.html'
 
-    def title = Aardi.config[:blog_home_title]
+    def title = @config[:blog_home_title]
 
     private
 
@@ -27,7 +28,7 @@ module Aardi
     end
 
     def content_footer
-      site_url = Aardi.config[:site_url]
+      site_url = @config[:site_url]
       more_archive = "[Archive](#{site_url}/#{@archive_path}/)"
       more_rss = "[RSS](#{site_url}/index.xml)"
       more_json = "[JSON](#{site_url}/index.json)"

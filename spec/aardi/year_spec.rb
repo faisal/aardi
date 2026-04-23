@@ -9,7 +9,7 @@ class YearSpec < Minitest::Spec
     end
 
     def make_year(year_int = 2024)
-      Aardi::Year.new(year_int, 'blog')
+      Aardi::Year.new(year_int, 'blog', config: Aardi.config, ledger: Aardi.ledger)
     end
 
     describe '#<<' do

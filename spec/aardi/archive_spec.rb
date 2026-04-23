@@ -9,7 +9,7 @@ class ArchiveSpec < Minitest::Spec
     end
 
     def make_archive(posts)
-      Aardi::Archive.new(posts, 'blog')
+      Aardi::Archive.new(posts, 'blog', config: Aardi.config, ledger: Aardi.ledger)
     end
 
     describe '#title' do

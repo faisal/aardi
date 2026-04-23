@@ -19,7 +19,7 @@ class PostSpec < Minitest::Spec
       content = "Creation: #{creation.iso8601}\n#{extra_yaml}\n----\n### #{title}\n\nBody text.\n"
       path = File.join(@tmpdir, "#{name}.md")
       File.write(path, content)
-      Aardi::Post.new(path)
+      Aardi::Post.new(path, config: Aardi.config, ledger: Aardi.ledger)
     end
 
     describe '#creation' do
