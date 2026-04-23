@@ -8,7 +8,12 @@ class PageTargetSpec < Minitest::Spec
       setup_config
       setup_ledger
       @tmpdir = Dir.mktmpdir
-      Aardi.ledger[:content_hashes] = Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
+      @content_hashes = Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
+      @html_files = Set.new
+      @ledger = Aardi::Ledger.new
+      @ledger[:content_hashes] = @content_hashes
+      @ledger[:html_files] = @html_files
+      @ledger[:template] = Aardi.ledger[:template] # still needed for PageContent.output
     end
 
     after do
@@ -22,19 +27,19 @@ class PageTargetSpec < Minitest::Spec
     it 'removes the path from html_files after writing' do
       path = target_path
       src = Aardi::PageContent.new("# Title\n", 'Title')
-      Aardi.ledger[:html_files].add(path)
-      Aardi.ledger[:content_hashes][path] = src.output_hash
-      capture_io { Aardi::PageTarget.new(src, path, ledger: Aardi.ledger).write }
+      @html_files.add(path)
+      @content_hashes[path] = src.output_hash
+      capture_io { Aardi::PageTarget.new(src, path, ledger: @ledger).write }
 
-      _(Aardi.ledger[:html_files]).wont_include path
+      _(@html_files).wont_include path
     end
 
     it 'uses html_files to determine if the file exists (not the filesystem)' do
       path = target_path
-      Aardi.ledger[:html_files].add(path)
+      @html_files.add(path)
       src = Aardi::PageContent.new("# Title\n", 'Title')
-      Aardi.ledger[:content_hashes][path] = src.output_hash
-      out, = capture_io { Aardi::PageTarget.new(src, path, ledger: Aardi.ledger).write }
+      @content_hashes[path] = src.output_hash
+      out, = capture_io { Aardi::PageTarget.new(src, path, ledger: @ledger).write }
 
       _(out).must_be_empty
       _(File.exist?(path)).must_equal false
@@ -43,10 +48,10 @@ class PageTargetSpec < Minitest::Spec
     it 'writes and removes path from html_files when path is not in html_files' do
       path = target_path
       src = Aardi::PageContent.new("# Title\n", 'Title')
-      capture_io { Aardi::PageTarget.new(src, path, ledger: Aardi.ledger).write }
+      capture_io { Aardi::PageTarget.new(src, path, ledger: @ledger).write }
 
       _(File.exist?(path)).must_equal true
-      _(Aardi.ledger[:html_files]).wont_include path
+      _(@html_files).wont_include path
     end
   end
 end
