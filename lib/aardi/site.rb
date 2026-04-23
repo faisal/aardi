@@ -39,7 +39,7 @@ module Aardi
     end
 
     def warn_about_orphans
-      Orphanage.new.report
+      Orphanage.new(config: @config, ledger: @ledger).report
     end
 
     def write_target; end

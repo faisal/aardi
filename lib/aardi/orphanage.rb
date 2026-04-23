@@ -2,14 +2,19 @@
 
 module Aardi
   class Orphanage
+    def initialize(config:, ledger:)
+      @config = config
+      @ledger = ledger
+    end
+
     def report
-      Aardi.ledger[:html_files].each { |path| warn("Orphan: #{path}") unless ignored?(path) }
+      @ledger[:html_files].each { |path| warn("Orphan: #{path}") unless ignored?(path) }
     end
 
     private
 
     def ignored?(path)
-      Array(Aardi.config[:ignore_orphans]).any? { |prefix| path.start_with?(prefix) }
+      Array(@config[:ignore_orphans]).any? { |prefix| path.start_with?(prefix) }
     end
   end
 end
