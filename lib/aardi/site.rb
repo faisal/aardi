@@ -13,7 +13,7 @@ module Aardi
       @ledger[:custom_renderer] = CustomRenderer.new
       @ledger[:markdown_renderer] = Redcarpet::Markdown.new @ledger[:custom_renderer], @config[:markup_options]
       @ledger[:html_files] = Dir.glob('./**/*.html').to_set
-      @ledger[:sitemap] = Sitemap.new
+      @ledger[:sitemap] = Sitemap.new(config: @config, ledger: @ledger)
       @ledger[:template] = Template.new @config[:template_path], ledger: @ledger
 
       @posts = Dir.glob("#{@config[:blog_posts_path]}/**/*.md")

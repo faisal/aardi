@@ -6,10 +6,13 @@ class SitemapSpec < Minitest::Spec
   describe Aardi::Sitemap do
     before do
       setup_config
+      setup_ledger
+      @config = Aardi.config
+      @ledger = Aardi.ledger
     end
 
     subject do
-      Aardi::Sitemap.new
+      Aardi::Sitemap.new(config: @config, ledger: @ledger)
     end
 
     describe '#urls' do
