@@ -20,8 +20,9 @@ module Aardi
     end
 
     def write_target
-      source = PageContent.new content, title, metadata
-      PageTarget.new(source, target_path, ledger: Aardi.ledger).write
+      ledger = Aardi.ledger
+      source = PageContent.new content, title, metadata, ledger: ledger
+      PageTarget.new(source, target_path, ledger: ledger).write
     end
   end
 end
