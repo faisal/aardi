@@ -1,3 +1,8 @@
+# v2.0.0
+
+- 2.0
+- restructured internals to pass around configuration and state rather than relying on globals
+
 # v1.0.0
 
 - 1.0
