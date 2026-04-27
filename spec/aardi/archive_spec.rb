@@ -29,6 +29,21 @@ class ArchiveSpec < Minitest::Spec
       end
     end
 
+    describe 'with tag_index' do
+      def make_archive_with_tag_index(posts)
+        tag_index = Aardi::TagIndex.new({ 'ruby' => 2, 'rails' => 1 }, config: @config, ledger: @ledger)
+        Aardi::Archive.new(posts, 'blog', config: @config, ledger: @ledger, tag_index: tag_index)
+      end
+
+      it 'includes tag links in content' do
+        posts = [StubPost.new(Time.utc(2024, 1, 1))]
+        content = make_archive_with_tag_index(posts).content
+
+        _(content).must_include '**What**:'
+        _(content).must_include '[ruby]'
+      end
+    end
+
     describe '#content' do
       it 'includes a archive table header row' do
         content = make_archive([]).content

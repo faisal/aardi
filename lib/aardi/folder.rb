@@ -13,8 +13,9 @@ module Aardi
 
     def render
       children.each(&:render)
+      return if @path == '.'
 
-      update_sitemap if @config[:sitemap_entries][@normalized_path]
+      @ledger[:sitemap].update_mtime(@normalized_path, mtime) if @config[:sitemap_entries][@normalized_path]
     end
 
     private
@@ -35,11 +36,6 @@ module Aardi
 
     def sources
       @sources ||= paths.filter_map { |path| Page.new(path, ledger: @ledger) if path.end_with?('.md') }
-    end
-
-    def update_sitemap
-      # '.' is the top level so skip it since the homepage will register itself
-      @ledger[:sitemap].update_mtime(@normalized_path, mtime) unless @path == '.'
     end
   end
 end

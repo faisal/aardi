@@ -12,25 +12,29 @@ module Aardi
     end
 
     def content
-      "#{@src_content}\n<div><span class=\"bookmark\">[<a href=\"#{url}\">bookmark</a>]</span></div>\n"
+      @content ||= "#{@src_content}\n<div>#{bookmark_span}</div>\n"
     end
 
     def creation = metadata['Creation']
 
-    def day = creation.day
-
     def feed_snippet
-      clean_content = @src_content.sub(/\A(### .*\n)?\n+/, '')
-      render_markup(clean_content).strip
+      @feed_snippet ||= begin
+        clean_content = @src_content.sub(/\A(### .*\n)?\n+/, '')
+        render_markup(clean_content).strip
+      end
     end
-
-    def month = creation.month
 
     def name = File.basename(@path, '.*')
 
     def report_field_summary
       creation_header = creation.strftime('%e %b %Y')
       puts "#{creation_header} | #{@path} | #{title}"
+    end
+
+    def tags
+      return @tags if defined?(@tags)
+
+      @tags = metadata['Tags']&.split&.sort
     end
 
     def target_path
@@ -41,9 +45,11 @@ module Aardi
 
     def url = "#{@config[:site_url]}/#{short_target}"
 
-    def year = creation.year
-
     private
+
+    def bookmark_span
+      %(<span class="bookmark">[<a href="#{url}">bookmark</a>]#{tag_links}</span>)
+    end
 
     def render_markup(content)
       @ledger[:custom_renderer].reset
@@ -52,6 +58,13 @@ module Aardi
 
     def short_target
       "#{@config[:blog_archive_path]}/#{creation.strftime('%Y/%m/%d')}/#{name}"
+    end
+
+    def tag_links
+      return '' unless tags&.any?
+
+      base = "#{@config[:site_url]}/#{@config[:blog_archive_path]}/#{@config[:blog_tags_path]}"
+      " #{tags.map { |tag| %(<a href="#{base}/#{tag}/">#{tag}</a>) }.join(', ')}"
     end
   end
 end

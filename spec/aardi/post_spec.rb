@@ -33,16 +33,6 @@ class PostSpec < Minitest::Spec
       end
     end
 
-    describe '#year / #month / #day' do
-      it 'delegates to the creation date components' do
-        post = make_post(creation: Time.utc(2024, 6, 20, 0, 0, 0))
-
-        _(post.year).must_equal 2024
-        _(post.month).must_equal 6
-        _(post.day).must_equal 20
-      end
-    end
-
     describe '#name' do
       it 'returns the filename without extension' do
         post = make_post(name: 'cool-post')
@@ -94,6 +84,48 @@ class PostSpec < Minitest::Spec
 
         _(post.content).must_include 'class="bookmark"'
         _(post.content).must_include post.url
+      end
+
+      it 'renders tag links when tags are present' do
+        post = make_post(extra_yaml: 'Tags: foo bar')
+        bookmark_span = post.content[%r{<span class="bookmark">[^<]*(?:<[^>]+>[^<]*)*</span>}]
+
+        _(bookmark_span).must_include '<a href="http://example.com/blog/tags/foo/">foo</a>'
+        _(bookmark_span).must_include '<a href="http://example.com/blog/tags/bar/">bar</a>'
+      end
+
+      it 'renders tag links after the bookmark when tags are present' do
+        post = make_post(extra_yaml: 'Tags: foo bar')
+        bookmark_span = post.content[%r{<span class="bookmark">[^<]*(?:<[^>]+>[^<]*)*</span>}]
+
+        _(bookmark_span.index('bar')).must_be :>, bookmark_span.index('bookmark</a>')
+      end
+
+      it 'renders tag links in alphabetical order when tags are preent' do
+        post = make_post(extra_yaml: 'Tags: foo bar')
+        bookmark_span = post.content[%r{<span class="bookmark">[^<]*(?:<[^>]+>[^<]*)*</span>}]
+
+        _(bookmark_span.index('foo')).must_be :>, bookmark_span.index('bar')
+      end
+
+      it 'omits tag links when the post has no tags' do
+        post = make_post
+
+        _(post.content).wont_include '/blog/tags/'
+      end
+
+      it 'omits the trailing space inside the bookmark span when the post has no tags' do
+        post = make_post
+
+        _(post.content).must_include ']</span>'
+        _(post.content).wont_include '] </span>'
+      end
+
+      it 'omits tag links when blog_tags_path is not configured' do
+        @config = setup_config(blog_tags_path: nil)
+        post = make_post(extra_yaml: 'Tags: foo bar')
+
+        _(post.content).wont_include '/tags/'
       end
     end
 

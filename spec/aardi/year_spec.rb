@@ -30,6 +30,16 @@ class YearSpec < Minitest::Spec
       it 'returns the year as a string' do
         _(make_year(2023).title).must_equal '2023'
       end
+
+      describe 'with tag' do
+        def make_year_with_tag
+          Aardi::Year.new(2023, 'blog', config: @config, ledger: @ledger, tag: 'ruby')
+        end
+
+        it 'includes tag in title' do
+          _(make_year_with_tag.title).must_equal '2023 - ruby'
+        end
+      end
     end
 
     describe '#target_path' do

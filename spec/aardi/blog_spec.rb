@@ -9,8 +9,8 @@ class BlogSpec < Minitest::Spec
       @ledger = Aardi::Ledger.new
     end
 
-    def make_blog(posts, opts = {})
-      Aardi::Blog.new(posts, config: @config, ledger: @ledger, **opts)
+    def make_blog(posts)
+      Aardi::Blog.new(posts, config: @config, ledger: @ledger)
     end
 
     def posts_across_years
@@ -27,12 +27,6 @@ class BlogSpec < Minitest::Spec
 
         _(archive.target_path).must_equal './blog/index.html'
       end
-
-      it 'honors an archive_path override from opts' do
-        archive = make_blog([], archive_path: 'news').send(:children).first
-
-        _(archive.target_path).must_equal './news/index.html'
-      end
     end
 
     describe '#children' do
@@ -46,6 +40,22 @@ class BlogSpec < Minitest::Spec
 
       it 'returns all four children even when there are no posts' do
         _(make_blog([]).send(:children).length).must_equal 4
+      end
+
+      it 'includes a TagIndex when the root blog has tagged posts' do
+        tagged_post = StubPost.new(Time.utc(2024, 1, 1))
+        tagged_post.define_singleton_method(:tags) { ['ruby'] }
+        children = make_blog([tagged_post]).send(:children)
+
+        _(children.map(&:class)).must_include Aardi::TagIndex
+      end
+
+      it 'includes a TagBlog child for each tag' do
+        tagged_post = StubPost.new(Time.utc(2024, 1, 1))
+        tagged_post.define_singleton_method(:tags) { ['ruby'] }
+        children = make_blog([tagged_post]).send(:children)
+
+        _(children.map(&:class)).must_include Aardi::TagBlog
       end
     end
 

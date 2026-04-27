@@ -6,13 +6,10 @@ unless defined?(InitTask)
   module InitTask
     def self.install_file(src)
       dest = File.basename(src)
+      return puts "Skipped #{dest}" if File.exist?(dest) && !prompt_overwrite?(dest)
 
-      if !File.exist?(dest) || prompt_overwrite?(dest)
-        FileUtils.cp(src, dest)
-        puts "Wrote #{dest}"
-      else
-        puts "Skipped #{dest}"
-      end
+      FileUtils.cp(src, dest)
+      puts "Wrote #{dest}"
     end
 
     def self.prompt_overwrite?(filename)

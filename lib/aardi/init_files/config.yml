@@ -13,6 +13,7 @@ blog_recent_posts: 10
 blog_archive_title: Blog Archive
 blog_home_title: My Site
 blog_home_posts: 10
+blog_tags_path: tags
 sitemap_entries:
   /: daily
 markup_options:

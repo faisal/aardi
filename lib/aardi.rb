@@ -1,41 +1,13 @@
 # frozen_string_literal: true
 
-require 'date'
-require 'fileutils'
-require 'json'
-require 'yaml'
-require 'zlib'
+%w[date fileutils json yaml zlib nokogiri rake redcarpet].each { |lib| require lib }
 
-require 'nokogiri'
-require 'rake'
-require 'redcarpet'
-
-require_relative 'aardi/version'
-require_relative 'aardi/config'
-require_relative 'aardi/ledger'
-require_relative 'aardi/content'
-require_relative 'aardi/content_hashes'
-require_relative 'aardi/custom_renderer'
-require_relative 'aardi/abstract_blog'
-require_relative 'aardi/abstract_page_support'
-require_relative 'aardi/abstract_feed'
-require_relative 'aardi/file_target'
-require_relative 'aardi/page_target'
-require_relative 'aardi/page_content'
-require_relative 'aardi/template'
-require_relative 'aardi/page'
-require_relative 'aardi/post'
-require_relative 'aardi/day'
-require_relative 'aardi/month'
-require_relative 'aardi/year'
-require_relative 'aardi/archive'
-require_relative 'aardi/home'
-require_relative 'aardi/atom_feed'
-require_relative 'aardi/json_feed'
-require_relative 'aardi/blog'
-require_relative 'aardi/folder'
-require_relative 'aardi/sitemap'
-require_relative 'aardi/orphanage'
-require_relative 'aardi/site'
+%w[
+  version config ledger content content_hashes custom_renderer
+  abstract_blog abstract_page_support abstract_feed
+  file_target page_target page_content template page post
+  day month year archive home tag_index atom_feed json_feed
+  blog tag_blog folder sitemap orphanage site
+].each { |name| require_relative "aardi/#{name}" }
 
 RubyVM::YJIT.enable if RUBY_ENGINE == 'ruby'

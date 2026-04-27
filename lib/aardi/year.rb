@@ -2,17 +2,18 @@
 
 module Aardi
   class Year < AbstractBlog
-    def initialize(key, archive_path, config:, ledger:)
+    def initialize(key, archive_path, config:, ledger:, tag: nil)
       super(config:, ledger:)
       @key = key
       @archive_path = archive_path
+      @tag = tag
       @index = Hash.new do |hash, month|
-        hash[month] = Month.new(self, month, archive_path, config: config, ledger: ledger)
+        hash[month] = Month.new(self, month, archive_path, config: config, ledger: ledger, tag: tag)
       end
     end
 
     def <<(post)
-      @index[post.month] << post
+      @index[post.creation.month] << post
     end
 
     def archive_row(year_fmt, month_fmt)
@@ -28,7 +29,12 @@ module Aardi
       "./#{@archive_path}/#{self}/index.html"
     end
 
-    def title = to_s
+    def title
+      return "#{self} - #{@tag}" if @tag
+
+      # coerce string if not interpolating
+      to_s
+    end
 
     private
 

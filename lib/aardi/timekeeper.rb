@@ -3,21 +3,18 @@
 require 'git'
 
 module Aardi
-  # :reek:TooManyInstanceVariables
   class Timekeeper
     def initialize
-      @repo = Git.open(Dir.pwd)
-      @commit_log = @repo.log(:all).all
-      @files = tracked_files_by_mtime
-      @files_count = @files.count
+      repo = Git.open(Dir.pwd)
+      @commit_log = repo.log(:all).all
+      @files = repo.ls_files.keys.sort_by { |file| File.mtime(file) }.reverse!
       @updated = 0
       @prior_summary_length = 0
     end
 
     def run
-      @files.each.with_index do |path, index|
+      @files.each_with_index do |path, index|
         @prior_summary_length = print_progress(index, path)
-
         commit_date = author_date(path)
         next unless commit_date
 
@@ -41,13 +38,9 @@ module Aardi
     end
 
     def print_progress(index, path)
-      summary = "(#{index} / #{@files_count}) #{@updated}: #{path}"
+      summary = "(#{index} / #{@files.size}) #{@updated}: #{path}"
       print format("\r%-#{@prior_summary_length}s", summary)
       summary.length
-    end
-
-    def tracked_files_by_mtime
-      @repo.ls_files.keys.sort_by { |file| File.mtime(file) }.reverse!
     end
   end
 end

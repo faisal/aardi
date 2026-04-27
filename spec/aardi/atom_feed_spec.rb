@@ -73,6 +73,18 @@ class AtomFeedSpec < Minitest::Spec
         _(entry.at_xpath('atom:title', ns).text).must_equal 'My Entry'
         _(entry.at_xpath('atom:link/@href', ns).value).must_equal post.url
       end
+
+      describe 'with tag' do
+        def make_feed_with_tag
+          Aardi::ATOMFeed.new(posts, config: @config, ledger: @ledger, tag: 'ruby')
+        end
+
+        it 'includes tag in feed title' do
+          doc = Nokogiri::XML(make_feed_with_tag.content)
+
+          _(doc.at_xpath('//atom:title', ns).text).must_equal 'Test Site - ruby'
+        end
+      end
     end
   end
 end

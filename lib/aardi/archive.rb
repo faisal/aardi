@@ -2,29 +2,42 @@
 
 module Aardi
   class Archive < AbstractBlog
-    def initialize(posts, archive_path, config:, ledger:)
+    # :reek:LongParameterList
+    # rubocop:disable Metrics/ParameterLists
+    def initialize(posts, archive_path, config:, ledger:, tag: nil, tag_index: nil)
       super(config:, ledger:)
       @posts = posts
       @archive_path = archive_path
+      @tag = tag
+      @tag_index = tag_index
     end
+    # rubocop:enable Metrics/ParameterLists
 
     def content
       year_fmt = "| %<year>s | %<months>s \n"
       month_fmt = "[&nbsp;%<count>s&nbsp;](#{@config[:site_url]}/%<archive_path>s/%<year>s/%<month>s/)"
 
-      "#{header}#{years.map { |year| year.archive_row(year_fmt, month_fmt) }.join}"
+      rows = years.map { |year| year.archive_row(year_fmt, month_fmt) }.join
+      "#{title_heading}#{tag_list}**When**:\n\n#{table_header}#{rows}"
     end
 
     def target_path = "./#{@archive_path}/index.html"
 
-    def title = @config[:blog_archive_title]
+    def title
+      base_title = @config[:blog_archive_title]
+      return "#{base_title} - #{@tag}" if @tag
+
+      base_title
+    end
 
     private
 
     def calendar
-      index = Hash.new { |hash, year| hash[year] = Year.new(year, @archive_path, config: @config, ledger: @ledger) }
+      index = Hash.new do |hash, year|
+        hash[year] = Year.new(year, @archive_path, config: @config, ledger: @ledger, tag: @tag)
+      end
       @posts.each do |post|
-        index[post.year] << post
+        index[post.creation.year] << post
       end
 
       index
@@ -34,13 +47,19 @@ module Aardi
       years
     end
 
-    def header
-      "# #{title}
-
-||Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|
+    def table_header
+      "||Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 "
     end
+
+    def tag_list
+      return '' unless @tag_index
+
+      "**What**: #{@tag_index.inline_links}\n\n"
+    end
+
+    def title_heading = "# #{title}\n\n"
 
     def years
       @years ||= calendar.values.sort_by { |date| -date.key }

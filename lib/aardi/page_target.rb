@@ -9,8 +9,11 @@ module Aardi
 
     private
 
+    # Optimization: in PageTarget first check the existing .html
+    # list rather than always rechecking the file system. But then
+    # check anyway because html_files doesn't always catch tag pages.
     def file_exists?
-      @ledger[:html_files].include? @path
+      @ledger[:html_files].include?(@path) || File.exist?(@path)
     end
   end
 end

@@ -30,10 +30,7 @@ module Aardi
 
     def read_hashes
       @original_hashes = File.exist?(@path) ? File.read(@path) : ''
-      @hashes = @original_hashes.split("\n").to_h do |line|
-        path, hash = line.split(':', 2)
-        [path.strip, hash.to_i]
-      end
+      @hashes = @original_hashes.scan(/^(.+): (\d+)$/).to_h { |path, hash| [path, hash.to_i] }
     end
   end
 end

@@ -8,6 +8,7 @@ blog_recent_posts: 10
 blog_archive_title: Blog Archive
 blog_home_title: Test Site
 blog_home_posts: 10
+blog_tags_path: tags
 files_to_exclude:
   - ./blog
   - ./posts

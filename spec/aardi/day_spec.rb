@@ -42,6 +42,18 @@ class DaySpec < Minitest::Spec
         _(day.title).must_include 'January 2024'
         _(day.title).must_include '15'
       end
+
+      describe 'with tag' do
+        def make_day_with_tag
+          year = Aardi::Year.new(2024, 'blog', config: @config, ledger: @ledger)
+          month = Aardi::Month.new(year, 1, 'blog', config: @config, ledger: @ledger)
+          Aardi::Day.new(year, month, 15, 'blog', config: @config, ledger: @ledger, tag: 'ruby')
+        end
+
+        it 'includes tag in title' do
+          _(make_day_with_tag.title).must_equal 'Monday, 15 January 2024 - ruby'
+        end
+      end
     end
 
     describe '#target_path' do

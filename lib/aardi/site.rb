@@ -14,13 +14,13 @@ module Aardi
     end
 
     def blog
-      @blog ||= Blog.new @posts, config: @config, ledger: @ledger
+      Blog.new @posts, config: @config, ledger: @ledger
     end
 
     def render
       super
       @ledger[:content_hashes].write
-      warn_about_orphans
+      Orphanage.new(config: @config, ledger: @ledger).report
     end
 
     private
@@ -39,10 +39,6 @@ module Aardi
       @ledger[:template] = Template.new(@config[:template_path], ledger: @ledger)
     end
     # rubocop:enable Metrics/AbcSize
-
-    def warn_about_orphans
-      Orphanage.new(config: @config, ledger: @ledger).report
-    end
 
     def write_target; end
   end

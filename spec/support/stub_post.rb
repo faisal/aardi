@@ -1,20 +1,16 @@
 # frozen_string_literal: true
 
-# Reusable stub that satisfies the Post interface for aggregate-class tests.
 # :reek:TooManyInstanceVariables
 class StubPost
-  attr_reader :mtime, :creation, :updated, :year, :month, :day, :title, :name, :url, :path
+  attr_reader :mtime, :creation, :updated, :title, :name, :url, :path
 
-  def initialize(creation_time, title: 'Test Post', name: 'test-post')
-    @creation = creation_time
-    @updated = creation_time
-    @year = creation_time.year
-    @month = creation_time.month
-    @day = creation_time.day
+  def initialize(creation, title: 'Test Post', name: 'test-post')
+    @creation = creation
+    @updated = creation
     @title = title
     @name = name
-    @url = "http://example.com/blog/#{format('%<y>04d/%<m>02d/%<d>02d', y: @year, m: @month, d: @day)}/#{name}"
-    @mtime = creation_time
+    @url = "http://example.com/blog/#{creation.strftime('%Y/%m/%d')}/#{name}"
+    @mtime = creation
     @path = "posts/#{name}.md"
   end
 

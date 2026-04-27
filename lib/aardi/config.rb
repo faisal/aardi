@@ -3,22 +3,17 @@
 module Aardi
   class Config
     def initialize(path = './config.yml')
-      @data = {}
-      prepare File.read(path)
+      @data = prepare(YAML.safe_load_file(path))
     end
 
     def [](key) = @data[key]
 
     private
 
-    # :reek:TooManyStatements
-    def prepare(config_yaml)
-      config_hash = YAML.safe_load config_yaml
+    def prepare(config_hash)
       config_hash.transform_keys!(&:to_sym)
       config_hash[:markup_options]&.transform_keys!(&:to_sym)
-      @data.merge!(config_hash)
-      @data.freeze
-      self
+      config_hash.freeze
     end
   end
 end

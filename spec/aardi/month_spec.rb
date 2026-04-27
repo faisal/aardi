@@ -43,6 +43,17 @@ class MonthSpec < Minitest::Spec
       it 'formats as month name and year' do
         _(make_month(3).title).must_equal 'March 2024'
       end
+
+      describe 'with tag' do
+        def make_month_with_tag
+          year = Aardi::Year.new(2024, 'blog', config: @config, ledger: @ledger)
+          Aardi::Month.new(year, 3, 'blog', config: @config, ledger: @ledger, tag: 'ruby')
+        end
+
+        it 'includes tag in title' do
+          _(make_month_with_tag.title).must_equal 'March 2024 - ruby'
+        end
+      end
     end
 
     describe '#target_path' do

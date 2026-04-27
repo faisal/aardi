@@ -70,6 +70,16 @@ class JSONFeedSpec < Minitest::Spec
 
         _(item).must_include 'date_modified'
       end
+
+      describe 'with tag' do
+        def make_feed_with_tag
+          Aardi::JSONFeed.new([StubPost.new(Time.now)], config: @config, ledger: @ledger, tag: 'ruby')
+        end
+
+        it 'includes tag in feed title' do
+          _(JSON.parse(make_feed_with_tag.content)['title']).must_equal 'Test Site - ruby'
+        end
+      end
     end
   end
 end
