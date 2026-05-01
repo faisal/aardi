@@ -8,9 +8,10 @@ module Aardi
 
       initialize_ledger
 
-      @posts = Dir.glob("#{@config[:blog_posts_path]}/**/*.md")
-                  .map { |path| Post.new(path, config: @config, ledger: @ledger) }
-                  .sort_by(&:creation)
+      post_sources = Dir.glob("#{@config[:blog_posts_path]}/**/*.md").map do |path|
+        Post.new(path, config: @config, ledger: @ledger)
+      end
+      @posts = Posts.new(post_sources, config: @config, ledger: @ledger)
     end
 
     def blog

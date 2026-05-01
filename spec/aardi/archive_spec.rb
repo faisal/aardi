@@ -10,7 +10,8 @@ class ArchiveSpec < Minitest::Spec
     end
 
     def make_archive(posts)
-      Aardi::Archive.new(posts, 'blog', config: @config, ledger: @ledger)
+      calendar = make_posts(posts, config: @config, ledger: @ledger).calendar
+      Aardi::Archive.new(calendar, 'blog', config: @config, ledger: @ledger)
     end
 
     describe '#title' do
@@ -32,7 +33,8 @@ class ArchiveSpec < Minitest::Spec
     describe 'with tag_index' do
       def make_archive_with_tag_index(posts)
         tag_index = Aardi::TagIndex.new({ 'ruby' => 2, 'rails' => 1 }, config: @config, ledger: @ledger)
-        Aardi::Archive.new(posts, 'blog', config: @config, ledger: @ledger, tag_index: tag_index)
+        calendar = make_posts(posts, config: @config, ledger: @ledger).calendar
+        Aardi::Archive.new(calendar, 'blog', config: @config, ledger: @ledger, tag_index: tag_index)
       end
 
       it 'includes tag links in content' do

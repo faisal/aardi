@@ -17,7 +17,8 @@ module Aardi
     private
 
     def archive
-      Archive.new(@posts, @archive_path, config: @config, ledger: @ledger, tag: tag, tag_index: archive_tag_index)
+      Archive.new(scoped_calendar, @archive_path, config: @config, ledger: @ledger, tag: tag,
+                                                  tag_index: archive_tag_index)
     end
 
     def archive_tag_index
@@ -36,10 +37,6 @@ module Aardi
       recent_posts(:blog_feed_posts)
     end
 
-    def group_post_by_tags(post, groups)
-      post.tags&.each { |tag| (groups[tag] ||= []) << post }
-    end
-
     def home
       Home.new(recent_posts(:blog_home_posts), @archive_path, config: @config, ledger: @ledger, blog_path: @blog_path,
                                                               tag: tag)
@@ -50,19 +47,23 @@ module Aardi
     end
 
     def recent_posts(conf_key)
-      @posts.last(@config[conf_key]).reverse
+      scoped_list.sort_by(&:creation).last(@config[conf_key]).reverse
     end
+
+    def scoped_calendar = @posts.calendar
+
+    def scoped_list = @posts.list
 
     def tag = nil
 
     def tag_children
       return [] if tag_groups.empty?
 
-      [tag_index, *tag_groups.map { |tag, posts| TagBlog.new(posts, tag, config: @config, ledger: @ledger) }]
+      [tag_index, *tag_groups.keys.map { |tag| TagBlog.new(@posts, tag, config: @config, ledger: @ledger) }]
     end
 
     def tag_groups
-      @tag_groups ||= @posts.each_with_object({}) { |post, groups| group_post_by_tags(post, groups) }
+      @posts.tag_groups
     end
 
     def tag_index
