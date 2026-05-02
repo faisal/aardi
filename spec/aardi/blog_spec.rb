@@ -10,7 +10,7 @@ class BlogSpec < Minitest::Spec
     end
 
     def make_blog(posts)
-      Aardi::Blog.new(make_posts(posts, config: @config, ledger: @ledger), config: @config, ledger: @ledger)
+      Aardi::Blog.new(posts, config: @config, ledger: @ledger)
     end
 
     def posts_across_years

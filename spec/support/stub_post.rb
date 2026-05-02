@@ -25,6 +25,4 @@ class StubPost
   def report_field_summary
     puts "#{@creation.strftime('%-e %b %Y')} | #{@path} | #{@title}"
   end
-
-  def tags = nil
 end

@@ -3,10 +3,6 @@
 module SpecHelpers
   SAMPLES_DIR = File.expand_path('../samples', __dir__)
 
-  def make_posts(list, config: setup_config, ledger: Aardi::Ledger.new)
-    Aardi::Posts.new(list, config:, ledger:)
-  end
-
   def page_by_sample_path(filename, ledger: Aardi::Ledger.new)
     Aardi::Page.new sample_path(filename), ledger:
   end

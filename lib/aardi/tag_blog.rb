@@ -14,14 +14,12 @@ module Aardi
 
     attr_reader :tag
 
-    def archive_tag_index = nil
+    def archive_tag_index
+      nil
+    end
 
     def children
       [archive, home, atom_feed, json_feed]
     end
-
-    def scoped_calendar = @posts.calendar_for(@tag)
-
-    def scoped_list = @posts.list_for(@tag)
   end
 end
