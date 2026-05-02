@@ -10,7 +10,6 @@ module Aardi
 
       @posts = Dir.glob("#{@config[:blog_posts_path]}/**/*.md")
                   .map { |path| Post.new(path, config: @config, ledger: @ledger) }
-                  .sort_by(&:creation)
     end
 
     def blog

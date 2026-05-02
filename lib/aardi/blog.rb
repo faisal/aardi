@@ -50,7 +50,7 @@ module Aardi
     end
 
     def recent_posts(conf_key)
-      @posts.last(@config[conf_key]).reverse
+      @posts.max_by(@config[conf_key], &:creation)
     end
 
     def tag = nil
