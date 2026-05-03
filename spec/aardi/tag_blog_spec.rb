@@ -10,7 +10,11 @@ class TagBlogSpec < Minitest::Spec
     end
 
     def make_tag_blog(posts, tag)
-      Aardi::TagBlog.new(posts, tag, config: @config, ledger: @ledger)
+      tag_blog = Aardi::TagBlog.new(tag, config: @config, ledger: @ledger)
+      posts.each do |post|
+        tag_blog << post
+      end
+      tag_blog
     end
 
     describe '#initialize' do

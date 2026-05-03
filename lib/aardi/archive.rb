@@ -3,15 +3,19 @@
 module Aardi
   class Archive < AbstractBlog
     # :reek:LongParameterList
-    # rubocop:disable Metrics/ParameterLists
-    def initialize(posts, archive_path, config:, ledger:, tag: nil, tag_index: nil)
+    def initialize(archive_path, config:, ledger:, tag: nil, tag_index: nil)
       super(config:, ledger:)
-      @posts = posts
       @archive_path = archive_path
       @tag = tag
       @tag_index = tag_index
+      @index = Hash.new do |hash, year|
+        hash[year] = Year.new(year, @archive_path, config: @config, ledger: @ledger, tag: @tag)
+      end
     end
-    # rubocop:enable Metrics/ParameterLists
+
+    def <<(post)
+      @index[post.creation.year] << post
+    end
 
     def content
       year_fmt = "| %<year>s | %<months>s \n"
@@ -32,17 +36,6 @@ module Aardi
 
     private
 
-    def calendar
-      index = Hash.new do |hash, year|
-        hash[year] = Year.new(year, @archive_path, config: @config, ledger: @ledger, tag: @tag)
-      end
-      @posts.each do |post|
-        index[post.creation.year] << post
-      end
-
-      index
-    end
-
     def children
       years
     end
@@ -62,7 +55,7 @@ module Aardi
     def title_heading = "# #{title}\n\n"
 
     def years
-      @years ||= calendar.values.sort_by { |date| -date.key }
+      @years ||= @index.values.sort_by { |date| -date.key }
     end
   end
 end

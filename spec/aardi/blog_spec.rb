@@ -10,14 +10,18 @@ class BlogSpec < Minitest::Spec
     end
 
     def make_blog(posts)
-      Aardi::Blog.new(posts, config: @config, ledger: @ledger)
+      blog = Aardi::Blog.new(config: @config, ledger: @ledger)
+      posts.each do |post|
+        blog << post
+      end
+      blog
     end
 
     def posts_across_years
       [
-        StubPost.new(Time.utc(2022, 1, 1), name: 'oldest', title: 'Oldest'),
-        StubPost.new(Time.utc(2023, 1, 1), name: 'middle', title: 'Middle'),
-        StubPost.new(Time.utc(2024, 1, 1), name: 'newest', title: 'Newest')
+        StubPost.new(Time.utc(2022, 1, 1), name: 'oldest', title: 'Oldest', tags: []),
+        StubPost.new(Time.utc(2023, 1, 1), name: 'middle', title: 'Middle', tags: %w[one]),
+        StubPost.new(Time.utc(2024, 1, 1), name: 'newest', title: 'Newest', tags: %w[one two])
       ]
     end
 

@@ -8,12 +8,13 @@ module Aardi
 
       initialize_ledger
 
-      @posts = Dir.glob("#{@config[:blog_posts_path]}/**/*.md")
-                  .map { |path| Post.new(path, config: @config, ledger: @ledger) }
+      posts.each do |post|
+        blog << post
+      end
     end
 
     def blog
-      Blog.new @posts, config: @config, ledger: @ledger
+      @blog ||= Blog.new config: @config, ledger: @ledger
     end
 
     def render
@@ -36,6 +37,11 @@ module Aardi
       @ledger[:html_files] = Dir.glob('./**/*.html').to_set
       @ledger[:sitemap] = Sitemap.new(config: @config, ledger: @ledger)
       @ledger[:template] = Template.new(@config[:template_path], ledger: @ledger)
+    end
+
+    def posts
+      Dir.glob("#{@config[:blog_posts_path]}/**/*.md")
+         .map { |path| Post.new(path, config: @config, ledger: @ledger) }
     end
     # rubocop:enable Metrics/AbcSize
 

@@ -32,9 +32,7 @@ module Aardi
     end
 
     def tags
-      return @tags if defined?(@tags)
-
-      @tags = metadata['Tags']&.split&.sort
+      @tags ||= metadata['Tags']&.split&.sort
     end
 
     def target_path

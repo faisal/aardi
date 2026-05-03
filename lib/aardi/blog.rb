@@ -3,11 +3,22 @@
 module Aardi
   # :reek:TooManyMethods
   class Blog < AbstractBlog
-    def initialize(posts, config:, ledger:)
-      super(config:, ledger:)
-      @posts = posts
+    def initialize(config:, ledger:)
+      super
+      @posts = []
       @blog_path = nil
       @archive_path = @config[:blog_archive_path]
+      @index = Hash.new do |hash, tag|
+        hash[tag] = TagBlog.new(tag, config: config, ledger: ledger)
+      end
+    end
+
+    def <<(post)
+      @posts << post
+      archive << post
+      post.tags&.each do |tag|
+        @index[tag] << post
+      end
     end
 
     def report_recent
@@ -17,11 +28,11 @@ module Aardi
     private
 
     def archive
-      Archive.new(@posts, @archive_path, config: @config, ledger: @ledger, tag: tag, tag_index: archive_tag_index)
+      @archive ||= Archive.new(@archive_path, config: @config, ledger: @ledger, tag: tag, tag_index: archive_tag_index)
     end
 
     def archive_tag_index
-      tag_index unless tag_groups.empty?
+      tag_index unless @index.empty?
     end
 
     def atom_feed
@@ -34,10 +45,6 @@ module Aardi
 
     def feed_posts
       recent_posts(:blog_feed_posts)
-    end
-
-    def group_post_by_tags(post, groups)
-      post.tags&.each { |tag| (groups[tag] ||= []) << post }
     end
 
     def home
@@ -56,17 +63,11 @@ module Aardi
     def tag = nil
 
     def tag_children
-      return [] if tag_groups.empty?
-
-      [tag_index, *tag_groups.map { |tag, posts| TagBlog.new(posts, tag, config: @config, ledger: @ledger) }]
-    end
-
-    def tag_groups
-      @tag_groups ||= @posts.each_with_object({}) { |post, groups| group_post_by_tags(post, groups) }
+      [tag_index, *@index.values] unless @index.empty?
     end
 
     def tag_index
-      @tag_index ||= TagIndex.new(tag_groups.transform_values(&:size), config: @config, ledger: @ledger)
+      @tag_index ||= TagIndex.new(@index.keys, config: @config, ledger: @ledger)
     end
 
     def write_target = nil

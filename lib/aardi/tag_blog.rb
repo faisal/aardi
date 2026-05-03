@@ -2,12 +2,17 @@
 
 module Aardi
   class TagBlog < Blog
-    def initialize(posts, tag, config:, ledger:)
-      super(posts, config:, ledger:)
+    def initialize(tag, config:, ledger:)
+      super(config:, ledger:)
       @tag = tag
       blog_archive_path = @config[:blog_archive_path]
       @blog_path = "#{blog_archive_path}/#{@config[:blog_tags_path]}/#{tag}"
       @archive_path = "#{@blog_path}/#{blog_archive_path}"
+    end
+
+    def <<(post)
+      @posts << post
+      archive << post
     end
 
     private
