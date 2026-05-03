@@ -1,24 +1,19 @@
 # frozen_string_literal: true
 
 module Aardi
-  # :reek:TooManyMethods
   class Blog < AbstractBlog
     def initialize(config:, ledger:)
       super
       @posts = []
       @blog_path = nil
       @archive_path = @config[:blog_archive_path]
-      @index = Hash.new do |hash, tag|
-        hash[tag] = TagBlog.new(tag, config: config, ledger: ledger)
-      end
+      @tags = BlogTagPages.new(config: config, ledger: ledger)
     end
 
     def <<(post)
       @posts << post
       archive << post
-      post.tags&.each do |tag|
-        @index[tag] << post
-      end
+      @tags << post
     end
 
     def report_recent
@@ -28,11 +23,8 @@ module Aardi
     private
 
     def archive
-      @archive ||= Archive.new(@archive_path, config: @config, ledger: @ledger, tag: tag, tag_index: archive_tag_index)
-    end
-
-    def archive_tag_index
-      tag_index unless @index.empty?
+      @archive ||= Archive.new(@archive_path, config: @config, ledger: @ledger, tag: tag,
+                                              tag_index: @tags.archive_tag_index)
     end
 
     def atom_feed
@@ -40,7 +32,7 @@ module Aardi
     end
 
     def children
-      [archive, home, atom_feed, json_feed, *tag_children]
+      [archive, home, atom_feed, json_feed, *@tags.children]
     end
 
     def feed_posts
@@ -48,8 +40,8 @@ module Aardi
     end
 
     def home
-      Home.new(recent_posts(:blog_home_posts), @archive_path, config: @config, ledger: @ledger, blog_path: @blog_path,
-                                                              tag: tag)
+      Home.new(recent_posts(:blog_home_posts), @archive_path, config: @config, ledger: @ledger,
+                                                              blog_path: @blog_path, tag: tag)
     end
 
     def json_feed
@@ -61,14 +53,6 @@ module Aardi
     end
 
     def tag = nil
-
-    def tag_children
-      [tag_index, *@index.values] unless @index.empty?
-    end
-
-    def tag_index
-      @tag_index ||= TagIndex.new(@index.keys, config: @config, ledger: @ledger)
-    end
 
     def write_target = nil
   end
