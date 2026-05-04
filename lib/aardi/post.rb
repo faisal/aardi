@@ -18,10 +18,7 @@ module Aardi
     def creation = metadata['Creation']
 
     def feed_snippet
-      @feed_snippet ||= begin
-        clean_content = @src_content.sub(/\A(### .*\n)?\n+/, '')
-        render_markup(clean_content).strip
-      end
+      @feed_snippet ||= @ledger[:renderer].markdown(@src_content.sub(/\A(### .*\n)?\n+/, ''))
     end
 
     def name = File.basename(@path, '.*')
@@ -44,11 +41,6 @@ module Aardi
     def url = "#{@config[:site_url]}/#{short_target}"
 
     private
-
-    def render_markup(content)
-      @ledger[:custom_renderer].reset
-      @ledger[:markdown_renderer].render(content)
-    end
 
     def short_target
       "#{@config[:blog_archive_path]}/#{creation.strftime('%Y/%m/%d')}/#{name}"

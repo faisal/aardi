@@ -3,7 +3,7 @@
 %w[date fileutils json yaml zlib nokogiri rake redcarpet].each { |lib| require lib }
 
 %w[
-  version config ledger content content_hashes custom_renderer
+  version config ledger content content_hashes custom_renderer renderer
   abstract_blog abstract_page_support abstract_feed
   file_target page_target page_content template page post_bookmark_line post
   day month year archive home tag_index atom_feed json_feed

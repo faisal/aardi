@@ -26,12 +26,8 @@ module SpecHelpers
 
   # :reek:TooManyStatements
   def setup_ledger(config:)
-    custom_renderer = Aardi::CustomRenderer.new
-    markup_opts = config[:markup_options] || {}
-    markdown_renderer = Redcarpet::Markdown.new(custom_renderer, markup_opts)
     ledger = Aardi::Ledger.new
-    ledger[:custom_renderer] = custom_renderer
-    ledger[:markdown_renderer] = markdown_renderer
+    ledger[:renderer] = Aardi::Renderer.new(config)
     ledger[:content_hashes] = Aardi::ContentHashes.new('/nonexistent_test_hashes')
     ledger[:html_files] = Set.new
 

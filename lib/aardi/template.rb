@@ -10,9 +10,7 @@ module Aardi
       @dom = Nokogiri::HTML5.parse(@content)
     end
 
-    # :reek:TooManyStatements
     def render(src)
-      @ledger[:custom_renderer].reset
       dom = @dom.clone
 
       add_main(dom, src)
@@ -32,7 +30,7 @@ module Aardi
     end
 
     def add_main(dom, src)
-      dom.at_css('main').add_child(@ledger[:markdown_renderer].render(src.content))
+      dom.at_css('main').add_child(@ledger[:renderer].markdown(src.content))
     end
 
     def add_title(dom, src)
