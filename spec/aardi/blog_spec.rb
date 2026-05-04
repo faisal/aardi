@@ -61,6 +61,15 @@ class BlogSpec < Minitest::Spec
 
         _(children.map(&:class)).must_include Aardi::TagBlog
       end
+
+      it 'archive content lists tag links once tagged posts are added' do
+        tagged_post = StubPost.new(Time.utc(2024, 1, 1))
+        tagged_post.define_singleton_method(:tags) { ['ruby'] }
+        archive = make_blog([tagged_post]).send(:children).first
+
+        _(archive.content).must_include '**What**:'
+        _(archive.content).must_include '[ruby]'
+      end
     end
 
     describe '#recent_posts' do

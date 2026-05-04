@@ -48,6 +48,7 @@ module Aardi
 
     def tag_list
       return '' unless @tag_index
+      return '' if @tag_index.empty?
 
       "**What**: #{@tag_index.inline_links}\n\n"
     end

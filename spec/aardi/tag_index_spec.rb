@@ -49,5 +49,15 @@ class TagIndexSpec < Minitest::Spec
         _(make_index({}).content).must_equal "# Tags\n"
       end
     end
+
+    describe '#empty?' do
+      it 'is true for an empty tag_counts' do
+        _(make_index({}).empty?).must_equal true
+      end
+
+      it 'is false when there are tags' do
+        _(make_index('ruby' => 1).empty?).must_equal false
+      end
+    end
   end
 end

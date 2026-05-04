@@ -33,10 +33,6 @@ class BlogTagPagesSpec < Minitest::Spec
     end
 
     describe '#archive_tag_index' do
-      it 'is nil before any tagged post is added' do
-        _(@proxy.archive_tag_index).must_be_nil
-      end
-
       it 'is non-nil once a tagged post is added' do
         @proxy << tagged_post(%w[ruby])
 
@@ -51,6 +47,13 @@ class BlogTagPagesSpec < Minitest::Spec
         content = @proxy.archive_tag_index.content
         _(content).must_match(/\[ruby\]\([^)]+\) \(2\)/)
         _(content).must_match(/\[rails\]\([^)]+\) \(1\)/)
+      end
+
+      it 'reflects posts added after the index is first observed' do
+        index = @proxy.archive_tag_index
+        @proxy << tagged_post(%w[ruby])
+
+        _(index.content).must_include '[ruby]'
       end
     end
 

@@ -50,6 +50,13 @@ class ArchiveSpec < Minitest::Spec
         _(content).must_include '**What**:'
         _(content).must_include '[ruby]'
       end
+
+      it 'omits the **What**: line when the TagIndex is empty' do
+        empty_index = Aardi::TagIndex.new({}, config: @config, ledger: @ledger)
+        archive = Aardi::Archive.new('blog', config: @config, ledger: @ledger, tag_index: empty_index)
+
+        _(archive.content).wont_include '**What**:'
+      end
     end
 
     describe '#content' do

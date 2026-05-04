@@ -13,6 +13,8 @@ module Aardi
       "# Tags\n\n#{tag_lines.join("\n")}\n"
     end
 
+    def empty? = @tag_counts.empty?
+
     def inline_links
       tag_list.map { |tag| "[#{tag}](#{tag_url(tag)})" }.join(', ')
     end

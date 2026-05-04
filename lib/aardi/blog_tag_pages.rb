@@ -16,7 +16,7 @@ module Aardi
       end
     end
 
-    def archive_tag_index = empty? ? nil : tag_index
+    def archive_tag_index = tag_index
 
     def children = empty? ? [] : [tag_index, *@index.values]
 
