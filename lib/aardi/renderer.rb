@@ -9,7 +9,7 @@ module Aardi
 
     def markup(content)
       @custom_renderer.reset
-      @markup_renderer.render(content).strip
+      @markup_renderer.render(content)
     end
   end
 end

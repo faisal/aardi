@@ -41,6 +41,10 @@ class RendererSpec < Minitest::Spec
         _(html).must_include 'Just a paragraph'
       end
 
+      it 'preserves the trailing newline emitted by Redcarpet' do
+        _(subject.markup('Just a paragraph.')).must_match(/\n\z/)
+      end
+
       it 'resets custom_renderer state between calls so heading ids do not collide' do
         subject.markup('## Hello')
         second = subject.markup('## Hello')
