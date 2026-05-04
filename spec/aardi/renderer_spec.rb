@@ -12,6 +12,20 @@ class RendererSpec < Minitest::Spec
       @ledger[:renderer]
     end
 
+    describe '.new' do
+      it 'accepts a config: keyword argument' do
+        renderer = Aardi::Renderer.new(config: setup_config)
+
+        _(renderer.markup('## Hello')).must_include '<h2'
+      end
+
+      it 'does not crash when config has no :markup_options' do
+        config = setup_config(markup_options: nil)
+
+        _(Aardi::Renderer.new(config: config)).must_be_instance_of Aardi::Renderer
+      end
+    end
+
     describe '#markup' do
       it 'returns HTML for a markup heading' do
         html = subject.markup('## Hello')

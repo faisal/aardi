@@ -27,7 +27,7 @@ module SpecHelpers
   # :reek:TooManyStatements
   def setup_ledger(config:)
     ledger = Aardi::Ledger.new
-    ledger[:renderer] = Aardi::Renderer.new(config)
+    ledger[:renderer] = Aardi::Renderer.new(config:)
     ledger[:content_hashes] = Aardi::ContentHashes.new('/nonexistent_test_hashes')
     ledger[:html_files] = Set.new
 
