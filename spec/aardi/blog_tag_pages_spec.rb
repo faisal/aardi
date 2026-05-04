@@ -42,6 +42,16 @@ class BlogTagPagesSpec < Minitest::Spec
 
         _(@proxy.archive_tag_index).wont_be_nil
       end
+
+      it 'returns a TagIndex whose content has correct per-tag counts' do
+        @proxy << tagged_post(%w[ruby])
+        @proxy << tagged_post(%w[ruby])
+        @proxy << tagged_post(%w[rails])
+
+        content = @proxy.archive_tag_index.content
+        _(content).must_match(/\[ruby\]\([^)]+\) \(2\)/)
+        _(content).must_match(/\[rails\]\([^)]+\) \(1\)/)
+      end
     end
 
     describe '#children' do

@@ -6,10 +6,14 @@ module Aardi
       @config = config
       @ledger = ledger
       @index = {}
+      @counts = Hash.new(0)
     end
 
     def <<(post)
-      post.tags&.each { |tag| tag_blog_for(tag) << post }
+      post.tags&.each do |tag|
+        tag_blog_for(tag) << post
+        @counts[tag] += 1
+      end
     end
 
     def archive_tag_index = empty? ? nil : tag_index
@@ -25,7 +29,7 @@ module Aardi
     end
 
     def tag_index
-      @tag_index ||= TagIndex.new(@index.keys, config: @config, ledger: @ledger)
+      @tag_index ||= TagIndex.new(@counts, config: @config, ledger: @ledger)
     end
   end
 end
