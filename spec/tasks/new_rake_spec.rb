@@ -23,7 +23,7 @@ class NewRakeSpec < Minitest::Spec
     end
 
     describe '#create_new_post' do
-      it 'creates a new markdown file under the posts directory' do
+      it 'creates a new markup file under the posts directory' do
         capture_io { create_new_post(@config) }
         post_files = Dir.glob('posts/**/*.md')
 

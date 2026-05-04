@@ -30,7 +30,7 @@ module Aardi
     end
 
     def add_main(dom, src)
-      dom.at_css('main').add_child(@ledger[:renderer].markdown(src.content))
+      dom.at_css('main').add_child(@ledger[:renderer].markup(src.content))
     end
 
     def add_title(dom, src)

@@ -34,7 +34,7 @@ class AbstractPageSupportSpec < Minitest::Spec
     end
 
     describe 'title' do
-      it 'extracts title from the first markdown heading when no metadata Title' do
+      it 'extracts title from the first markup heading when no metadata Title' do
         page = page_by_sample_path 'page_heading_title.md'
 
         _(page.title).must_equal 'My Heading'

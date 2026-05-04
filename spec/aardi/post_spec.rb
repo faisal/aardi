@@ -141,7 +141,7 @@ class PostSpec < Minitest::Spec
     end
 
     describe '#title' do
-      it 'extracts the title from the first markdown heading' do
+      it 'extracts the title from the first markup heading' do
         post = make_post(title: 'Heading Title')
 
         _(post.title).must_equal 'Heading Title'

@@ -26,7 +26,7 @@ class TagIndexSpec < Minitest::Spec
     end
 
     describe '#content' do
-      it 'includes a markdown link for each tag pointing to the correct URL' do
+      it 'includes a markup link for each tag pointing to the correct URL' do
         index = make_index('ruby' => 1)
 
         _(index.content).must_include '[ruby](http://example.com/blog/tags/ruby/)'

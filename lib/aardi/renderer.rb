@@ -7,7 +7,7 @@ module Aardi
       @markup_renderer = Redcarpet::Markdown.new(@custom_renderer, config[:markup_options])
     end
 
-    def markdown(content)
+    def markup(content)
       @custom_renderer.reset
       @markup_renderer.render(content).strip
     end

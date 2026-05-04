@@ -12,32 +12,32 @@ class RendererSpec < Minitest::Spec
       @ledger[:renderer]
     end
 
-    describe '#markdown' do
-      it 'returns HTML for a markdown heading' do
-        html = subject.markdown('## Hello')
+    describe '#markup' do
+      it 'returns HTML for a markup heading' do
+        html = subject.markup('## Hello')
 
         _(html).must_include '<h2'
         _(html).must_include 'Hello'
       end
 
-      it 'returns HTML for a markdown paragraph' do
-        html = subject.markdown('Just a paragraph.')
+      it 'returns HTML for a markup paragraph' do
+        html = subject.markup('Just a paragraph.')
 
         _(html).must_include '<p>'
         _(html).must_include 'Just a paragraph'
       end
 
       it 'resets custom_renderer state between calls so heading ids do not collide' do
-        subject.markdown('## Hello')
-        second = subject.markdown('## Hello')
+        subject.markup('## Hello')
+        second = subject.markup('## Hello')
 
         _(second).must_include 'id="hello"'
         _(second).wont_include 'id="hello-1"'
       end
 
       it 'returns identical output for identical input across calls' do
-        first = subject.markdown('## Hello')
-        second = subject.markdown('## Hello')
+        first = subject.markup('## Hello')
+        second = subject.markup('## Hello')
 
         _(second).must_equal first
       end

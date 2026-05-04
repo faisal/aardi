@@ -13,7 +13,7 @@ class TemplateSpec < Minitest::Spec
     end
 
     describe '#render' do
-      it 'inserts rendered markdown into the main element' do
+      it 'inserts rendered markup into the main element' do
         src = Aardi::PageContent.new("## Hello\n\nWorld.", 'Hello', ledger: @ledger)
         html = subject.render(src)
 
