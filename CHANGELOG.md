@@ -1,11 +1,10 @@
 # v2.0.0
 
-- 2.0
+- support post tags, and automatic reation of sub-blogs based on their `Tags:` directive
 - restructured internals to pass around configuration and state rather than relying on globals
 
 # v1.0.0
 
-- 1.0
 - Orphan files warning now goes to STDERR rather than STDOUT
 - Switched from Standard Ruby to plain Rubocop for linting.
 - Add ruby-lsp to development dependies, for use in development.
