@@ -5,24 +5,25 @@ require 'spec_helper'
 class RendererSpec < Minitest::Spec
   describe Aardi::Renderer do
     before do
-      @ledger = setup_ledger(config: setup_config)
+      setup_config
+      setup_ledger
     end
 
     subject do
-      @ledger[:renderer]
+      Aardi.ledger[:renderer]
     end
 
     describe '.new' do
-      it 'accepts a config: keyword argument' do
-        renderer = Aardi::Renderer.new(config: setup_config)
+      it 'reads markup_options from Aardi.config' do
+        renderer = Aardi::Renderer.new
 
         _(renderer.markup('## Hello')).must_include '<h2'
       end
 
       it 'does not crash when config has no :markup_options' do
-        config = setup_config(markup_options: nil)
+        setup_config(markup_options: nil)
 
-        _(Aardi::Renderer.new(config: config)).must_be_instance_of Aardi::Renderer
+        _(Aardi::Renderer.new).must_be_instance_of Aardi::Renderer
       end
     end
 
@@ -58,6 +59,27 @@ class RendererSpec < Minitest::Spec
         second = subject.markup('## Hello')
 
         _(second).must_equal first
+      end
+
+      it 'does not strip the output' do
+        content = "# Header
+
+Paragraph
+"
+        marked_up = subject.markup(content)
+        _(marked_up).wont_equal marked_up.strip
+      end
+    end
+
+    describe '#markup_snippet' do
+      it 'strips the content' do
+        content = "### Header
+
+Snippet content
+"
+
+        marked_up = subject.markup_snippet(content)
+        _(marked_up).must_equal marked_up.strip
       end
     end
   end

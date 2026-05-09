@@ -5,12 +5,11 @@ require 'spec_helper'
 class TagBlogSpec < Minitest::Spec
   describe Aardi::TagBlog do
     before do
-      @config = setup_config
-      @ledger = Aardi::Ledger.new
+      setup_config
     end
 
     def make_tag_blog(posts, tag)
-      tag_blog = Aardi::TagBlog.new(tag, config: @config, ledger: @ledger)
+      tag_blog = Aardi::TagBlog.new(tag)
       posts.each do |post|
         tag_blog << post
       end

@@ -2,11 +2,10 @@
 
 module Aardi
   class FileTarget
-    def initialize(src, target_path, ledger:)
+    def initialize(src, target_path)
       @src = src
       @path = target_path
-      @ledger = ledger
-      @content_hashes = @ledger[:content_hashes]
+      @content_hashes = Aardi.ledger[:content_hashes]
     end
 
     # :reek:TooManyStatements
@@ -34,7 +33,8 @@ module Aardi
       return true unless file_exists?
       return false unless output_hash_changed?
 
-      @src.output != File.read(@path).strip # in case cache missing (or corrupt) yet file good.
+      # in case cache missing (or corrupt) yet file good.
+      @src.output != File.read(@path).strip
     end
 
     def update_hash

@@ -5,12 +5,11 @@ require 'spec_helper'
 class TagIndexSpec < Minitest::Spec
   describe Aardi::TagIndex do
     before do
-      @config = setup_config
-      @ledger = Aardi::Ledger.new
+      setup_config
     end
 
     def make_index(tag_counts)
-      Aardi::TagIndex.new(tag_counts, config: @config, ledger: @ledger)
+      Aardi::TagIndex.new(tag_counts)
     end
 
     describe '#target_path' do

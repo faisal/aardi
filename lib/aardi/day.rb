@@ -2,11 +2,8 @@
 
 module Aardi
   # :reek:TooManyInstanceVariables
-  # :reek:LongParameterList
   class Day < AbstractBlog
-    # rubocop:disable Metrics/ParameterLists
-    def initialize(year, month, key, archive_path, config:, ledger:, tag: nil)
-      super(config:, ledger:)
+    def initialize(year, month, key, archive_path, tag: nil)
       @year = year
       @month = month
       @key = key
@@ -14,7 +11,6 @@ module Aardi
       @tag = tag
       @posts = []
     end
-    # rubocop:enable Metrics/ParameterLists
 
     def <<(post)
       @posts << post
@@ -35,12 +31,10 @@ module Aardi
     end
 
     def title
-      base = date.strftime('%A, %-e %B %Y')
-      if @tag
-        "#{base} - #{@tag}"
-      else
-        base
-      end
+      base_title = date.strftime('%A, %-e %B %Y')
+      return "#{base_title} - #{@tag}" if @tag
+
+      base_title
     end
 
     private

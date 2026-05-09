@@ -5,12 +5,11 @@ require 'spec_helper'
 class BlogSpec < Minitest::Spec
   describe Aardi::Blog do
     before do
-      @config = setup_config
-      @ledger = Aardi::Ledger.new
+      setup_config
     end
 
     def make_blog(posts)
-      blog = Aardi::Blog.new(config: @config, ledger: @ledger)
+      blog = Aardi::Blog.new
       posts.each do |post|
         blog << post
       end
@@ -74,7 +73,7 @@ class BlogSpec < Minitest::Spec
 
     describe '#recent_posts' do
       it 'returns the last N posts reversed so newest is first' do
-        @config = setup_config(blog_home_posts: 2)
+        setup_config(blog_home_posts: 2)
         blog = make_blog(posts_across_years)
 
         selection = blog.send(:recent_posts, :blog_home_posts)
@@ -83,7 +82,7 @@ class BlogSpec < Minitest::Spec
       end
 
       it 'uses the config key it was passed, so feed and home counts differ' do
-        @config = setup_config(blog_feed_posts: 1, blog_home_posts: 3)
+        setup_config(blog_feed_posts: 1, blog_home_posts: 3)
         blog = make_blog(posts_across_years)
 
         _(blog.send(:recent_posts, :blog_feed_posts).map(&:name)).must_equal ['newest']
@@ -92,7 +91,7 @@ class BlogSpec < Minitest::Spec
       end
 
       it 'returns all posts reversed when there are fewer posts than the limit' do
-        @config = setup_config(blog_home_posts: 10)
+        setup_config(blog_home_posts: 10)
         blog = make_blog(posts_across_years)
 
         _(blog.send(:recent_posts, :blog_home_posts).map(&:name))
@@ -106,7 +105,7 @@ class BlogSpec < Minitest::Spec
 
     describe '#report_recent' do
       it 'calls report_field_summary on the last blog_recent_posts, newest first' do
-        @config = setup_config(blog_recent_posts: 2)
+        setup_config(blog_recent_posts: 2)
         reported = []
         posts = posts_across_years.each do |post|
           post.define_singleton_method(:report_field_summary) { reported << name }
@@ -118,7 +117,7 @@ class BlogSpec < Minitest::Spec
       end
 
       it 'reports on all posts when there are fewer than blog_recent_posts' do
-        @config = setup_config(blog_recent_posts: 10)
+        setup_config(blog_recent_posts: 10)
         reported = []
         posts = posts_across_years.each do |post|
           post.define_singleton_method(:report_field_summary) { reported << name }

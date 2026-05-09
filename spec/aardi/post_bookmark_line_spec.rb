@@ -5,12 +5,12 @@ require 'spec_helper'
 class PostBookmarkLineSpec < Minitest::Spec
   describe Aardi::PostBookmarkLine do
     before do
-      @config = setup_config
+      setup_config
     end
 
     def make_bookmark(url: 'http://example.com/blog/2024/01/05/my-post', tags: nil)
       post = Struct.new(:url, :tags).new(url, tags)
-      Aardi::PostBookmarkLine.new(post, config: @config)
+      Aardi::PostBookmarkLine.new(post)
     end
 
     describe '#to_s' do
@@ -48,9 +48,9 @@ class PostBookmarkLineSpec < Minitest::Spec
       end
 
       it 'omits tag links when blog_tags_path is not configured' do
-        config = setup_config(blog_tags_path: nil)
+        setup_config(blog_tags_path: nil)
         post = Struct.new(:url, :tags).new('http://example.com/post', %w[ruby])
-        bookmark = Aardi::PostBookmarkLine.new(post, config:)
+        bookmark = Aardi::PostBookmarkLine.new(post)
 
         _(bookmark.to_s).wont_include '/tags/'
       end

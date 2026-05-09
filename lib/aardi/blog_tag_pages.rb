@@ -2,9 +2,7 @@
 
 module Aardi
   class BlogTagPages
-    def initialize(config:, ledger:)
-      @config = config
-      @ledger = ledger
+    def initialize
       @index = {}
       @counts = Hash.new(0)
     end
@@ -25,11 +23,11 @@ module Aardi
     private
 
     def tag_blog_for(tag)
-      @index[tag] ||= TagBlog.new(tag, config: @config, ledger: @ledger)
+      @index[tag] ||= TagBlog.new(tag)
     end
 
     def tag_index
-      @tag_index ||= TagIndex.new(@counts, config: @config, ledger: @ledger)
+      @tag_index ||= TagIndex.new(@counts)
     end
   end
 end

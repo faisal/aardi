@@ -2,14 +2,12 @@
 
 module Aardi
   class Archive < AbstractBlog
-    # :reek:LongParameterList
-    def initialize(archive_path, config:, ledger:, tag: nil, tag_index: nil)
-      super(config:, ledger:)
+    def initialize(archive_path, tag: nil, tag_index: nil)
       @archive_path = archive_path
       @tag = tag
       @tag_index = tag_index
       @index = Hash.new do |hash, year|
-        hash[year] = Year.new(year, @archive_path, config: @config, ledger: @ledger, tag: @tag)
+        hash[year] = Year.new(year, @archive_path, tag: @tag)
       end
     end
 
@@ -19,7 +17,7 @@ module Aardi
 
     def content
       year_fmt = "| %<year>s | %<months>s \n"
-      month_fmt = "[&nbsp;%<count>s&nbsp;](#{@config[:site_url]}/%<archive_path>s/%<year>s/%<month>s/)"
+      month_fmt = "[&nbsp;%<count>s&nbsp;](#{Aardi.config[:site_url]}/%<archive_path>s/%<year>s/%<month>s/)"
 
       rows = years.map { |year| year.archive_row(year_fmt, month_fmt) }.join
       "#{title_heading}#{tag_list}**When**:\n\n#{table_header}#{rows}"
@@ -28,7 +26,7 @@ module Aardi
     def target_path = "./#{@archive_path}/index.html"
 
     def title
-      base_title = @config[:blog_archive_title]
+      base_title = Aardi.config[:blog_archive_title]
       return "#{base_title} - #{@tag}" if @tag
 
       base_title

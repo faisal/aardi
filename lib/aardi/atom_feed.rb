@@ -15,10 +15,8 @@ module Aardi
     # :reek:TooManyStatements
     # rubocop:disable Metrics/MethodLength
     def feed_details(feed)
-      config = @config
-
       feed.author do
-        name(config[:site_author])
+        name(Aardi.config[:site_author])
       end
 
       subnodes = { id: feed_url, link: { href: feed_url, rel: 'self' },

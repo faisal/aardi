@@ -1,7 +1,6 @@
 # v2.0.0
 
 - support post tags, and automatic reation of sub-blogs based on their `Tags:` directive
-- restructured internals to pass around configuration and state rather than relying on globals
 
 # v1.0.0
 

@@ -5,9 +5,12 @@ module Aardi
     attr_reader :metadata, :mtime
 
     def parse_source(path)
-      yaml_part, _, @src_content = File.read(path, encoding: 'utf-8').rpartition("\n----\n")
-      @metadata = YAML.safe_load(yaml_part, permitted_classes: [Time]) || {}
-      @mtime = File.mtime(path).utc
+      File.open(path, encoding: 'utf-8') do |file|
+        parts = file.read.rpartition("\n----\n")
+        @metadata = YAML.safe_load(parts.first, permitted_classes: [Time]) || {}
+        @src_content = parts.last
+        @mtime = file.mtime.utc
+      end
     end
 
     def title

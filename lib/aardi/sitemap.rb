@@ -2,11 +2,6 @@
 
 module Aardi
   class Sitemap
-    def initialize(config:, ledger:)
-      @config = config
-      @ledger = ledger
-    end
-
     # :reek:NestedIterators
     def content
       sitemap = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do
@@ -22,7 +17,7 @@ module Aardi
 
     def render
       source = Content.new(content)
-      FileTarget.new(source, target_path, ledger: @ledger).write
+      FileTarget.new(source, target_path).write
     end
 
     def target_path = './sitemap.xml'
@@ -44,7 +39,7 @@ module Aardi
     end
 
     def urls
-      @urls ||= @config[:sitemap_entries].to_h { |path, cf| [path, url_values(path, cf)] }
+      @urls ||= Aardi.config[:sitemap_entries].to_h { |path, cf| [path, url_values(path, cf)] }
     end
 
     private
@@ -55,7 +50,7 @@ module Aardi
     end
 
     def url_values(path, changefreq)
-      { loc: "#{@config[:site_url]}#{path}", changefreq: }
+      { loc: "#{Aardi.config[:site_url]}#{path}", changefreq: }
     end
   end
 end

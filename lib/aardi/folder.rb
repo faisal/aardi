@@ -2,10 +2,8 @@
 
 module Aardi
   class Folder
-    def initialize(path, config:, ledger:)
+    def initialize(path)
       @path = path
-      @config = config
-      @ledger = ledger
       @normalized_path = "#{path.sub(/^\./, '')}/"
     end
 
@@ -15,7 +13,7 @@ module Aardi
       children.each(&:render)
       return if @path == '.'
 
-      @ledger[:sitemap].update_mtime(@normalized_path, mtime) if @config[:sitemap_entries][@normalized_path]
+      Aardi.ledger[:sitemap].update_mtime(@normalized_path, mtime) if Aardi.config[:sitemap_entries][@normalized_path]
     end
 
     private
@@ -25,17 +23,15 @@ module Aardi
     end
 
     def folders
-      @folders ||= paths.filter_map do |path|
-        Folder.new(path, config: @config, ledger: @ledger) if File.directory?(path)
-      end
+      @folders ||= paths.filter_map { |path| Folder.new(path) if File.directory?(path) }
     end
 
     def paths
-      @paths ||= FileList["#{@path}/*"].exclude(@config[:files_to_exclude])
+      @paths ||= FileList["#{@path}/*"].exclude(Aardi.config[:files_to_exclude])
     end
 
     def sources
-      @sources ||= paths.filter_map { |path| Page.new(path, ledger: @ledger) if path.end_with?('.md') }
+      @sources ||= paths.filter_map { |path| Page.new(path) if path.end_with?('.md') }
     end
   end
 end

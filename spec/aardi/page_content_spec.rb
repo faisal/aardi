@@ -5,11 +5,12 @@ require 'spec_helper'
 class PageContentSpec < Minitest::Spec
   describe Aardi::PageContent do
     before do
-      @ledger = setup_ledger(config: setup_config)
+      setup_config
+      setup_ledger
     end
 
     subject do
-      Aardi::PageContent.new("## Hello\n\nContent.", 'My Title', { 'Description' => 'desc' }, ledger: @ledger)
+      Aardi::PageContent.new("## Hello\n\nContent.", 'My Title', { 'Description' => 'desc' })
     end
 
     it 'stores the title' do

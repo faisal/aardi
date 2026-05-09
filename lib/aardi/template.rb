@@ -3,9 +3,8 @@
 module Aardi
   # :reek:DataClump
   class Template
-    def initialize(path, ledger:)
+    def initialize(path)
       @path = path
-      @ledger = ledger
       @content = File.read(path).strip
       @dom = Nokogiri::HTML5.parse(@content)
     end
@@ -30,7 +29,7 @@ module Aardi
     end
 
     def add_main(dom, src)
-      dom.at_css('main').add_child(@ledger[:renderer].markup(src.content))
+      dom.at_css('main').add_child(Aardi.ledger[:renderer].markup(src.content))
     end
 
     def add_title(dom, src)

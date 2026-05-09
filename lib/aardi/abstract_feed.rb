@@ -2,8 +2,7 @@
 
 module Aardi
   class AbstractFeed < AbstractBlog
-    def initialize(posts, config:, ledger:, archive_path: nil, tag: nil)
-      super(config:, ledger:)
+    def initialize(posts, archive_path: nil, tag: nil)
       @archive_path = archive_path
       @posts = posts
       @tag = tag
@@ -28,19 +27,19 @@ module Aardi
     def creation = children.max_by(&:creation)&.creation
 
     def feed_title
-      base_title = @config[:site_title]
+      base_title = Aardi.config[:site_title]
       return "#{base_title} - #{@tag}" if @tag
 
       base_title
     end
 
-    def feed_url = "#{@config[:site_url]}#{target_path[1..]}"
+    def feed_url = "#{Aardi.config[:site_url]}#{target_path[1..]}"
 
     def updated = children.max_by(&:updated)&.updated
 
     def write_target
       source = Content.new(content)
-      FileTarget.new(source, target_path, ledger: @ledger).write
+      FileTarget.new(source, target_path).write
     end
   end
 end

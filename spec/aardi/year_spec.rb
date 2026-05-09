@@ -5,12 +5,11 @@ require 'spec_helper'
 class YearSpec < Minitest::Spec
   describe Aardi::Year do
     before do
-      @config = setup_config
-      @ledger = Aardi::Ledger.new
+      setup_config
     end
 
     def make_year(year_int = 2024)
-      Aardi::Year.new(year_int, 'blog', config: @config, ledger: @ledger)
+      Aardi::Year.new(year_int, 'blog')
     end
 
     describe '#<<' do
@@ -18,10 +17,7 @@ class YearSpec < Minitest::Spec
         year = make_year
         year << StubPost.new(Time.utc(2024, 6, 1))
         year << StubPost.new(Time.utc(2024, 6, 15))
-        year_fmt = '%<year>s %<months>s'
-        month_fmt = '%<month>s(%<count>s)'
-        row = year.archive_row(year_fmt, month_fmt)
-
+        row = year.archive_row('%<year>s %<months>s', '%<month>s(%<count>s)')
         _(row).must_include '06(2)'
       end
     end
@@ -31,14 +27,8 @@ class YearSpec < Minitest::Spec
         _(make_year(2023).title).must_equal '2023'
       end
 
-      describe 'with tag' do
-        def make_year_with_tag
-          Aardi::Year.new(2023, 'blog', config: @config, ledger: @ledger, tag: 'ruby')
-        end
-
-        it 'includes tag in title' do
-          _(make_year_with_tag.title).must_equal '2023 - ruby'
-        end
+      it 'includes tag in title' do
+        _(Aardi::Year.new(2023, 'blog', tag: 'ruby').title).must_equal '2023 - ruby'
       end
     end
 
@@ -51,10 +41,7 @@ class YearSpec < Minitest::Spec
     describe '#archive_row' do
       it 'includes the year and 12 month cells' do
         year = make_year
-        year_fmt = "| %<year>s | %<months>s\n"
-        month_fmt = '[%<count>s](http://example.com/blog/%<year>s/%<month>s/)'
-        row = year.archive_row(year_fmt, month_fmt)
-
+        row = year.archive_row("| %<year>s | %<months>s\n", '[%<count>s](http://example.com/blog/%<year>s/%<month>s/)')
         _(row).must_include '| 2024 |'
       end
     end
@@ -63,10 +50,8 @@ class YearSpec < Minitest::Spec
       it 'includes a heading and links to each month with posts' do
         year = make_year(2024)
         year << StubPost.new(Time.utc(2024, 6, 1))
-        content = year.content
-
-        _(content).must_include '# 2024'
-        _(content).must_include 'June'
+        _(year.content).must_include '# 2024'
+        _(year.content).must_include 'June'
       end
     end
   end

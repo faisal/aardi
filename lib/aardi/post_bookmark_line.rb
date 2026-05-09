@@ -2,9 +2,8 @@
 
 module Aardi
   class PostBookmarkLine
-    def initialize(post, config:)
+    def initialize(post)
       @post = post
-      @config = config
     end
 
     def to_s
@@ -21,7 +20,8 @@ module Aardi
     end
 
     def tags_base_url
-      "#{@config[:site_url]}/#{@config[:blog_archive_path]}/#{@config[:blog_tags_path]}"
+      config = Aardi.config
+      "#{config[:site_url]}/#{config[:blog_archive_path]}/#{config[:blog_tags_path]}"
     end
   end
 end

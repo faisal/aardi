@@ -6,7 +6,7 @@ require 'rake'
 class NewRakeSpec < Minitest::Spec
   describe 'rake new / create_new_post' do
     before do
-      @config = setup_config
+      setup_config
       @tmpdir = Dir.mktmpdir
       @original_dir = Dir.pwd
       Dir.chdir(@tmpdir)
@@ -24,33 +24,33 @@ class NewRakeSpec < Minitest::Spec
 
     describe '#create_new_post' do
       it 'creates a new markup file under the posts directory' do
-        capture_io { create_new_post(@config) }
+        capture_io { create_new_post }
         post_files = Dir.glob('posts/**/*.md')
 
         _(post_files).wont_be_empty
       end
 
       it 'prints the path of the created file' do
-        out, = capture_io { create_new_post(@config) }
+        out, = capture_io { create_new_post }
         _(out.chomp).must_match(%r{^posts/.+\.md$})
       end
 
       it 'includes a Creation timestamp in the file content' do
-        capture_io { create_new_post(@config) }
+        capture_io { create_new_post }
         content = File.read(Dir.glob('posts/**/*.md').first)
 
         _(content).must_match(/^Creation: \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/)
       end
 
       it 'uses the ---- separator between YAML and content' do
-        capture_io { create_new_post(@config) }
+        capture_io { create_new_post }
         content = File.read(Dir.glob('posts/**/*.md').first)
 
         _(content).must_include "\n----\n"
       end
 
       it 'includes a title placeholder in the content' do
-        capture_io { create_new_post(@config) }
+        capture_io { create_new_post }
         content = File.read(Dir.glob('posts/**/*.md').first)
 
         _(content).must_include '### title'

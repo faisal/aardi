@@ -2,12 +2,11 @@
 
 module Aardi
   class Blog < AbstractBlog
-    def initialize(config:, ledger:)
-      super
+    def initialize
       @posts = []
       @blog_path = nil
-      @archive_path = @config[:blog_archive_path]
-      @tags = BlogTagPages.new(config: config, ledger: ledger)
+      @archive_path = Aardi.config[:blog_archive_path]
+      @tags = BlogTagPages.new
     end
 
     def <<(post)
@@ -23,12 +22,11 @@ module Aardi
     private
 
     def archive
-      @archive ||= Archive.new(@archive_path, config: @config, ledger: @ledger, tag: tag,
-                                              tag_index: @tags.archive_tag_index)
+      @archive ||= Archive.new(@archive_path, tag: tag, tag_index: @tags.archive_tag_index)
     end
 
     def atom_feed
-      ATOMFeed.new(feed_posts, config: @config, ledger: @ledger, archive_path: @blog_path, tag: tag)
+      ATOMFeed.new(feed_posts, archive_path: @blog_path, tag: tag)
     end
 
     def children
@@ -40,16 +38,15 @@ module Aardi
     end
 
     def home
-      Home.new(recent_posts(:blog_home_posts), @archive_path, config: @config, ledger: @ledger,
-                                                              blog_path: @blog_path, tag: tag)
+      Home.new(recent_posts(:blog_home_posts), @archive_path, blog_path: @blog_path, tag: tag)
     end
 
     def json_feed
-      JSONFeed.new(feed_posts, config: @config, ledger: @ledger, archive_path: @blog_path, tag: tag)
+      JSONFeed.new(feed_posts, archive_path: @blog_path, tag: tag)
     end
 
     def recent_posts(conf_key)
-      @posts.max_by(@config[conf_key], &:creation)
+      @posts.max_by(Aardi.config[conf_key], &:creation)
     end
 
     def tag = nil

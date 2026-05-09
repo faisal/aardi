@@ -4,7 +4,7 @@ module Aardi
   class PageTarget < FileTarget
     def write
       super
-      @ledger[:html_files].delete(@path)
+      Aardi.ledger[:html_files].delete(@path)
     end
 
     private
@@ -13,7 +13,7 @@ module Aardi
     # list rather than always rechecking the file system. But then
     # check anyway because html_files doesn't always catch tag pages.
     def file_exists?
-      @ledger[:html_files].include?(@path) || File.exist?(@path)
+      Aardi.ledger[:html_files].include?(@path) || File.exist?(@path)
     end
   end
 end

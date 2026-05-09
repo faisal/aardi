@@ -5,8 +5,8 @@ require 'spec_helper'
 class PostSpec < Minitest::Spec
   describe Aardi::Post do
     before do
-      @config = setup_config
-      @ledger = setup_ledger(config: @config)
+      setup_config
+      setup_ledger
       @tmpdir = Dir.mktmpdir
     end
 
@@ -19,7 +19,7 @@ class PostSpec < Minitest::Spec
       content = "Creation: #{creation.iso8601}\n#{extra_yaml}\n----\n### #{title}\n\nBody text.\n"
       path = File.join(@tmpdir, "#{name}.md")
       File.write(path, content)
-      Aardi::Post.new(path, config: @config, ledger: @ledger)
+      Aardi::Post.new(path)
     end
 
     describe '#creation' do
@@ -122,7 +122,7 @@ class PostSpec < Minitest::Spec
       end
 
       it 'omits tag links when blog_tags_path is not configured' do
-        @config = setup_config(blog_tags_path: nil)
+        setup_config(blog_tags_path: nil)
         post = make_post(extra_yaml: 'Tags: foo bar')
 
         _(post.content).wont_include '/tags/'

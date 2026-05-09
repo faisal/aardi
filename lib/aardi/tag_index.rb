@@ -2,8 +2,7 @@
 
 module Aardi
   class TagIndex < AbstractBlog
-    def initialize(tag_counts, config:, ledger:)
-      super(config:, ledger:)
+    def initialize(tag_counts)
       @tag_counts = tag_counts
     end
 
@@ -36,11 +35,12 @@ module Aardi
     end
 
     def tag_url(tag)
-      "#{@config[:site_url]}/#{tags_base_path}/#{tag}/"
+      "#{Aardi.config[:site_url]}/#{tags_base_path}/#{tag}/"
     end
 
     def tags_base_path
-      "#{@config[:blog_archive_path]}/#{@config[:blog_tags_path]}"
+      config = Aardi.config
+      "#{config[:blog_archive_path]}/#{config[:blog_tags_path]}"
     end
   end
 end

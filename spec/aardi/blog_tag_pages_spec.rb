@@ -5,9 +5,9 @@ require 'spec_helper'
 class BlogTagPagesSpec < Minitest::Spec
   describe Aardi::BlogTagPages do
     before do
-      @config = setup_config
-      @ledger = setup_ledger(config: @config)
-      @proxy = Aardi::BlogTagPages.new(config: @config, ledger: @ledger)
+      setup_config
+      setup_ledger
+      @proxy = Aardi::BlogTagPages.new
     end
 
     def tagged_post(tags)

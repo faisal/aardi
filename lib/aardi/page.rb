@@ -4,9 +4,8 @@ module Aardi
   class Page
     include AbstractPageSupport
 
-    def initialize(path, ledger:)
+    def initialize(path)
       @path = path
-      @ledger = ledger
       parse_source path
     end
 
@@ -15,8 +14,8 @@ module Aardi
     end
 
     def render
-      page_content = PageContent.new(content, title, metadata, ledger: @ledger)
-      PageTarget.new(page_content, target_path, ledger: @ledger).write
+      page_content = PageContent.new(content, title, metadata)
+      PageTarget.new(page_content, target_path).write
     end
 
     def target_path

@@ -7,12 +7,11 @@ class AtomFeedSpec < Minitest::Spec
 
   describe Aardi::ATOMFeed do
     before do
-      @config = setup_config
-      @ledger = Aardi::Ledger.new
+      setup_config
     end
 
     def make_feed(posts = [])
-      Aardi::ATOMFeed.new(posts, config: @config, ledger: @ledger)
+      Aardi::ATOMFeed.new(posts)
     end
 
     describe '#target_path' do
@@ -76,7 +75,7 @@ class AtomFeedSpec < Minitest::Spec
 
       describe 'with tag' do
         def make_feed_with_tag
-          Aardi::ATOMFeed.new(posts, config: @config, ledger: @ledger, tag: 'ruby')
+          Aardi::ATOMFeed.new(posts, tag: 'ruby')
         end
 
         it 'includes tag in feed title' do

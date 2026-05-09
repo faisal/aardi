@@ -2,24 +2,21 @@
 
 module Aardi
   # :reek:TooManyStatements
+  # :reek:RepeatedConditional
   class Home < AbstractBlog
-    # :reek:LongParameterList
-    # rubocop:disable Metrics/ParameterLists
-    def initialize(posts, archive_path, config:, ledger:, blog_path: nil, tag: nil)
-      super(config:, ledger:)
+    def initialize(posts, archive_path, blog_path: nil, tag: nil)
       @posts = posts
       @archive_path = archive_path
       @blog_path = blog_path
       @tag = tag
     end
-    # rubocop:enable Metrics/ParameterLists
 
     def content
       "# #{title}\n#{post_days_content}#{content_footer}"
     end
 
     def render
-      @ledger[:sitemap].update_mtime('/', mtime) unless @blog_path
+      Aardi.ledger[:sitemap].update_mtime('/', mtime) unless @blog_path
       write_target
     end
 
@@ -30,7 +27,7 @@ module Aardi
     end
 
     def title
-      base_title = @config[:blog_home_title]
+      base_title = Aardi.config[:blog_home_title]
       return "#{base_title} - #{@tag}" if @tag
 
       base_title
@@ -43,13 +40,15 @@ module Aardi
     end
 
     # :reek:NilCheck
+    # :reek:DuplicateMethodCall
     def content_footer
-      site_url = @config[:site_url]
-      feed_base = @blog_path.nil? ? '' : "/#{@blog_path}"
-      archive_url = "#{site_url}#{feed_base}/#{@config[:blog_archive_path]}/"
-      rss_url = "#{site_url}#{feed_base}/index.xml"
-      json_url = "#{site_url}#{feed_base}/index.json"
-      "**More:** [Archive](#{archive_url}), [RSS](#{rss_url}), [JSON](#{json_url})"
+      site_url = Aardi.config[:site_url]
+      feed_base = "/#{@blog_path}" if @blog_path
+
+      "**More:** \
+[Archive](#{"#{site_url}#{feed_base}/#{Aardi.config[:blog_archive_path]}/"}), \
+[RSS](#{"#{site_url}#{feed_base}/index.xml"}), \
+[JSON](#{"#{site_url}#{feed_base}/index.json"})"
     end
 
     def days_hash
@@ -57,7 +56,8 @@ module Aardi
     end
 
     def post_day_content(post_day)
-      "## #{post_day.first.creation.strftime('%A, %e %B %Y')}\n#{post_day.map(&:content).join}"
+      first_post = post_day.first
+      "## #{first_post.creation.strftime('%A, %e %B %Y')}\n#{post_day.map(&:content).join}"
     end
 
     def post_days_content

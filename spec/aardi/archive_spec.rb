@@ -5,41 +5,32 @@ require 'spec_helper'
 class ArchiveSpec < Minitest::Spec
   describe Aardi::Archive do
     before do
-      @config = setup_config
-      @ledger = Aardi::Ledger.new
+      setup_config
     end
 
     def make_archive(posts)
-      archive = Aardi::Archive.new('blog', config: @config, ledger: @ledger)
-      posts.each do |post|
-        archive << post
-      end
+      archive = Aardi::Archive.new('blog')
+      posts.each { |post| archive << post }
       archive
     end
 
     describe '#title' do
       it 'returns the blog_archive_title from config' do
-        archive = make_archive([])
-
-        _(archive.title).must_equal 'Blog Archive'
+        _(make_archive([]).title).must_equal 'Blog Archive'
       end
     end
 
     describe '#target_path' do
       it 'uses the archive_path' do
-        target_path = make_archive([]).target_path
-
-        _(target_path).must_equal './blog/index.html'
+        _(make_archive([]).target_path).must_equal './blog/index.html'
       end
     end
 
     describe 'with tag_index' do
       def make_archive_with_tag_index(posts)
-        tag_index = Aardi::TagIndex.new({ 'ruby' => 2, 'rails' => 1 }, config: @config, ledger: @ledger)
-        archive = Aardi::Archive.new('blog', config: @config, ledger: @ledger, tag_index: tag_index)
-        posts.each do |post|
-          archive << post
-        end
+        tag_index = Aardi::TagIndex.new({ 'ruby' => 2, 'rails' => 1 })
+        archive = Aardi::Archive.new('blog', tag_index: tag_index)
+        posts.each { |post| archive << post }
         archive
       end
 
@@ -52,8 +43,8 @@ class ArchiveSpec < Minitest::Spec
       end
 
       it 'omits the **What**: line when the TagIndex is empty' do
-        empty_index = Aardi::TagIndex.new({}, config: @config, ledger: @ledger)
-        archive = Aardi::Archive.new('blog', config: @config, ledger: @ledger, tag_index: empty_index)
+        empty_index = Aardi::TagIndex.new({})
+        archive = Aardi::Archive.new('blog', tag_index: empty_index)
 
         _(archive.content).wont_include '**What**:'
       end
@@ -61,15 +52,11 @@ class ArchiveSpec < Minitest::Spec
 
     describe '#content' do
       it 'includes a archive table header row' do
-        content = make_archive([]).content
-
-        _(content).must_match(/\|Jan\|.*\|Dec\|/)
+        _(make_archive([]).content).must_match(/\|Jan\|.*\|Dec\|/)
       end
 
       it 'includes the archive title as a heading' do
-        content = make_archive([]).content
-
-        _(content).must_match(/\A# Blog Archive/)
+        _(make_archive([]).content).must_match(/\A# Blog Archive/)
       end
 
       it 'includes rows for each year that has posts' do

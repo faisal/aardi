@@ -5,12 +5,11 @@ require 'spec_helper'
 class JSONFeedSpec < Minitest::Spec
   describe Aardi::JSONFeed do
     before do
-      @config = setup_config
-      @ledger = Aardi::Ledger.new
+      setup_config
     end
 
     def make_feed(posts = [])
-      Aardi::JSONFeed.new(posts, config: @config, ledger: @ledger)
+      Aardi::JSONFeed.new(posts)
     end
 
     describe '#target_path' do
@@ -73,7 +72,7 @@ class JSONFeedSpec < Minitest::Spec
 
       describe 'with tag' do
         def make_feed_with_tag
-          Aardi::JSONFeed.new([StubPost.new(Time.now)], config: @config, ledger: @ledger, tag: 'ruby')
+          Aardi::JSONFeed.new([StubPost.new(Time.now)], tag: 'ruby')
         end
 
         it 'includes tag in feed title' do

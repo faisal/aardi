@@ -5,12 +5,11 @@ require 'spec_helper'
 class HomeSpec < Minitest::Spec
   describe Aardi::Home do
     before do
-      @config = setup_config
-      @ledger = Aardi::Ledger.new
+      setup_config
     end
 
     def make_home(posts)
-      Aardi::Home.new(posts, 'blog', config: @config, ledger: @ledger)
+      Aardi::Home.new(posts, 'blog')
     end
 
     describe '#title' do
@@ -25,7 +24,7 @@ class HomeSpec < Minitest::Spec
       end
 
       it 'is ./blog-path/index.html when blog_path is set' do
-        home = Aardi::Home.new([], 'blog', config: @config, ledger: @ledger, blog_path: 'blog/tags/ruby')
+        home = Aardi::Home.new([], 'blog', blog_path: 'blog/tags/ruby')
 
         _(home.target_path).must_equal './blog/tags/ruby/index.html'
       end
@@ -73,8 +72,7 @@ class HomeSpec < Minitest::Spec
 
       describe 'with blog_path' do
         def make_home_with_blog_path
-          Aardi::Home.new([StubPost.new(Time.now)], 'blog', config: @config, ledger: @ledger,
-                                                            blog_path: 'blog/tags/ruby')
+          Aardi::Home.new([StubPost.new(Time.now)], 'blog', blog_path: 'blog/tags/ruby')
         end
 
         it 'uses blog_path for feed URLs in footer' do

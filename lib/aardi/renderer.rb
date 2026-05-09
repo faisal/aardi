@@ -2,14 +2,18 @@
 
 module Aardi
   class Renderer
-    def initialize(config:)
+    def initialize
       @custom_renderer = CustomRenderer.new
-      @markup_renderer = Redcarpet::Markdown.new(@custom_renderer, config[:markup_options] || {})
+      @markup_renderer = Redcarpet::Markdown.new(@custom_renderer, Aardi.config[:markup_options] || {})
     end
 
     def markup(content)
       @custom_renderer.reset
       @markup_renderer.render(content)
+    end
+
+    def markup_snippet(content)
+      markup(content).strip
     end
   end
 end

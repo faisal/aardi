@@ -3,19 +3,13 @@
 module Aardi
   # :reek:TooManyInstanceVariables
   class Month < AbstractBlog
-    # :reek:LongParameterList
-    # rubocop:disable Metrics/ParameterLists
-    def initialize(year, key, archive_path, config:, ledger:, tag: nil)
-      super(config:, ledger:)
+    def initialize(year, key, archive_path, tag: nil)
       @year = year
       @key = key
       @archive_path = archive_path
+      @index = Hash.new { |hash, day| hash[day] = Day.new(year, self, day, archive_path, tag: tag) }
       @tag = tag
-      @index = Hash.new do |hash, day|
-        hash[day] = Day.new(year, self, day, archive_path, config: config, ledger: ledger, tag: tag)
-      end
     end
-    # rubocop:enable Metrics/ParameterLists
 
     def <<(post)
       @index[post.creation.day] << post

@@ -4,11 +4,10 @@ module Aardi
   class PageContent < Content
     attr_reader :title, :metadata
 
-    def initialize(src_content, title, metadata = {}, ledger:)
+    def initialize(src_content, title, metadata = {})
       super(src_content)
       @title = title
       @metadata = metadata
-      @ledger = ledger
     end
 
     def content
@@ -16,7 +15,7 @@ module Aardi
     end
 
     def output
-      @output ||= @ledger[:template].render(self)
+      @output ||= Aardi.ledger[:template].render(self)
     end
   end
 end

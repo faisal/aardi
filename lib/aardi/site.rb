@@ -2,10 +2,7 @@
 
 module Aardi
   class Site < AbstractBlog
-    def initialize(config:)
-      @config = config
-      @ledger = Ledger.new
-
+    def initialize
       initialize_ledger
 
       posts.each do |post|
@@ -14,32 +11,36 @@ module Aardi
     end
 
     def blog
-      @blog ||= Blog.new config: @config, ledger: @ledger
+      @blog ||= Blog.new
     end
 
     def render
       super
-      @ledger[:content_hashes].write
-      Orphanage.new(config: @config, ledger: @ledger).report
+      Aardi.ledger[:content_hashes].write
+      Orphanage.new.report
     end
 
     private
 
     def children
-      [Folder.new('.', config: @config, ledger: @ledger), blog, @ledger[:sitemap]]
+      [Folder.new('.'), blog, Aardi.ledger[:sitemap]]
     end
 
+    # rubocop:disable Metrics/AbcSize
+    # :reek:DuplicateMethodCall
     def initialize_ledger
-      @ledger[:content_hashes] = ContentHashes.new(@config[:content_hashes_path])
-      @ledger[:renderer] = Renderer.new(config: @config)
-      @ledger[:html_files] = Dir.glob('./**/*.html').to_set
-      @ledger[:sitemap] = Sitemap.new(config: @config, ledger: @ledger)
-      @ledger[:template] = Template.new(@config[:template_path], ledger: @ledger)
+      ledger = Aardi.ledger
+      ledger[:content_hashes] = ContentHashes.new(Aardi.config[:content_hashes_path])
+      ledger[:renderer] = Renderer.new
+      ledger[:html_files] = Dir.glob('./**/*.html').to_set
+      ledger[:sitemap] = Sitemap.new
+      ledger[:template] = Template.new(Aardi.config[:template_path])
     end
+    # rubocop:enable Metrics/AbcSize
 
     def posts
-      Dir.glob("#{@config[:blog_posts_path]}/**/*.md")
-         .map { |path| Post.new(path, config: @config, ledger: @ledger) }
+      Dir.glob("#{Aardi.config[:blog_posts_path]}/**/*.md")
+         .map { |path| Post.new(path) }
     end
 
     def write_target; end
