@@ -34,6 +34,7 @@
   month
   year
   archive
+  home_footer_links
   home
   tag_index
   atom_feed

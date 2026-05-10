@@ -39,17 +39,7 @@ module Aardi
       @posts
     end
 
-    # :reek:NilCheck
-    # :reek:DuplicateMethodCall
-    def content_footer
-      site_url = Aardi.config[:site_url]
-      feed_base = "/#{@blog_path}" if @blog_path
-
-      "**More:** \
-[Archive](#{"#{site_url}#{feed_base}/#{Aardi.config[:blog_archive_path]}/"}), \
-[RSS](#{"#{site_url}#{feed_base}/index.xml"}), \
-[JSON](#{"#{site_url}#{feed_base}/index.json"})"
-    end
+    def content_footer = HomeFooterLinks.new(@blog_path).to_s
 
     def days_hash
       @days_hash ||= @posts.group_by { |post| post.creation.strftime('%Y-%m-%d') }
