@@ -10,7 +10,7 @@ class PageContentSpec < Minitest::Spec
     end
 
     subject do
-      Aardi::PageContent.new("## Hello\n\nContent.", 'My Title', { 'Description' => 'desc' })
+      Aardi::PageContent.new("## Hello\n\nContent.", 'My Title', Aardi::Metadata.new({ 'Description' => 'desc' }))
     end
 
     it 'stores the title' do
@@ -18,7 +18,7 @@ class PageContentSpec < Minitest::Spec
     end
 
     it 'stores the metadata' do
-      _(subject.metadata['Description']).must_equal 'desc'
+      _(subject.metadata.description).must_equal 'desc'
     end
 
     it 'content returns the raw (stripped) source content' do

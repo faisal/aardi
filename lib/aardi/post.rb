@@ -8,14 +8,14 @@ module Aardi
       @path = path
       parse_source path
 
-      raise "#{path}: missing Creation metadata" unless metadata['Creation']
+      raise "#{path}: missing Creation metadata" unless metadata.creation
     end
 
     def content
       @content ||= "#{@src_content}\n<div>#{PostBookmarkLine.new(self)}</div>\n"
     end
 
-    def creation = metadata['Creation']
+    def creation = metadata.creation
 
     def feed_snippet
       @feed_snippet ||= Aardi.ledger[:renderer].markup_feed_snippet(@src_content)
@@ -28,15 +28,13 @@ module Aardi
       puts "#{creation_header} | #{@path} | #{title}"
     end
 
-    def tags
-      @tags ||= metadata['Tags']&.split&.sort
-    end
+    def tags = metadata.tags
 
     def target_path
       "./#{short_target}.html"
     end
 
-    def updated = metadata['Updated'] || creation
+    def updated = metadata.updated || creation
 
     def url = "#{Aardi.config[:site_url]}/#{short_target}"
 

@@ -15,6 +15,7 @@
   version
   config
   ledger
+  metadata
   content
   content_hashes
   custom_renderer

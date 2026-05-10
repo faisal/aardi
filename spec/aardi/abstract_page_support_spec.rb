@@ -22,7 +22,7 @@ class AbstractPageSupportSpec < Minitest::Spec
       it 'parses Time values in frontmatter when permitted' do
         page = page_by_sample_path 'post_with_creation.md'
 
-        _(page.metadata['Creation']).must_be_kind_of Time
+        _(page.metadata.creation).must_be_kind_of Time
       end
 
       it 'records the file mtime' do

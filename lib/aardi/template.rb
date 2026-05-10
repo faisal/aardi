@@ -22,7 +22,7 @@ module Aardi
     private
 
     def add_description(dom, src)
-      description = src.metadata['Description']
+      description = src.metadata.description
       return unless description
 
       dom.at_css('meta[name="description"]')['content'] = description

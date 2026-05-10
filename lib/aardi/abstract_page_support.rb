@@ -7,14 +7,14 @@ module Aardi
     def parse_source(path)
       File.open(path, encoding: 'utf-8') do |file|
         parts = file.read.rpartition("\n----\n")
-        @metadata = YAML.safe_load(parts.first, permitted_classes: [Time]) || {}
+        @metadata = Metadata.parse(parts.first, source: path)
         @src_content = parts.last
         @mtime = file.mtime.utc
       end
     end
 
     def title
-      metadata['Title'] || @src_content[/\A(?:#+ +)?([^\n]+)/, 1]
+      metadata.title || @src_content[/\A(?:#+ +)?([^\n]+)/, 1]
     end
   end
 end
