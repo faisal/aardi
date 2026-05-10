@@ -15,6 +15,12 @@ module Aardi
       sitemap.to_xml
     end
 
+    def record_mtime(path, path_mtime)
+      return unless urls.key?(path) && path_mtime
+
+      update_mtime(path, path_mtime)
+    end
+
     def render
       source = Content.new(content)
       FileTarget.new(source, target_path).write

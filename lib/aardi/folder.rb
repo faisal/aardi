@@ -7,13 +7,13 @@ module Aardi
       @normalized_path = "#{path.sub(/^\./, '')}/"
     end
 
-    def mtime = children.max_by(&:mtime)&.mtime
+    def mtime = children.filter_map(&:mtime).max
 
     def render
       children.each(&:render)
       return if @path == '.'
 
-      Aardi.ledger[:sitemap].update_mtime(@normalized_path, mtime) if Aardi.config[:sitemap_entries][@normalized_path]
+      Aardi.ledger[:sitemap].record_mtime(@normalized_path, mtime)
     end
 
     private

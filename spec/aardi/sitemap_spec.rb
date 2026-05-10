@@ -30,6 +30,27 @@ class SitemapSpec < Minitest::Spec
       end
     end
 
+    describe '#record_mtime' do
+      it 'sets lastmod when path is tracked' do
+        time = Time.now
+        subject.record_mtime('/', time)
+
+        _(subject.urls['/'][:lastmod]).must_equal time.iso8601
+      end
+
+      it 'is a no-op for an untracked path' do
+        subject.record_mtime('/not-in-sitemap/', Time.now)
+
+        _(subject.urls.key?('/not-in-sitemap/')).must_equal false
+      end
+
+      it 'is a no-op when path_mtime is nil' do
+        subject.record_mtime('/', nil)
+
+        _(subject.urls['/'].key?(:lastmod)).must_equal false
+      end
+    end
+
     describe '#target_path' do
       it 'is ./sitemap.xml' do
         _(subject.target_path).must_equal './sitemap.xml'
