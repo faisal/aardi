@@ -71,14 +71,14 @@ Paragraph
       end
     end
 
-    describe '#markup_snippet' do
+    describe '#markup_feed_snippet' do
       it 'strips the content' do
         content = "### Header
 
 Snippet content
 "
 
-        marked_up = subject.markup_snippet(content)
+        marked_up = subject.markup_feed_snippet(content)
         _(marked_up).must_equal marked_up.strip
       end
     end

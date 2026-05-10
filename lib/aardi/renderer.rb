@@ -12,8 +12,8 @@ module Aardi
       @markup_renderer.render(content)
     end
 
-    def markup_snippet(content)
-      markup(content).strip
+    def markup_feed_snippet(content)
+      markup(content.sub(/\A(### .*\n)?\n+/, '')).strip
     end
   end
 end

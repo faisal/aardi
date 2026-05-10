@@ -18,7 +18,7 @@ module Aardi
     def creation = metadata['Creation']
 
     def feed_snippet
-      @feed_snippet ||= Aardi.ledger[:renderer].markup_snippet(@src_content.sub(/\A(### .*\n)?\n+/, ''))
+      @feed_snippet ||= Aardi.ledger[:renderer].markup_feed_snippet(@src_content)
     end
 
     def name = File.basename(@path, '.*')
