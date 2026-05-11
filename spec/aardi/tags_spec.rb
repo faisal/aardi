@@ -2,14 +2,14 @@
 
 require 'spec_helper'
 
-class TagIndexSpec < Minitest::Spec
-  describe Aardi::TagIndex do
+class TagsSpec < Minitest::Spec
+  describe Aardi::Tags do
     before do
       setup_config
     end
 
     def make_index(tag_counts)
-      Aardi::TagIndex.new(tag_counts)
+      Aardi::Tags.new(tag_counts)
     end
 
     describe '#target_path' do

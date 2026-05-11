@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Aardi
-  class BlogTagPages
+  class TagDispatcher
     def initialize
       @index = {}
       @counts = Hash.new(0)
@@ -27,7 +27,7 @@ module Aardi
     end
 
     def tag_index
-      @tag_index ||= TagIndex.new(@counts)
+      @tag_index ||= Tags.new(@counts)
     end
   end
 end

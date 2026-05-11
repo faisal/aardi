@@ -6,7 +6,7 @@ module Aardi
       @posts = []
       @blog_path = nil
       @archive_path = Aardi.config[:blog_archive_path]
-      @tags = BlogTagPages.new
+      @tags = TagDispatcher.new
     end
 
     def <<(post)

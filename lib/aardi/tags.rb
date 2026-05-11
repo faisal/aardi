@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Aardi
-  class TagIndex < AbstractBlog
+  class Tags < AbstractBlog
     def initialize(tag_counts)
       @tag_counts = tag_counts
     end

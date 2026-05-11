@@ -45,12 +45,12 @@ class BlogSpec < Minitest::Spec
         _(make_blog([]).send(:children).length).must_equal 4
       end
 
-      it 'includes a TagIndex when the root blog has tagged posts' do
+      it 'includes a Tags when the root blog has tagged posts' do
         tagged_post = StubPost.new(Time.utc(2024, 1, 1))
         tagged_post.define_singleton_method(:tags) { ['foo'] }
         children = make_blog([tagged_post]).send(:children)
 
-        _(children.map(&:class)).must_include Aardi::TagIndex
+        _(children.map(&:class)).must_include Aardi::Tags
       end
 
       it 'includes a TagBlog child for each tag' do

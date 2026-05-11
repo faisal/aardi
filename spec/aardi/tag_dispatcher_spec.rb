@@ -2,12 +2,12 @@
 
 require 'spec_helper'
 
-class BlogTagPagesSpec < Minitest::Spec
-  describe Aardi::BlogTagPages do
+class TagDispatcherSpec < Minitest::Spec
+  describe Aardi::TagDispatcher do
     before do
       setup_config
       setup_ledger
-      @proxy = Aardi::BlogTagPages.new
+      @proxy = Aardi::TagDispatcher.new
     end
 
     def tagged_post(tags)
@@ -39,7 +39,7 @@ class BlogTagPagesSpec < Minitest::Spec
         _(@proxy.archive_tag_index).wont_be_nil
       end
 
-      it 'returns a TagIndex whose content has correct per-tag counts' do
+      it 'returns a Tags whose content has correct per-tag counts' do
         @proxy << tagged_post(%w[foo])
         @proxy << tagged_post(%w[foo])
         @proxy << tagged_post(%w[bar])
@@ -62,11 +62,11 @@ class BlogTagPagesSpec < Minitest::Spec
         _(@proxy.children).must_equal []
       end
 
-      it 'contains a TagIndex and a TagBlog per tag once tagged posts are added' do
+      it 'contains a Tags and a TagBlog per tag once tagged posts are added' do
         @proxy << tagged_post(%w[foo bar])
 
         classes = @proxy.children.map(&:class)
-        _(classes).must_include Aardi::TagIndex
+        _(classes).must_include Aardi::Tags
         _(classes.count { |class_count| class_count == Aardi::TagBlog }).must_equal 2
       end
     end

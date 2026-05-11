@@ -36,12 +36,12 @@
   archive
   home_footer_links
   home
-  tag_index
+  tags
   atom_feed
   json_feed
   blog
   tag_blog
-  blog_tag_pages
+  tag_dispatcher
   folder
   sitemap
   orphanage

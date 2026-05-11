@@ -33,12 +33,12 @@ class TagBlogSpec < Minitest::Spec
         ]
       end
 
-      it 'does not include a TagIndex' do
+      it 'does not include a Tags' do
         tagged_post = StubPost.new(Time.utc(2024, 1, 1))
         tagged_post.define_singleton_method(:tags) { ['foo'] }
         children = make_tag_blog([tagged_post], 'foo').send(:children)
 
-        _(children.map(&:class)).wont_include Aardi::TagIndex
+        _(children.map(&:class)).wont_include Aardi::Tags
       end
     end
   end
