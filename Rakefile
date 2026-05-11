@@ -12,4 +12,4 @@ Rake::TestTask.new(:spec) do |t|
   t.libs << 'lib'
 end
 
-task default: :lint
+task default: :spec
