@@ -41,8 +41,8 @@ class DaySpec < Minitest::Spec
       it 'includes tag in title' do
         year = Aardi::Year.new(2024, 'blog')
         month = Aardi::Month.new(year, 1, 'blog')
-        day = Aardi::Day.new(year, month, 15, 'blog', tag: 'ruby')
-        _(day.title).must_equal 'Monday, 15 January 2024 - ruby'
+        day = Aardi::Day.new(year, month, 15, 'blog', tag: 'foo')
+        _(day.title).must_equal 'Monday, 15 January 2024 - foo'
       end
     end
 

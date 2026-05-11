@@ -26,7 +26,7 @@ class TagBlogSpec < Minitest::Spec
 
     describe '#children' do
       it 'returns Archive, Home, ATOMFeed, and JSONFeed only' do
-        children = make_tag_blog([], 'ruby').send(:children)
+        children = make_tag_blog([], 'foo').send(:children)
 
         _(children.map(&:class)).must_equal [
           Aardi::Archive, Aardi::Home, Aardi::ATOMFeed, Aardi::JSONFeed
@@ -35,8 +35,8 @@ class TagBlogSpec < Minitest::Spec
 
       it 'does not include a TagIndex' do
         tagged_post = StubPost.new(Time.utc(2024, 1, 1))
-        tagged_post.define_singleton_method(:tags) { ['ruby'] }
-        children = make_tag_blog([tagged_post], 'ruby').send(:children)
+        tagged_post.define_singleton_method(:tags) { ['foo'] }
+        children = make_tag_blog([tagged_post], 'foo').send(:children)
 
         _(children.map(&:class)).wont_include Aardi::TagIndex
       end

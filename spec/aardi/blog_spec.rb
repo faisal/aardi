@@ -47,7 +47,7 @@ class BlogSpec < Minitest::Spec
 
       it 'includes a TagIndex when the root blog has tagged posts' do
         tagged_post = StubPost.new(Time.utc(2024, 1, 1))
-        tagged_post.define_singleton_method(:tags) { ['ruby'] }
+        tagged_post.define_singleton_method(:tags) { ['foo'] }
         children = make_blog([tagged_post]).send(:children)
 
         _(children.map(&:class)).must_include Aardi::TagIndex
@@ -55,7 +55,7 @@ class BlogSpec < Minitest::Spec
 
       it 'includes a TagBlog child for each tag' do
         tagged_post = StubPost.new(Time.utc(2024, 1, 1))
-        tagged_post.define_singleton_method(:tags) { ['ruby'] }
+        tagged_post.define_singleton_method(:tags) { ['foo'] }
         children = make_blog([tagged_post]).send(:children)
 
         _(children.map(&:class)).must_include Aardi::TagBlog
@@ -63,11 +63,11 @@ class BlogSpec < Minitest::Spec
 
       it 'archive content lists tag links once tagged posts are added' do
         tagged_post = StubPost.new(Time.utc(2024, 1, 1))
-        tagged_post.define_singleton_method(:tags) { ['ruby'] }
+        tagged_post.define_singleton_method(:tags) { ['foo'] }
         archive = make_blog([tagged_post]).send(:children).first
 
         _(archive.content).must_include '**What**:'
-        _(archive.content).must_include '[ruby]'
+        _(archive.content).must_include '[foo]'
       end
     end
 

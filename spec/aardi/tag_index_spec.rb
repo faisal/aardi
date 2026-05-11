@@ -26,13 +26,13 @@ class TagIndexSpec < Minitest::Spec
 
     describe '#content' do
       it 'includes a markup link for each tag pointing to the correct URL' do
-        index = make_index('ruby' => 1)
+        index = make_index('foo' => 1)
 
-        _(index.content).must_include '[ruby](http://example.com/blog/tags/ruby/)'
+        _(index.content).must_include '[foo](http://example.com/blog/tags/foo/)'
       end
 
       it 'includes the post count in parentheses' do
-        index = make_index('ruby' => 3)
+        index = make_index('foo' => 3)
 
         _(index.content).must_include '(3)'
       end
@@ -55,7 +55,7 @@ class TagIndexSpec < Minitest::Spec
       end
 
       it 'is false when there are tags' do
-        _(make_index('ruby' => 1).empty?).must_equal false
+        _(make_index('foo' => 1).empty?).must_equal false
       end
     end
   end

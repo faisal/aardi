@@ -26,11 +26,11 @@ class HomeFooterLinksSpec < Minitest::Spec
     end
 
     describe 'with blog_path' do
-      subject { Aardi::HomeFooterLinks.new('blog/tags/ruby') }
+      subject { Aardi::HomeFooterLinks.new('blog/tags/foo') }
 
       it 'includes blog_path in feed URLs' do
-        _(subject.to_s).must_include 'http://example.com/blog/tags/ruby/index.xml'
-        _(subject.to_s).must_include 'http://example.com/blog/tags/ruby/index.json'
+        _(subject.to_s).must_include 'http://example.com/blog/tags/foo/index.xml'
+        _(subject.to_s).must_include 'http://example.com/blog/tags/foo/index.json'
       end
     end
   end

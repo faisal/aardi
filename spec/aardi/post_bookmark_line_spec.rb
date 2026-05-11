@@ -33,23 +33,23 @@ class PostBookmarkLineSpec < Minitest::Spec
       end
 
       it 'renders tags in the order they are provided' do
-        bookmark = make_bookmark(tags: %w[rails ruby])
+        bookmark = make_bookmark(tags: %w[bar foo])
 
         html = bookmark.to_s
-        _(html).must_include '<a href="http://example.com/blog/tags/rails/">rails</a>'
-        _(html).must_include '<a href="http://example.com/blog/tags/ruby/">ruby</a>'
-        _(html.index('rails')).must_be :<, html.index('ruby')
+        _(html).must_include '<a href="http://example.com/blog/tags/bar/">bar</a>'
+        _(html).must_include '<a href="http://example.com/blog/tags/foo/">foo</a>'
+        _(html.index('bar')).must_be :<, html.index('foo')
       end
 
       it 'separates tag anchors with a comma and space' do
-        bookmark = make_bookmark(tags: %w[rails ruby])
+        bookmark = make_bookmark(tags: %w[bar foo])
 
-        _(bookmark.to_s).must_include 'rails</a>, <a href'
+        _(bookmark.to_s).must_include 'bar</a>, <a href'
       end
 
       it 'omits tag links when blog_tags_path is not configured' do
         setup_config(blog_tags_path: nil)
-        post = Struct.new(:url, :tags).new('http://example.com/post', %w[ruby])
+        post = Struct.new(:url, :tags).new('http://example.com/post', %w[foo])
         bookmark = Aardi::PostBookmarkLine.new(post)
 
         _(bookmark.to_s).wont_include '/tags/'

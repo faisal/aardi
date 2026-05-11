@@ -72,11 +72,11 @@ class JSONFeedSpec < Minitest::Spec
 
       describe 'with tag' do
         def make_feed_with_tag
-          Aardi::JSONFeed.new([StubPost.new(Time.now)], tag: 'ruby')
+          Aardi::JSONFeed.new([StubPost.new(Time.now)], tag: 'foo')
         end
 
         it 'includes tag in feed title' do
-          _(JSON.parse(make_feed_with_tag.content)['title']).must_equal 'Test Site - ruby'
+          _(JSON.parse(make_feed_with_tag.content)['title']).must_equal 'Test Site - foo'
         end
       end
     end

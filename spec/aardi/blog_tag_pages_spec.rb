@@ -20,7 +20,7 @@ class BlogTagPagesSpec < Minitest::Spec
       end
 
       it 'is false once a tagged post is added' do
-        @proxy << tagged_post(%w[ruby])
+        @proxy << tagged_post(%w[foo])
 
         _(@proxy.empty?).must_equal false
       end
@@ -34,26 +34,26 @@ class BlogTagPagesSpec < Minitest::Spec
 
     describe '#archive_tag_index' do
       it 'is non-nil once a tagged post is added' do
-        @proxy << tagged_post(%w[ruby])
+        @proxy << tagged_post(%w[foo])
 
         _(@proxy.archive_tag_index).wont_be_nil
       end
 
       it 'returns a TagIndex whose content has correct per-tag counts' do
-        @proxy << tagged_post(%w[ruby])
-        @proxy << tagged_post(%w[ruby])
-        @proxy << tagged_post(%w[rails])
+        @proxy << tagged_post(%w[foo])
+        @proxy << tagged_post(%w[foo])
+        @proxy << tagged_post(%w[bar])
 
         content = @proxy.archive_tag_index.content
-        _(content).must_match(/\[ruby\]\([^)]+\) \(2\)/)
-        _(content).must_match(/\[rails\]\([^)]+\) \(1\)/)
+        _(content).must_match(/\[foo\]\([^)]+\) \(2\)/)
+        _(content).must_match(/\[bar\]\([^)]+\) \(1\)/)
       end
 
       it 'reflects posts added after the index is first observed' do
         index = @proxy.archive_tag_index
-        @proxy << tagged_post(%w[ruby])
+        @proxy << tagged_post(%w[foo])
 
-        _(index.content).must_include '[ruby]'
+        _(index.content).must_include '[foo]'
       end
     end
 
@@ -63,7 +63,7 @@ class BlogTagPagesSpec < Minitest::Spec
       end
 
       it 'contains a TagIndex and a TagBlog per tag once tagged posts are added' do
-        @proxy << tagged_post(%w[ruby rails])
+        @proxy << tagged_post(%w[foo bar])
 
         classes = @proxy.children.map(&:class)
         _(classes).must_include Aardi::TagIndex
@@ -73,7 +73,7 @@ class BlogTagPagesSpec < Minitest::Spec
 
     describe '#<<' do
       it 'distributes a post to each of its tag blogs' do
-        post = tagged_post(%w[ruby rails])
+        post = tagged_post(%w[foo bar])
         @proxy << post
 
         @proxy.children.grep(Aardi::TagBlog).each do |tag_blog|

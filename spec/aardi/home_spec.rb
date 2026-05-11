@@ -24,9 +24,9 @@ class HomeSpec < Minitest::Spec
       end
 
       it 'is ./blog-path/index.html when blog_path is set' do
-        home = Aardi::Home.new([], 'blog', blog_path: 'blog/tags/ruby')
+        home = Aardi::Home.new([], 'blog', blog_path: 'blog/tags/foo')
 
-        _(home.target_path).must_equal './blog/tags/ruby/index.html'
+        _(home.target_path).must_equal './blog/tags/foo/index.html'
       end
     end
 
@@ -72,14 +72,14 @@ class HomeSpec < Minitest::Spec
 
       describe 'with blog_path' do
         def make_home_with_blog_path
-          Aardi::Home.new([StubPost.new(Time.now)], 'blog', blog_path: 'blog/tags/ruby')
+          Aardi::Home.new([StubPost.new(Time.now)], 'blog', blog_path: 'blog/tags/foo')
         end
 
         it 'uses blog_path for feed URLs in footer' do
           content = make_home_with_blog_path.content
 
-          _(content).must_include 'http://example.com/blog/tags/ruby/index.xml'
-          _(content).must_include 'http://example.com/blog/tags/ruby/index.json'
+          _(content).must_include 'http://example.com/blog/tags/foo/index.xml'
+          _(content).must_include 'http://example.com/blog/tags/foo/index.json'
         end
       end
     end

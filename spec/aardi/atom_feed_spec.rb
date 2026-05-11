@@ -75,13 +75,13 @@ class AtomFeedSpec < Minitest::Spec
 
       describe 'with tag' do
         def make_feed_with_tag
-          Aardi::ATOMFeed.new(posts, tag: 'ruby')
+          Aardi::ATOMFeed.new(posts, tag: 'foo')
         end
 
         it 'includes tag in feed title' do
           doc = Nokogiri::XML(make_feed_with_tag.content)
 
-          _(doc.at_xpath('//atom:title', ns).text).must_equal 'Test Site - ruby'
+          _(doc.at_xpath('//atom:title', ns).text).must_equal 'Test Site - foo'
         end
       end
     end

@@ -28,7 +28,7 @@ class ArchiveSpec < Minitest::Spec
 
     describe 'with tag_index' do
       def make_archive_with_tag_index(posts)
-        tag_index = Aardi::TagIndex.new({ 'ruby' => 2, 'rails' => 1 })
+        tag_index = Aardi::TagIndex.new({ 'foo' => 2, 'bar' => 1 })
         archive = Aardi::Archive.new('blog', tag_index: tag_index)
         posts.each { |post| archive << post }
         archive
@@ -39,7 +39,7 @@ class ArchiveSpec < Minitest::Spec
         content = make_archive_with_tag_index(posts).content
 
         _(content).must_include '**What**:'
-        _(content).must_include '[ruby]'
+        _(content).must_include '[foo]'
       end
 
       it 'omits the **What**: line when the TagIndex is empty' do
