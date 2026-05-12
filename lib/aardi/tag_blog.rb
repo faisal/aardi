@@ -16,6 +16,18 @@ module Aardi
       archive << post
     end
 
+    def count
+      @posts.count
+    end
+
+    def index_line
+      "- [#{tag}](#{url}) (#{count})"
+    end
+
+    def url
+      "#{Aardi.config[:site_url]}/#{@blog_path}/"
+    end
+
     private
 
     attr_reader :tag

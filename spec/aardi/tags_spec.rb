@@ -6,56 +6,112 @@ class TagsSpec < Minitest::Spec
   describe Aardi::Tags do
     before do
       setup_config
+      setup_ledger
+      @tags = Aardi::Tags.new
     end
 
-    def make_index(tag_counts)
-      Aardi::Tags.new(tag_counts)
+    def tagged_post(tags)
+      StubPost.new(Time.utc(2024, 1, 1), tags:)
     end
 
     describe '#target_path' do
       it 'returns the tags index path using config values' do
-        _(make_index({}).target_path).must_equal './blog/tags/index.html'
+        _(@tags.target_path).must_equal './blog/tags/index.html'
       end
     end
 
     describe '#title' do
       it 'returns "Tags"' do
-        _(make_index({}).title).must_equal 'Tags'
+        _(@tags.title).must_equal 'Tags'
+      end
+    end
+
+    describe '#empty?' do
+      it 'is true with no posts' do
+        _(@tags.empty?).must_equal true
+      end
+
+      it 'is false once a tagged post is added' do
+        @tags << tagged_post(%w[foo])
+
+        _(@tags.empty?).must_equal false
+      end
+
+      it 'remains true when an untagged post is added' do
+        @tags << tagged_post([])
+
+        _(@tags.empty?).must_equal true
+      end
+    end
+
+    describe '#<<' do
+      it 'distributes a post to each of its tag blogs' do
+        post = tagged_post(%w[foo bar])
+        @tags << post
+
+        @tags.send(:children).grep(Aardi::TagBlog).each do |tag_blog|
+          _(tag_blog.instance_variable_get(:@posts)).must_include post
+        end
+      end
+
+      it 'ignores posts with no tags' do
+        @tags << tagged_post([])
+
+        _(@tags.send(:children)).must_equal []
+      end
+    end
+
+    describe '#archive_tag_index' do
+      it 'returns self' do
+        _(@tags.archive_tag_index).must_be_same_as @tags
+      end
+
+      it 'content reflects counts of posts added after the index is first observed' do
+        index = @tags.archive_tag_index
+        @tags << tagged_post(%w[foo])
+        @tags << tagged_post(%w[foo])
+        @tags << tagged_post(%w[bar])
+
+        _(index.content).must_match(/\[foo\]\([^)]+\) \(2\)/)
+        _(index.content).must_match(/\[bar\]\([^)]+\) \(1\)/)
       end
     end
 
     describe '#content' do
       it 'includes a markup link for each tag pointing to the correct URL' do
-        index = make_index('foo' => 1)
+        @tags << tagged_post(%w[foo])
 
-        _(index.content).must_include '[foo](http://example.com/blog/tags/foo/)'
+        _(@tags.content).must_include '[foo](http://example.com/blog/tags/foo/)'
       end
 
       it 'includes the post count in parentheses' do
-        index = make_index('foo' => 3)
+        3.times { @tags << tagged_post(%w[foo]) }
 
-        _(index.content).must_include '(3)'
+        _(@tags.content).must_include '(3)'
       end
 
-      it 'sorts tags alphabetically' do
-        index = make_index('zebra' => 1, 'apple' => 2, 'mango' => 3)
+      it 'sorts tags descending by count' do
+        %w[zebra apple apple mango mango mango].each { |tag| @tags << tagged_post([tag]) }
 
-        positions = %w[apple mango zebra].map { |tag| index.content.index(tag) }
+        positions = %w[mango apple zebra].map { |tag| [@tags.content.index(tag)] }
         _(positions).must_equal positions.sort
       end
 
-      it 'produces just the heading when tag_counts is empty' do
-        _(make_index({}).content).must_equal "# Tags\n"
+      it 'produces just the heading when no posts have been added' do
+        _(@tags.content).must_equal "# Tags\n"
       end
     end
 
-    describe '#empty?' do
-      it 'is true for an empty tag_counts' do
-        _(make_index({}).empty?).must_equal true
+    describe '#children (private)' do
+      it 'is empty before any tagged post is added' do
+        _(@tags.send(:children)).must_equal []
       end
 
-      it 'is false when there are tags' do
-        _(make_index('foo' => 1).empty?).must_equal false
+      it 'contains a TagBlog per tag once tagged posts are added' do
+        @tags << tagged_post(%w[foo bar])
+
+        classes = @tags.send(:children).map(&:class)
+        _(classes.count { |tag_class| tag_class == Aardi::TagBlog }).must_equal 2
       end
     end
   end

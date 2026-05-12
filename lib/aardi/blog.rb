@@ -6,7 +6,7 @@ module Aardi
       @posts = []
       @blog_path = nil
       @archive_path = Aardi.config[:blog_archive_path]
-      @tags = TagDispatcher.new
+      @tags = Tags.new
     end
 
     def <<(post)
@@ -22,7 +22,7 @@ module Aardi
     private
 
     def archive
-      @archive ||= Archive.new(@archive_path, tag: tag, tag_index: @tags.archive_tag_index)
+      @archive ||= Archive.new(@archive_path, tag: tag, tag_index: @tags)
     end
 
     def atom_feed
@@ -30,7 +30,7 @@ module Aardi
     end
 
     def children
-      [archive, home, atom_feed, json_feed, *@tags.children]
+      [archive, home, atom_feed, json_feed, *@tags]
     end
 
     def feed_posts

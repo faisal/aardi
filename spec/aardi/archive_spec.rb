@@ -27,8 +27,12 @@ class ArchiveSpec < Minitest::Spec
     end
 
     describe 'with tag_index' do
+      # :reek:TooManyStatements
       def make_archive_with_tag_index(posts)
-        tag_index = Aardi::Tags.new({ 'foo' => 2, 'bar' => 1 })
+        tag_index = Aardi::Tags.new
+        [StubPost.new(Time.utc(2024, 1, 1), tags: ['foo']),
+         StubPost.new(Time.utc(2024, 1, 2), tags: ['foo']),
+         StubPost.new(Time.utc(2024, 1, 3), tags: ['bar'])].each { |post| tag_index << post }
         archive = Aardi::Archive.new('blog', tag_index: tag_index)
         posts.each { |post| archive << post }
         archive
@@ -43,7 +47,7 @@ class ArchiveSpec < Minitest::Spec
       end
 
       it 'omits the **What**: line when the Tags is empty' do
-        empty_index = Aardi::Tags.new({})
+        empty_index = Aardi::Tags.new
         archive = Aardi::Archive.new('blog', tag_index: empty_index)
 
         _(archive.content).wont_include '**What**:'

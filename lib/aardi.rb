@@ -41,7 +41,6 @@
   json_feed
   blog
   tag_blog
-  tag_dispatcher
   folder
   sitemap
   orphanage

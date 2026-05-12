@@ -33,16 +33,16 @@ class BlogSpec < Minitest::Spec
     end
 
     describe '#children' do
-      it 'returns an Archive, Home, ATOMFeed, and JSONFeed in that order' do
+      it 'returns an Archive, Home, ATOMFeed, JSONFeed, and Tags objects in that order' do
         children = make_blog([]).send(:children)
 
         _(children.map(&:class)).must_equal [
-          Aardi::Archive, Aardi::Home, Aardi::ATOMFeed, Aardi::JSONFeed
+          Aardi::Archive, Aardi::Home, Aardi::ATOMFeed, Aardi::JSONFeed, Aardi::Tags
         ]
       end
 
-      it 'returns all four children even when there are no posts' do
-        _(make_blog([]).send(:children).length).must_equal 4
+      it 'returns all five children even when there are no posts' do
+        _(make_blog([]).send(:children).length).must_equal 5
       end
 
       it 'includes a Tags when the root blog has tagged posts' do
@@ -53,12 +53,12 @@ class BlogSpec < Minitest::Spec
         _(children.map(&:class)).must_include Aardi::Tags
       end
 
-      it 'includes a TagBlog child for each tag' do
+      it 'Tags child contains a TagBlog for each tag' do
         tagged_post = StubPost.new(Time.utc(2024, 1, 1))
         tagged_post.define_singleton_method(:tags) { ['foo'] }
-        children = make_blog([tagged_post]).send(:children)
+        tags_child = make_blog([tagged_post]).send(:children).grep(Aardi::Tags).first
 
-        _(children.map(&:class)).must_include Aardi::TagBlog
+        _(tags_child.send(:children).map(&:class)).must_include Aardi::TagBlog
       end
 
       it 'archive content lists tag links once tagged posts are added' do
