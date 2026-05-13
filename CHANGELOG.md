@@ -1,6 +1,9 @@
 # v2.0.0
 
-- support post tags, and automatic reation of sub-blogs based on their `Tags:` directive
+- Support post tags, and automatic reation of sub-blogs based on their `Tags:` directive
+- API removals or changes:
+  - Intantiation of a Aardi::Blog object no longer takes a posts path. Intantiate the Blog and then build its posts list instead.
+  - Post no longer has #day, #month, and #year methods. use creation.day, creation.month, and creation.year instead.
 
 # v1.0.0
 
