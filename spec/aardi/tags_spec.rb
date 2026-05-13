@@ -16,7 +16,7 @@ class TagsSpec < Minitest::Spec
 
     describe '#target_path' do
       it 'returns the tags index path using config values' do
-        _(@tags.target_path).must_equal './blog/tags/index.html'
+        _(@tags.target_path).must_equal './tags/index.html'
       end
     end
 
@@ -81,7 +81,7 @@ class TagsSpec < Minitest::Spec
       it 'includes a markup link for each tag pointing to the correct URL' do
         @tags << tagged_post(%w[foo])
 
-        _(@tags.content).must_include '[foo](http://example.com/blog/tags/foo/)'
+        _(@tags.content).must_include '[foo](http://example.com/tags/foo/)'
       end
 
       it 'includes the post count in parentheses' do

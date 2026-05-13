@@ -51,8 +51,7 @@ module Aardi
     end
 
     def tags_base_path
-      config = Aardi.config
-      "#{config[:blog_archive_path]}/#{config[:blog_tags_path]}"
+      Aardi.config[:blog_tags_path]
     end
 
     def write_target

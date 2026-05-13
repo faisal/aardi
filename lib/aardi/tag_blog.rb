@@ -6,9 +6,8 @@ module Aardi
     def initialize(tag)
       super()
       @tag = tag
-      blog_archive_path = Aardi.config[:blog_archive_path]
-      @blog_path = "#{blog_archive_path}/#{Aardi.config[:blog_tags_path]}/#{tag}"
-      @archive_path = "#{@blog_path}/#{blog_archive_path}"
+      @blog_path = "#{Aardi.config[:blog_tags_path]}/#{tag}"
+      @archive_path = "#{@blog_path}/#{Aardi.config[:blog_archive_path]}"
     end
 
     def <<(post)

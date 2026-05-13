@@ -20,7 +20,7 @@ class TagBlogSpec < Minitest::Spec
       it 'sets archive_path under the tag sub-path' do
         archive = make_tag_blog([], 'news').send(:children).first
 
-        _(archive.target_path).must_equal './blog/tags/news/blog/index.html'
+        _(archive.target_path).must_equal './tags/news/blog/index.html'
       end
     end
 

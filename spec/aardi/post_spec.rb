@@ -90,8 +90,8 @@ class PostSpec < Minitest::Spec
         post = make_post(extra_yaml: 'Tags: foo bar')
         bookmark_span = post.content[%r{<span class="bookmark">[^<]*(?:<[^>]+>[^<]*)*</span>}]
 
-        _(bookmark_span).must_include '<a href="http://example.com/blog/tags/foo/">foo</a>'
-        _(bookmark_span).must_include '<a href="http://example.com/blog/tags/bar/">bar</a>'
+        _(bookmark_span).must_include '<a href="http://example.com/tags/foo/">foo</a>'
+        _(bookmark_span).must_include '<a href="http://example.com/tags/bar/">bar</a>'
       end
 
       it 'renders tag links after the bookmark when tags are present' do
@@ -111,7 +111,7 @@ class PostSpec < Minitest::Spec
       it 'omits tag links when the post has no tags' do
         post = make_post
 
-        _(post.content).wont_include '/blog/tags/'
+        _(post.content).wont_include '/tags/'
       end
 
       it 'omits the trailing space inside the bookmark span when the post has no tags' do

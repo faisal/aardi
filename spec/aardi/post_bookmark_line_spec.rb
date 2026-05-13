@@ -36,8 +36,8 @@ class PostBookmarkLineSpec < Minitest::Spec
         bookmark = make_bookmark(tags: %w[bar foo])
 
         html = bookmark.to_s
-        _(html).must_include '<a href="http://example.com/blog/tags/bar/">bar</a>'
-        _(html).must_include '<a href="http://example.com/blog/tags/foo/">foo</a>'
+        _(html).must_include '<a href="http://example.com/tags/bar/">bar</a>'
+        _(html).must_include '<a href="http://example.com/tags/foo/">foo</a>'
         _(html.index('bar')).must_be :<, html.index('foo')
       end
 
