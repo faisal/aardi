@@ -5,28 +5,34 @@ module Aardi
     KNOWN_KEYS = %w[Title Description Creation Updated Tags].freeze
 
     def self.parse(yaml_str, source: nil)
-      raw = YAML.safe_load(yaml_str, permitted_classes: [Time])
-      new(raw.is_a?(Hash) ? raw : {}, source)
+      yaml = YAML.safe_load(yaml_str, permitted_classes: [Time])
+      return new({}, source) unless yaml.is_a?(Hash)
+
+      new(yaml, source)
     end
 
-    def initialize(raw, source = nil)
-      @raw = raw
+    def initialize(yaml, source = nil)
+      @yaml = yaml
       warn_unknown(source)
     end
 
-    def creation    = @raw['Creation']
-    def description = @raw['Description']
-    def empty?      = @raw.empty?
-    def tags        = @raw['Tags']&.split&.sort
-    def title       = @raw['Title']
-    def updated     = @raw['Updated']
+    def creation    = @yaml['Creation']
+    def description = @yaml['Description']
+    def empty?      = @yaml.empty?
+    def tags        = @yaml['Tags']&.split&.sort
+    def title       = @yaml['Title']
+    def updated     = @yaml['Updated']
 
     private
 
-    def location_hint(source) = source ? " in #{source}" : ''
+    def location_hint(source)
+      return '' unless source
+
+      " in #{source}"
+    end
 
     def warn_unknown(source)
-      unknown = @raw.keys - KNOWN_KEYS
+      unknown = @yaml.keys - KNOWN_KEYS
       return if unknown.empty?
 
       unknown.each { |key| warn "Aardi::Metadata: unknown declaration '#{key}'#{location_hint(source)} (ignored)" }
