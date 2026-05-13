@@ -2,7 +2,7 @@
 
 module Aardi
   class Archive < AbstractBlog
-    def initialize(archive_path, tag: nil, tag_index: nil)
+    def initialize(archive_path, tag = nil, tag_index = nil)
       @archive_path = archive_path
       @tag = tag
       @tag_index = tag_index

@@ -33,7 +33,7 @@ class ArchiveSpec < Minitest::Spec
         [StubPost.new(Time.utc(2024, 1, 1), tags: ['foo']),
          StubPost.new(Time.utc(2024, 1, 2), tags: ['foo']),
          StubPost.new(Time.utc(2024, 1, 3), tags: ['bar'])].each { |post| tag_index << post }
-        archive = Aardi::Archive.new('blog', tag_index: tag_index)
+        archive = Aardi::Archive.new('blog', nil, tag_index)
         posts.each { |post| archive << post }
         archive
       end
@@ -48,7 +48,7 @@ class ArchiveSpec < Minitest::Spec
 
       it 'omits the **What**: line when the Tags is empty' do
         empty_index = Aardi::Tags.new
-        archive = Aardi::Archive.new('blog', tag_index: empty_index)
+        archive = Aardi::Archive.new('blog', empty_index)
 
         _(archive.content).wont_include '**What**:'
       end

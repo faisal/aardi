@@ -22,7 +22,7 @@ module Aardi
     private
 
     def archive
-      @archive ||= Archive.new(@archive_path, tag: tag, tag_index: @tags)
+      @archive ||= Archive.new(@archive_path, tag, @tags)
     end
 
     def atom_feed
