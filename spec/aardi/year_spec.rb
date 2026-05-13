@@ -28,7 +28,7 @@ class YearSpec < Minitest::Spec
       end
 
       it 'includes tag in title' do
-        _(Aardi::Year.new(2023, 'blog', tag: 'foo').title).must_equal '2023 - foo'
+        _(Aardi::Year.new(2023, 'blog', 'foo').title).must_equal '2023 - foo'
       end
     end
 

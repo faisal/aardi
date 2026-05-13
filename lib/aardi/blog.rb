@@ -26,7 +26,7 @@ module Aardi
     end
 
     def atom_feed
-      ATOMFeed.new(feed_posts, archive_path: @blog_path, tag: tag)
+      ATOMFeed.new(feed_posts, @blog_path, tag)
     end
 
     def children
@@ -38,11 +38,11 @@ module Aardi
     end
 
     def home
-      Home.new(recent_posts(:blog_home_posts), @archive_path, blog_path: @blog_path, tag: tag)
+      Home.new(recent_posts(:blog_home_posts), @archive_path, @blog_path, tag)
     end
 
     def json_feed
-      JSONFeed.new(feed_posts, archive_path: @blog_path, tag: tag)
+      JSONFeed.new(feed_posts, @blog_path, tag)
     end
 
     def recent_posts(conf_key)

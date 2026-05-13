@@ -2,10 +2,10 @@
 
 module Aardi
   class Year < AbstractBlog
-    def initialize(key, archive_path, tag: nil)
+    def initialize(key, archive_path, tag = nil)
       @key = key
       @archive_path = archive_path
-      @index = Hash.new { |hash, month| hash[month] = Month.new(self, month, archive_path, tag: tag) }
+      @index = Hash.new { |hash, month| hash[month] = Month.new(self, month, archive_path, tag) }
       @tag = tag
     end
 

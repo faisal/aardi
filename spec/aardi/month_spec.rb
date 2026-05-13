@@ -40,7 +40,7 @@ class MonthSpec < Minitest::Spec
 
       it 'includes tag in title' do
         year = Aardi::Year.new(2024, 'blog')
-        _(Aardi::Month.new(year, 3, 'blog', tag: 'foo').title).must_equal 'March 2024 - foo'
+        _(Aardi::Month.new(year, 3, 'blog', 'foo').title).must_equal 'March 2024 - foo'
       end
     end
 

@@ -6,7 +6,7 @@ module Aardi
       @archive_path = archive_path
       @tag = tag
       @tag_index = tag_index
-      @index = Hash.new { |hash, year| hash[year] = Year.new(year, @archive_path, tag: @tag) }
+      @index = Hash.new { |hash, year| hash[year] = Year.new(year, @archive_path, @tag) }
     end
 
     def <<(post)

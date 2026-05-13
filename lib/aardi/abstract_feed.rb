@@ -2,7 +2,7 @@
 
 module Aardi
   class AbstractFeed < AbstractBlog
-    def initialize(posts, archive_path: nil, tag: nil)
+    def initialize(posts, archive_path = nil, tag = nil)
       @archive_path = archive_path
       @posts = posts
       @tag = tag

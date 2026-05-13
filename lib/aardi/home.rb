@@ -4,7 +4,7 @@ module Aardi
   # :reek:TooManyStatements
   # :reek:RepeatedConditional
   class Home < AbstractBlog
-    def initialize(posts, archive_path, blog_path: nil, tag: nil)
+    def initialize(posts, archive_path, blog_path = nil, tag = nil)
       @posts = posts
       @archive_path = archive_path
       @blog_path = blog_path

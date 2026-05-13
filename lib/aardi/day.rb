@@ -3,7 +3,7 @@
 module Aardi
   # :reek:TooManyInstanceVariables
   class Day < AbstractBlog
-    def initialize(year, month, key, archive_path, tag: nil)
+    def initialize(year, month, key, archive_path, tag = nil)
       @year = year
       @month = month
       @key = key

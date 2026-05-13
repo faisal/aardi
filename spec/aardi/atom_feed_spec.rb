@@ -75,7 +75,7 @@ class AtomFeedSpec < Minitest::Spec
 
       describe 'with tag' do
         def make_feed_with_tag
-          Aardi::ATOMFeed.new(posts, tag: 'foo')
+          Aardi::ATOMFeed.new(posts, nil, 'foo')
         end
 
         it 'includes tag in feed title' do
