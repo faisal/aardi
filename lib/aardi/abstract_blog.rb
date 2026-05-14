@@ -4,7 +4,7 @@ module Aardi
   class AbstractBlog
     attr_reader :key
 
-    def metadata = (@metadata ||= Metadata.new({}))
+    def metadata = (@metadata ||= Metadata.new)
 
     def mtime = children.max_by(&:mtime)&.mtime
 

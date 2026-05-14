@@ -31,7 +31,7 @@ class TemplateSpec < Minitest::Spec
       end
 
       it 'sets the meta description when metadata contains Description' do
-        src = Aardi::PageContent.new('Body.', 'Title', Aardi::Metadata.new({ 'Description' => 'A short desc' }))
+        src = Aardi::PageContent.new('Body.', 'Title', Aardi::Metadata.new("Description: A short desc\n"))
         html = subject.render(src)
 
         _(html).must_include 'content="A short desc"'

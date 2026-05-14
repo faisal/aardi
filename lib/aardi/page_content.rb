@@ -4,7 +4,7 @@ module Aardi
   class PageContent < Content
     attr_reader :title, :metadata
 
-    def initialize(src_content, title, metadata = Metadata.new({}))
+    def initialize(src_content, title, metadata = Metadata.new)
       super(src_content)
       @title = title
       @metadata = metadata

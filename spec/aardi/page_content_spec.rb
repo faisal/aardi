@@ -10,7 +10,7 @@ class PageContentSpec < Minitest::Spec
     end
 
     subject do
-      Aardi::PageContent.new("## Hello\n\nContent.", 'My Title', Aardi::Metadata.new({ 'Description' => 'desc' }))
+      Aardi::PageContent.new("## Hello\n\nContent.", 'My Title', Aardi::Metadata.new("Description: desc\n"))
     end
 
     it 'stores the title' do

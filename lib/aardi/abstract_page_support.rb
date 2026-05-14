@@ -7,7 +7,7 @@ module Aardi
     def parse_source(path)
       File.open(path, encoding: 'utf-8') do |file|
         parts = file.read.rpartition("\n----\n")
-        @metadata = Metadata.parse(parts.first, source: path)
+        @metadata = Metadata.new(parts.first, path)
         @src_content = parts.last
         @mtime = file.mtime.utc
       end
