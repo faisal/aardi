@@ -24,6 +24,15 @@ class TagBlogSpec < Minitest::Spec
       end
     end
 
+    describe '#inline_link_text' do
+      it 'returns a markdown link with the post count in parentheses' do
+        tag_blog = make_tag_blog([StubPost.new(Time.utc(2024, 1, 1)),
+                                  StubPost.new(Time.utc(2024, 2, 1))], 'news')
+
+        _(tag_blog.inline_link_text).must_equal '[news](http://example.com/tags/news/) (2)'
+      end
+    end
+
     describe '#children' do
       it 'returns Archive, Home, ATOMFeed, and JSONFeed only' do
         children = make_tag_blog([], 'foo').send(:children)

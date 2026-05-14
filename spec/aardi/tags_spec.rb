@@ -61,6 +61,16 @@ class TagsSpec < Minitest::Spec
       end
     end
 
+    describe '#inline_links' do
+      it 'includes the post count in parentheses after each link' do
+        2.times { @tags << tagged_post(%w[foo]) }
+        @tags << tagged_post(%w[bar])
+
+        _(@tags.inline_links).must_match(/\[foo\]\([^)]+\) \(2\)/)
+        _(@tags.inline_links).must_match(/\[bar\]\([^)]+\) \(1\)/)
+      end
+    end
+
     describe '#archive_tag_index' do
       it 'returns self' do
         _(@tags.archive_tag_index).must_be_same_as @tags

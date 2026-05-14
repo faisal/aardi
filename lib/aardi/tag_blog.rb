@@ -20,7 +20,11 @@ module Aardi
     end
 
     def index_line
-      "- [#{tag}](#{url}) (#{count})"
+      "- #{inline_link_text}"
+    end
+
+    def inline_link_text
+      "[#{tag}](#{url}) (#{count})"
     end
 
     def url

@@ -23,7 +23,7 @@ module Aardi
     def empty? = @index.empty?
 
     def inline_links
-      counts.map { |tag, tag_blog| "[#{tag}](#{tag_blog.url})" }.join(', ')
+      counts.map { |_tag, tag_blog| tag_blog.inline_link_text }.join(', ')
     end
 
     def target_path
