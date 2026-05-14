@@ -12,8 +12,6 @@ module Aardi
       end
     end
 
-    def archive_tag_index = self
-
     def content
       return "# Tags\n" if counts.empty?
 

@@ -71,27 +71,21 @@ class TagsSpec < Minitest::Spec
       end
     end
 
-    describe '#archive_tag_index' do
-      it 'returns self' do
-        _(@tags.archive_tag_index).must_be_same_as @tags
-      end
-
-      it 'content reflects counts of posts added after the index is first observed' do
-        index = @tags.archive_tag_index
-        @tags << tagged_post(%w[foo])
-        @tags << tagged_post(%w[foo])
-        @tags << tagged_post(%w[bar])
-
-        _(index.content).must_match(/\[foo\]\([^)]+\) \(2\)/)
-        _(index.content).must_match(/\[bar\]\([^)]+\) \(1\)/)
-      end
-    end
-
     describe '#content' do
       it 'includes a markup link for each tag pointing to the correct URL' do
         @tags << tagged_post(%w[foo])
 
         _(@tags.content).must_include '[foo](http://example.com/tags/foo/)'
+      end
+
+      it 'reflects posts added after a reference is captured' do
+        later = @tags
+        @tags << tagged_post(%w[foo])
+        @tags << tagged_post(%w[foo])
+        @tags << tagged_post(%w[bar])
+
+        _(later.content).must_match(/\[foo\]\([^)]+\) \(2\)/)
+        _(later.content).must_match(/\[bar\]\([^)]+\) \(1\)/)
       end
 
       it 'includes the post count in parentheses' do

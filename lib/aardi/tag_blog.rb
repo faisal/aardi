@@ -35,10 +35,6 @@ module Aardi
 
     attr_reader :tag
 
-    def archive_tag_index
-      nil
-    end
-
     def children
       [archive, home, atom_feed, json_feed]
     end

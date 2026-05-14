@@ -2,10 +2,10 @@
 
 module Aardi
   class Archive < AbstractBlog
-    def initialize(archive_path, tag = nil, tag_index = nil)
+    def initialize(archive_path, tag = nil, tags = nil)
       @archive_path = archive_path
       @tag = tag
-      @tag_index = tag_index
+      @tags = tags
       @index = Hash.new { |hash, year| hash[year] = Year.new(year, @archive_path, @tag) }
     end
 
@@ -43,10 +43,10 @@ module Aardi
     end
 
     def tag_list
-      return '' unless @tag_index
-      return '' if @tag_index.empty?
+      return '' unless @tags
+      return '' if @tags.empty?
 
-      "**What**: #{@tag_index.inline_links}\n\n"
+      "**What**: #{@tags.inline_links}\n\n"
     end
 
     def title_heading = "# #{title}\n\n"
