@@ -6,3 +6,4 @@ doc/
 .yardoc/
 tmp/
 docs/superpowers/
+coverage/
