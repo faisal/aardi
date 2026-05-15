@@ -2,7 +2,13 @@
 
 module Aardi
   module AbstractPageSupport
-    attr_reader :metadata, :mtime
+    def metadata
+      @metadata
+    end
+
+    def mtime
+      @mtime
+    end
 
     def parse_source(path)
       File.open(path, encoding: 'utf-8') do |file|
