@@ -29,7 +29,6 @@ class SiteSpec < Minitest::Spec
     end
 
     describe 'with a populated posts directory' do
-      # :reek:TooManyStatements
       before do
         @tmpdir = Dir.mktmpdir
         @original_dir = Dir.pwd

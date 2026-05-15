@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module Aardi
-  # :reek:TooManyStatements
-  # :reek:RepeatedConditional
   class Home < AbstractBlog
     def initialize(posts, archive_path, blog_path = nil, tag = nil)
       @posts = posts
