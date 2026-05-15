@@ -54,5 +54,15 @@ class YearSpec < Minitest::Spec
         _(year.content).must_include 'June'
       end
     end
+
+    describe '#children (private)' do
+      it 'returns the months sorted by descending key' do
+        year = make_year(2024)
+        year << StubPost.new(Time.utc(2024, 3, 1))
+        year << StubPost.new(Time.utc(2024, 9, 1))
+
+        _(year.send(:children).map(&:key)).must_equal [9, 3]
+      end
+    end
   end
 end

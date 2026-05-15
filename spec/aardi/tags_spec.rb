@@ -118,5 +118,34 @@ class TagsSpec < Minitest::Spec
         _(classes.count { |tag_class| tag_class == Aardi::TagBlog }).must_equal 2
       end
     end
+
+    describe '#write_target (private)' do
+      before do
+        @tmpdir = Dir.mktmpdir
+        @original_dir = Dir.pwd
+        Dir.chdir(@tmpdir)
+        Aardi.ledger[:html_files] = Set.new
+        Aardi.ledger[:content_hashes] = Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
+      end
+
+      after do
+        Dir.chdir(@original_dir)
+        FileUtils.rm_rf(@tmpdir)
+      end
+
+      it 'does not write the tags index when empty' do
+        capture_io { @tags.send(:write_target) }
+
+        _(File.exist?(File.join(@tmpdir, 'tags', 'index.html'))).must_equal false
+      end
+
+      it 'writes the tags index when not empty' do
+        @tags << tagged_post(%w[foo])
+
+        capture_io { @tags.send(:write_target) }
+
+        _(File.exist?(File.join(@tmpdir, 'tags', 'index.html'))).must_equal true
+      end
+    end
   end
 end

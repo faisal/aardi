@@ -22,8 +22,4 @@ class StubPost
   def feed_snippet
     "<p>Snippet for #{@title}</p>"
   end
-
-  def report_field_summary
-    puts "#{@creation.strftime('%-e %b %Y')} | #{@path} | #{@title}"
-  end
 end

@@ -72,5 +72,15 @@ class MonthSpec < Minitest::Spec
         _(month.content).must_include '# May 2024'
       end
     end
+
+    describe '#children (private)' do
+      it 'returns the days sorted by descending key' do
+        month = make_month(6)
+        month << StubPost.new(Time.utc(2024, 6, 5))
+        month << StubPost.new(Time.utc(2024, 6, 20))
+
+        _(month.send(:children).map(&:key)).must_equal [20, 5]
+      end
+    end
   end
 end

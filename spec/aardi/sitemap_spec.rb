@@ -88,6 +88,59 @@ class SitemapSpec < Minitest::Spec
 
         _(lastmods).wont_be_empty
       end
+
+      describe 'when a configured path is missing on disk' do
+        before do
+          setup_config(sitemap_entries: { '/missing/' => 'daily' })
+          @tmpdir = Dir.mktmpdir
+          @original_dir = Dir.pwd
+          Dir.chdir(@tmpdir)
+        end
+
+        after do
+          Dir.chdir(@original_dir)
+          FileUtils.rm_rf(@tmpdir)
+        end
+
+        it 'prints FATAL and calls exit' do
+          sitemap = Aardi::Sitemap.new
+          sitemap.define_singleton_method(:exit) { |*| raise SystemExit }
+
+          out, = capture_io do
+            assert_raises(SystemExit) { sitemap.content }
+          end
+
+          _(out).must_include 'FATAL'
+          _(out).must_include '/missing/'
+        end
+      end
+    end
+
+    describe '#render' do
+      before do
+        @tmpdir = Dir.mktmpdir
+        @original_dir = Dir.pwd
+        Dir.chdir(@tmpdir)
+        File.write(File.join(@tmpdir, 'index.html'), '<html></html>')
+        Aardi.ledger[:content_hashes] = Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
+      end
+
+      after do
+        Dir.chdir(@original_dir)
+        FileUtils.rm_rf(@tmpdir)
+      end
+
+      it 'writes sitemap.xml in the current directory' do
+        capture_io { subject.render }
+
+        _(File.exist?(File.join(@tmpdir, 'sitemap.xml'))).must_equal true
+      end
+
+      it 'written sitemap includes the configured site URL' do
+        capture_io { subject.render }
+
+        _(File.read(File.join(@tmpdir, 'sitemap.xml'))).must_include 'http://example.com'
+      end
     end
   end
 end

@@ -147,5 +147,18 @@ class PostSpec < Minitest::Spec
         _(post.title).must_equal 'Heading Title'
       end
     end
+
+    describe '#report_field_summary' do
+      it 'prints creation, path, and title separated by pipes' do
+        post = make_post(creation: Time.utc(2024, 1, 5, 0, 0, 0), name: 'my-post', title: 'My Title')
+
+        out, = capture_io { post.report_field_summary }
+
+        _(out).must_include ' 5 Jan 2024'
+        _(out).must_include 'my-post.md'
+        _(out).must_include 'My Title'
+        _(out).must_include ' | '
+      end
+    end
   end
 end

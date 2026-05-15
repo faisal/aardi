@@ -83,5 +83,62 @@ class HomeSpec < Minitest::Spec
         end
       end
     end
+
+    describe '#children (private)' do
+      it 'returns the posts the home was constructed with' do
+        posts = [StubPost.new(Time.now)]
+
+        _(Aardi::Home.new(posts, 'blog').send(:children)).must_equal posts
+      end
+    end
+
+    describe '#render' do
+      before do
+        setup_ledger
+        @tmpdir = Dir.mktmpdir
+        @original_dir = Dir.pwd
+        Dir.chdir(@tmpdir)
+        Aardi.ledger[:html_files] = Set.new
+        Aardi.ledger[:content_hashes] = Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
+        Aardi.ledger[:sitemap] = Aardi::Sitemap.new
+      end
+
+      after do
+        Dir.chdir(@original_dir)
+        FileUtils.rm_rf(@tmpdir)
+      end
+
+      it 'writes ./index.html when no blog_path is given' do
+        home = Aardi::Home.new([StubPost.new(Time.now)], 'blog')
+
+        capture_io { home.render }
+
+        _(File.exist?(File.join(@tmpdir, 'index.html'))).must_equal true
+      end
+
+      it "updates the sitemap mtime for '/' when no blog_path is given" do
+        home = Aardi::Home.new([StubPost.new(Time.now)], 'blog')
+
+        capture_io { home.render }
+
+        _(Aardi.ledger[:sitemap].urls['/'][:lastmod]).wont_be_nil
+      end
+
+      it 'writes the target page when blog_path is given' do
+        home = Aardi::Home.new([StubPost.new(Time.now)], 'blog', 'tags/foo')
+
+        capture_io { home.render }
+
+        _(File.exist?(File.join(@tmpdir, 'tags', 'foo', 'index.html'))).must_equal true
+      end
+
+      it 'does not update the sitemap when blog_path is given' do
+        home = Aardi::Home.new([StubPost.new(Time.now)], 'blog', 'tags/foo')
+
+        capture_io { home.render }
+
+        _(Aardi.ledger[:sitemap].urls['/'].key?(:lastmod)).must_equal false
+      end
+    end
   end
 end

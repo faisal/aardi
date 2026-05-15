@@ -85,5 +85,34 @@ class AtomFeedSpec < Minitest::Spec
         end
       end
     end
+
+    describe '#render' do
+      before do
+        @tmpdir = Dir.mktmpdir
+        @original_dir = Dir.pwd
+        Dir.chdir(@tmpdir)
+        Aardi.ledger[:html_files] = Set.new
+        Aardi.ledger[:content_hashes] = Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
+      end
+
+      after do
+        Dir.chdir(@original_dir)
+        FileUtils.rm_rf(@tmpdir)
+      end
+
+      it 'writes index.xml at the target path' do
+        capture_io { make_feed(posts).render }
+
+        _(File.exist?(File.join(@tmpdir, 'index.xml'))).must_equal true
+      end
+
+      it 'written file parses as Atom XML' do
+        capture_io { make_feed(posts).render }
+        doc = Nokogiri::XML(File.read(File.join(@tmpdir, 'index.xml')))
+
+        _(doc.errors).must_be_empty
+        _(doc.root.namespace.href).must_equal 'http://www.w3.org/2005/Atom'
+      end
+    end
   end
 end

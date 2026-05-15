@@ -78,5 +78,15 @@ class ArchiveSpec < Minitest::Spec
         _(content.index('2024')).must_be :<, content.index('2022')
       end
     end
+
+    describe '#children (private)' do
+      it 'returns Year instances sorted by descending key' do
+        posts = [StubPost.new(Time.utc(2022, 1, 1)), StubPost.new(Time.utc(2024, 1, 1))]
+        children = make_archive(posts).send(:children)
+
+        _(children.map(&:class).uniq).must_equal [Aardi::Year]
+        _(children.map(&:key)).must_equal [2024, 2022]
+      end
+    end
   end
 end

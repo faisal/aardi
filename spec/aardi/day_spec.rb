@@ -81,5 +81,17 @@ class DaySpec < Minitest::Spec
         _(content.index('Late Morning')).must_be :<, content.index('Morning')
       end
     end
+
+    describe '#children (private)' do
+      it 'returns the posts added to the day' do
+        day = make_day
+        first = StubPost.new(Time.utc(2024, 1, 15, 8, 0, 0))
+        second = StubPost.new(Time.utc(2024, 1, 15, 9, 0, 0))
+        day << first
+        day << second
+
+        _(day.send(:children)).must_equal [first, second]
+      end
+    end
   end
 end

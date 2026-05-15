@@ -14,6 +14,8 @@ class NewRakeSpec < Minitest::Spec
       if Object.private_method_defined?(:create_new_post) || Object.method_defined?(:create_new_post)
         Object.undef_method(:create_new_post)
       end
+      Rake.application = Rake::Application.new
+      Rake::Task.define_task(:load_config)
       load File.expand_path('../../lib/aardi/tasks/new.rake', __dir__)
     end
 
@@ -54,6 +56,14 @@ class NewRakeSpec < Minitest::Spec
         content = File.read(Dir.glob('posts/**/*.md').first)
 
         _(content).must_include '### title'
+      end
+    end
+
+    describe 'rake new task' do
+      it 'creates a post file when invoked' do
+        capture_io { Rake.application[:new].invoke }
+
+        _(Dir.glob('posts/**/*.md')).wont_be_empty
       end
     end
   end
