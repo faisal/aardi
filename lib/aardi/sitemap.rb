@@ -32,7 +32,8 @@ module Aardi
       urls[path][:lastmod] = path_mtime.iso8601
     end
 
-    # Methods called inside builder blocks must be public.
+    # Absent a block variable on Nokogiri::XML::Builder.new, this
+    # is called by the builder, not sitemap itself, and must be public.
     # :reek:FeatureEnvy
     def url_details(path, details, urlset)
       missing_path(path) unless File.exist?("./#{path}")
