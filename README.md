@@ -81,7 +81,7 @@ Configure your settings in the config.yml file at the top level of your site. co
 - blog_archive_title: The title of the blog's archive page.
 - blog_home_title: The title of the blog's home page.
 - blog_home_posts: How many posts to list on the blog's home page.
-- blog_tags_path: The sub-directory of the blog_archive_path in which to store blog tag sub-blogs.
+- blog_tags_path: The name of the directory in which to store blog tag sub-blogs.
 - sitemap_entries: A dictionary of paths and how frequently the sitemap should indicate those paths are refreshed.
 - markup_options: A dictionary of true/false markup options for the renderer to follow. Those include:
   - autolink: automatically make URLS in text into clickable links.
