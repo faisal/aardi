@@ -3,7 +3,7 @@
 module Aardi
   class JSONFeed < AbstractFeed
     def content
-      feed_content = { version: 'https://jsonfeed.org/version/1.1', title: feed_title,
+      feed_content = { version: 'https://jsonfeed.org/version/1.1', title:,
                        home_page_url: Aardi.config[:site_url], feed_url: }
       feed_content[:items] = @posts.map { |post| post_details(post) }
 

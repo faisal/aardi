@@ -26,14 +26,9 @@ module Aardi
       './index.html'
     end
 
-    def title
-      base_title = Aardi.config[:blog_home_title]
-      return "#{base_title} - #{@tag}" if @tag
-
-      base_title
-    end
-
     private
+
+    def base_title = Aardi.config[:blog_home_title]
 
     def children
       @posts

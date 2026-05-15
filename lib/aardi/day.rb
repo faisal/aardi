@@ -30,14 +30,9 @@ module Aardi
       "./#{@archive_path}/#{@year}/#{@month}/#{self}/index.html"
     end
 
-    def title
-      base_title = date.strftime('%A, %-e %B %Y')
-      return "#{base_title} - #{@tag}" if @tag
-
-      base_title
-    end
-
     private
+
+    def base_title = date.strftime('%A, %-e %B %Y')
 
     def children
       @posts

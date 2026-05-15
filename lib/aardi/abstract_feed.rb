@@ -18,20 +18,19 @@ module Aardi
       "./#{feed_file}"
     end
 
+    # Keep #title private so Nokogiri `:title` in ATOMFeed#feed_details
+    # as an element name rather than a delegated call.
+    private :title
+
     private
+
+    def base_title = Aardi.config[:site_title]
 
     def children
       @posts
     end
 
     def creation = children.max_by(&:creation)&.creation
-
-    def feed_title
-      base_title = Aardi.config[:site_title]
-      return "#{base_title} - #{@tag}" if @tag
-
-      base_title
-    end
 
     def feed_url = "#{Aardi.config[:site_url]}#{target_path[1..]}"
 

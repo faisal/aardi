@@ -20,7 +20,7 @@ module Aardi
       end
 
       subnodes = { id: feed_url, link: { href: feed_url, rel: 'self' },
-                   title: feed_title, updated: updated.iso8601 }
+                   title:, updated: updated.iso8601 }
 
       subnodes.each do |node, value|
         feed.public_send node, value

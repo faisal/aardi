@@ -31,16 +31,11 @@ module Aardi
       "./#{@archive_path}/#{@year}/#{self}/index.html"
     end
 
-    def title
-      base_title = Date.new(@year.key, @key).strftime('%B %Y')
-      return "#{base_title} - #{@tag}" if @tag
-
-      base_title
-    end
-
     def to_s = @key.to_s.rjust(2, '0')
 
     private
+
+    def base_title = Date.new(@year.key, @key).strftime('%B %Y')
 
     def children
       days

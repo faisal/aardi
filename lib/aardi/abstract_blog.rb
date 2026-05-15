@@ -13,6 +13,12 @@ module Aardi
       write_target
     end
 
+    def title
+      return "#{base_title} - #{@tag}" if @tag
+
+      base_title
+    end
+
     private
 
     def children

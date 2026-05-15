@@ -23,14 +23,9 @@ module Aardi
 
     def target_path = "./#{@archive_path}/index.html"
 
-    def title
-      base_title = Aardi.config[:blog_archive_title]
-      return "#{base_title} - #{@tag}" if @tag
-
-      base_title
-    end
-
     private
+
+    def base_title = Aardi.config[:blog_archive_title]
 
     def children
       years

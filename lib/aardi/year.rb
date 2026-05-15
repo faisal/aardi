@@ -26,13 +26,9 @@ module Aardi
       "./#{@archive_path}/#{self}/index.html"
     end
 
-    def title
-      return "#{self} - #{@tag}" if @tag
-
-      to_s
-    end
-
     private
+
+    def base_title = to_s
 
     def children
       months
