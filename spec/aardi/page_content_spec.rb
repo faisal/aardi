@@ -25,7 +25,7 @@ class PageContentSpec < Minitest::Spec
       _(subject.content).must_equal "## Hello\n\nContent."
     end
 
-    it 'output returns HTML rendered via the template' do
+    it 'output returns HTML rendered via the renderer' do
       html = subject.output
       _(html).must_include '<html'
       _(html).must_include 'My Title'

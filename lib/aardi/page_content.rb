@@ -15,7 +15,7 @@ module Aardi
     end
 
     def output
-      @output ||= Aardi.ledger[:template].render(self)
+      @output ||= Aardi.ledger[:renderer].render(self)
     end
   end
 end

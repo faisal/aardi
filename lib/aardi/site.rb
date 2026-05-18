@@ -26,7 +26,6 @@ module Aardi
       [Folder.new('.'), blog, Aardi.ledger[:sitemap]]
     end
 
-    # rubocop:disable Metrics/AbcSize
     # :reek:DuplicateMethodCall
     def initialize_ledger
       ledger = Aardi.ledger
@@ -34,9 +33,7 @@ module Aardi
       ledger[:renderer] = Renderer.new
       ledger[:html_files] = Dir.glob('./**/*.html').to_set
       ledger[:sitemap] = Sitemap.new
-      ledger[:template] = Template.new(Aardi.config[:template_path])
     end
-    # rubocop:enable Metrics/AbcSize
 
     def posts
       Dir.glob("#{Aardi.config[:blog_posts_path]}/**/*.md")

@@ -15,15 +15,31 @@ class RendererSpec < Minitest::Spec
 
     describe '.new' do
       it 'reads markup_options from Aardi.config' do
-        renderer = Aardi::Renderer.new
-
-        _(renderer.markup('## Hello')).must_include '<h2'
+        _(Aardi::Renderer.new.markup('## Hello')).must_include '<h2'
       end
 
       it 'does not crash when config has no :markup_options' do
         setup_config(markup_options: nil)
 
         _(Aardi::Renderer.new).must_be_instance_of Aardi::Renderer
+      end
+
+      it 'creates its own Template from the configured template_path' do
+        renderer = Aardi::Renderer.new
+        src = Aardi::PageContent.new('Body.', 'Title')
+
+        _(renderer.render(src)).must_include '<html'
+      end
+    end
+
+    describe '#render' do
+      it 'returns full-page HTML wrapping the rendered markup in the template' do
+        src = Aardi::PageContent.new("## Hello\n\nWorld.", 'My Title')
+        html = subject.render(src)
+
+        _(html).must_include '<html'
+        _(html).must_include '<h2'
+        _(html).must_include 'My Title'
       end
     end
 

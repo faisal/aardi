@@ -12,10 +12,12 @@ module SpecHelpers
   end
 
   # :reek:TooManyStatements
+  # :reek:FeatureEnvy
   def setup_config(overrides = {})
     Aardi.reset!
     base = YAML.safe_load_file(File.join(SAMPLES_DIR, 'minimal_config.yml'))
-    config_data = base.merge(overrides.transform_keys(&:to_s))
+    defaults = { 'template_path' => sample_path('minimal_template.html') }
+    config_data = base.merge(defaults).merge(overrides.transform_keys(&:to_s))
     Tempfile.create(['config', '.yml']) do |file|
       file.write(config_data.to_yaml)
       file.flush
@@ -23,18 +25,10 @@ module SpecHelpers
     end
   end
 
-  # :reek:TooManyStatements
   def setup_ledger
     ledger = Aardi.ledger
-    ledger[:renderer] = Aardi::Renderer.new
     ledger[:content_hashes] = Aardi::ContentHashes.new('/nonexistent_test_hashes')
     ledger[:html_files] = Set.new
-
-    html = File.read(File.join(SAMPLES_DIR, 'minimal_template.html'))
-    Tempfile.create(['template', '.html']) do |file|
-      file.write(html)
-      file.flush
-      ledger[:template] = Aardi::Template.new(file.path)
-    end
+    ledger[:renderer] = Aardi::Renderer.new
   end
 end
