@@ -1,9 +1,15 @@
 # frozen_string_literal: true
 
 module Aardi
+  # :reek:TooManyInstanceVariables
   class Renderer
-    def initialize
+    attr_reader :content_hashes, :html_files, :sitemap
+
+    def initialize(html_files, content_hashes, sitemap)
       config = Aardi.config
+      @html_files = html_files
+      @content_hashes = content_hashes
+      @sitemap = sitemap
       @template = Template.new(config[:template_path])
       @custom_renderer = CustomRenderer.new
       @markup_renderer = Redcarpet::Markdown.new(@custom_renderer, config[:markup_options] || {})

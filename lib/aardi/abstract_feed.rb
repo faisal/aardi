@@ -8,8 +8,8 @@ module Aardi
       @tag = tag
     end
 
-    def render
-      write_target
+    def render(renderer)
+      write_target(renderer)
     end
 
     def target_path
@@ -36,9 +36,9 @@ module Aardi
 
     def updated = children.max_by(&:updated)&.updated
 
-    def write_target
+    def write_target(renderer)
       source = Content.new(content)
-      FileTarget.new(source, target_path).write
+      FileTarget.new(source, target_path, renderer).write
     end
   end
 end

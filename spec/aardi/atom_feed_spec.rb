@@ -91,8 +91,9 @@ class AtomFeedSpec < Minitest::Spec
         @tmpdir = Dir.mktmpdir
         @original_dir = Dir.pwd
         Dir.chdir(@tmpdir)
-        Aardi.ledger[:html_files] = Set.new
-        Aardi.ledger[:content_hashes] = Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
+        @renderer = make_renderer(
+          content_hashes: Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
+        )
       end
 
       after do
@@ -101,13 +102,13 @@ class AtomFeedSpec < Minitest::Spec
       end
 
       it 'writes index.xml at the target path' do
-        capture_io { make_feed(posts).render }
+        capture_io { make_feed(posts).render(@renderer) }
 
         _(File.exist?(File.join(@tmpdir, 'index.xml'))).must_equal true
       end
 
       it 'written file parses as Atom XML' do
-        capture_io { make_feed(posts).render }
+        capture_io { make_feed(posts).render(@renderer) }
         doc = Nokogiri::XML(File.read(File.join(@tmpdir, 'index.xml')))
 
         _(doc.errors).must_be_empty

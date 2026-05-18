@@ -94,13 +94,15 @@ class HomeSpec < Minitest::Spec
 
     describe '#render' do
       before do
-        setup_ledger
         @tmpdir = Dir.mktmpdir
         @original_dir = Dir.pwd
         Dir.chdir(@tmpdir)
-        Aardi.ledger[:html_files] = Set.new
-        Aardi.ledger[:content_hashes] = Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
-        Aardi.ledger[:sitemap] = Aardi::Sitemap.new
+        @sitemap = Aardi::Sitemap.new
+        @renderer = make_renderer(
+          html_files: Set.new,
+          content_hashes: Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt')),
+          sitemap: @sitemap
+        )
       end
 
       after do
@@ -111,7 +113,7 @@ class HomeSpec < Minitest::Spec
       it 'writes ./index.html when no blog_path is given' do
         home = Aardi::Home.new([StubPost.new(Time.now)], 'blog')
 
-        capture_io { home.render }
+        capture_io { home.render(@renderer) }
 
         _(File.exist?(File.join(@tmpdir, 'index.html'))).must_equal true
       end
@@ -119,15 +121,15 @@ class HomeSpec < Minitest::Spec
       it "updates the sitemap mtime for '/' when no blog_path is given" do
         home = Aardi::Home.new([StubPost.new(Time.now)], 'blog')
 
-        capture_io { home.render }
+        capture_io { home.render(@renderer) }
 
-        _(Aardi.ledger[:sitemap].urls['/'][:lastmod]).wont_be_nil
+        _(@sitemap.urls['/'][:lastmod]).wont_be_nil
       end
 
       it 'writes the target page when blog_path is given' do
         home = Aardi::Home.new([StubPost.new(Time.now)], 'blog', 'tags/foo')
 
-        capture_io { home.render }
+        capture_io { home.render(@renderer) }
 
         _(File.exist?(File.join(@tmpdir, 'tags', 'foo', 'index.html'))).must_equal true
       end
@@ -135,9 +137,9 @@ class HomeSpec < Minitest::Spec
       it 'does not update the sitemap when blog_path is given' do
         home = Aardi::Home.new([StubPost.new(Time.now)], 'blog', 'tags/foo')
 
-        capture_io { home.render }
+        capture_io { home.render(@renderer) }
 
-        _(Aardi.ledger[:sitemap].urls['/'].key?(:lastmod)).must_equal false
+        _(@sitemap.urls['/'].key?(:lastmod)).must_equal false
       end
     end
   end

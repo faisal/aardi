@@ -6,7 +6,6 @@ class FolderSpec < Minitest::Spec
   describe Aardi::Folder do
     before do
       setup_config
-      setup_ledger
     end
 
     describe '.new' do
@@ -43,9 +42,12 @@ class FolderSpec < Minitest::Spec
         @tmpdir = Dir.mktmpdir
         @original_dir = Dir.pwd
         Dir.chdir(@tmpdir)
-        Aardi.ledger[:html_files] = Set.new
-        Aardi.ledger[:content_hashes] = Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
-        Aardi.ledger[:sitemap] = Aardi::Sitemap.new
+        @sitemap = Aardi::Sitemap.new
+        @renderer = make_renderer(
+          html_files: Set.new,
+          content_hashes: Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt')),
+          sitemap: @sitemap
+        )
       end
 
       after do
@@ -56,7 +58,7 @@ class FolderSpec < Minitest::Spec
       it "renders contained .md pages when path is '.'" do
         File.write(File.join(@tmpdir, 'page.md'), "Title: P\n\n----\n# P\n\nText.\n")
 
-        capture_io { Aardi::Folder.new('.').render }
+        capture_io { Aardi::Folder.new('.').render(@renderer) }
 
         _(File.exist?(File.join(@tmpdir, 'page.html'))).must_equal true
       end
@@ -64,7 +66,7 @@ class FolderSpec < Minitest::Spec
       it 'returns a hash mapping rendered page paths to their checksums' do
         File.write(File.join(@tmpdir, 'page.md'), "Title: P\n\n----\n# P\n\nText.\n")
         result = nil
-        capture_io { result = Aardi::Folder.new('.').render }
+        capture_io { result = Aardi::Folder.new('.').render(@renderer) }
 
         _(result).must_be_kind_of Hash
         _(result.keys).must_include './page.html'
@@ -73,9 +75,9 @@ class FolderSpec < Minitest::Spec
       it "does not record sitemap mtime when path is '.'" do
         File.write(File.join(@tmpdir, 'page.md'), "Title: P\n\n----\n# P\n\nText.\n")
 
-        capture_io { Aardi::Folder.new('.').render }
+        capture_io { Aardi::Folder.new('.').render(@renderer) }
 
-        _(Aardi.ledger[:sitemap].urls['/'].key?(:lastmod)).must_equal false
+        _(@sitemap.urls['/'].key?(:lastmod)).must_equal false
       end
 
       it "records sitemap mtime for the folder's normalized path when path is not '.'" do
@@ -83,14 +85,16 @@ class FolderSpec < Minitest::Spec
         File.write(File.join(@tmpdir, 'section', 'page.md'), "Title: P\n\n----\n# P\n\nText.\n")
         setup_config(template_path: File.join(SpecHelpers::SAMPLES_DIR, 'minimal_template.html'),
                      sitemap_entries: { '/section/' => 'weekly' })
-        setup_ledger
-        Aardi.ledger[:html_files] = Set.new
-        Aardi.ledger[:content_hashes] = Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
-        Aardi.ledger[:sitemap] = Aardi::Sitemap.new
+        section_sitemap = Aardi::Sitemap.new
+        section_renderer = make_renderer(
+          html_files: Set.new,
+          content_hashes: Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes2.txt')),
+          sitemap: section_sitemap
+        )
 
-        capture_io { Aardi::Folder.new('./section').render }
+        capture_io { Aardi::Folder.new('./section').render(section_renderer) }
 
-        _(Aardi.ledger[:sitemap].urls['/section/'][:lastmod]).wont_be_nil
+        _(section_sitemap.urls['/section/'][:lastmod]).wont_be_nil
       end
     end
   end

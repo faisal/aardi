@@ -86,8 +86,9 @@ class JSONFeedSpec < Minitest::Spec
         @tmpdir = Dir.mktmpdir
         @original_dir = Dir.pwd
         Dir.chdir(@tmpdir)
-        Aardi.ledger[:html_files] = Set.new
-        Aardi.ledger[:content_hashes] = Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
+        @renderer = make_renderer(
+          content_hashes: Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
+        )
       end
 
       after do
@@ -96,13 +97,13 @@ class JSONFeedSpec < Minitest::Spec
       end
 
       it 'writes index.json at the target path' do
-        capture_io { make_feed([StubPost.new(Time.now)]).render }
+        capture_io { make_feed([StubPost.new(Time.now)]).render(@renderer) }
 
         _(File.exist?(File.join(@tmpdir, 'index.json'))).must_equal true
       end
 
       it 'written file parses as a JSON Feed v1.1 document' do
-        capture_io { make_feed([StubPost.new(Time.now)]).render }
+        capture_io { make_feed([StubPost.new(Time.now)]).render(@renderer) }
         parsed = JSON.parse(File.read(File.join(@tmpdir, 'index.json')))
 
         _(parsed['version']).must_equal 'https://jsonfeed.org/version/1.1'

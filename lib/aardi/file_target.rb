@@ -2,10 +2,11 @@
 
 module Aardi
   class FileTarget
-    def initialize(src, target_path)
+    def initialize(src, target_path, renderer)
       @src = src
       @path = target_path
-      @content_hashes = Aardi.ledger[:content_hashes]
+      @content_hashes = renderer.content_hashes
+      @html_files = renderer.html_files
     end
 
     # :reek:TooManyStatements

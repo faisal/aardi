@@ -13,9 +13,9 @@ module Aardi
       @src_content
     end
 
-    def render
-      page_content = PageContent.new(content, title, metadata)
-      PageTarget.new(page_content, target_path).write
+    def render(renderer)
+      page_content = PageContent.new(content, title, renderer, metadata)
+      PageTarget.new(page_content, target_path, renderer).write
     end
 
     def target_path

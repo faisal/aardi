@@ -8,7 +8,7 @@ module Aardi
     # list rather than always rechecking the file system. But then
     # check anyway because html_files doesn't always catch tag pages.
     def file_exists?
-      Aardi.ledger[:html_files].include?(@path) || File.exist?(@path)
+      @html_files.include?(@path) || File.exist?(@path)
     end
   end
 end

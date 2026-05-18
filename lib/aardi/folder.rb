@@ -9,9 +9,9 @@ module Aardi
 
     def mtime = children.filter_map(&:mtime).max
 
-    def render
-      result = children.map(&:render).reduce({}, :merge)
-      Aardi.ledger[:sitemap].record_mtime(@normalized_path, mtime) unless @path == '.'
+    def render(renderer)
+      result = children.each_with_object({}) { |child, acc| acc.merge!(child.render(renderer)) }
+      renderer.sitemap.record_mtime(@normalized_path, mtime) unless @path == '.'
       result
     end
 

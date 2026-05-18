@@ -4,8 +4,9 @@ module Aardi
   class Post < AbstractBlog
     include AbstractPageSupport
 
-    def initialize(path)
+    def initialize(path, renderer)
       @path = path
+      @renderer = renderer
       parse_source path
 
       raise "#{path}: missing Creation metadata" unless metadata.creation
@@ -18,7 +19,7 @@ module Aardi
     def creation = metadata.creation
 
     def feed_snippet
-      @feed_snippet ||= Aardi.ledger[:renderer].markup_feed_snippet(@src_content)
+      @feed_snippet ||= @renderer.markup_feed_snippet(@src_content)
     end
 
     def name = File.basename(@path, '.*')

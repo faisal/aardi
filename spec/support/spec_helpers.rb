@@ -3,6 +3,10 @@
 module SpecHelpers
   SAMPLES_DIR = File.expand_path('../samples', __dir__)
 
+  def make_renderer(html_files: Set.new, content_hashes: stub_content_hashes, sitemap: stub_sitemap)
+    Aardi::Renderer.new(html_files, content_hashes, sitemap)
+  end
+
   def page_by_sample_path(filename)
     Aardi::Page.new sample_path(filename)
   end
@@ -25,10 +29,17 @@ module SpecHelpers
     end
   end
 
-  def setup_ledger
-    ledger = Aardi.ledger
-    ledger[:content_hashes] = Aardi::ContentHashes.new('/nonexistent_test_hashes')
-    ledger[:html_files] = Set.new
-    ledger[:renderer] = Aardi::Renderer.new
+  private
+
+  def stub_content_hashes
+    Aardi::ContentHashes.new('/nonexistent_test_hashes')
+  end
+
+  # :reek:TooManyStatements
+  def stub_sitemap
+    Object.new.tap do |stub|
+      stub.define_singleton_method(:record_mtime) { |*| nil }
+      stub.define_singleton_method(:update_mtime) { |*| nil }
+    end
   end
 end

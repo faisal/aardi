@@ -15,10 +15,11 @@ class AbstractBlogSpec < Minitest::Spec
   describe Aardi::AbstractBlog do
     before do
       setup_config
-      setup_ledger
       @tmpdir = Dir.mktmpdir
-      Aardi.ledger[:html_files] = Set.new
-      Aardi.ledger[:content_hashes] = Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
+      @renderer = make_renderer(
+        html_files: Set.new,
+        content_hashes: Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
+      )
     end
 
     after do
@@ -48,7 +49,7 @@ class AbstractBlogSpec < Minitest::Spec
         blog = TestAbstractBlog.new
         blog.target_path = File.join(@tmpdir, 'test.html')
 
-        capture_io { blog.render }
+        capture_io { blog.render(@renderer) }
 
         _(File.exist?(blog.target_path)).must_equal true
       end
@@ -57,7 +58,7 @@ class AbstractBlogSpec < Minitest::Spec
         blog = TestAbstractBlog.new
         blog.target_path = File.join(@tmpdir, 'test.html')
 
-        capture_io { blog.render }
+        capture_io { blog.render(@renderer) }
 
         _(File.read(blog.target_path)).must_include 'Heading'
       end
@@ -66,7 +67,7 @@ class AbstractBlogSpec < Minitest::Spec
         blog = TestAbstractBlog.new
         blog.target_path = File.join(@tmpdir, 'test.html')
         result = nil
-        capture_io { result = blog.render }
+        capture_io { result = blog.render(@renderer) }
 
         _(result).must_be_kind_of Hash
         _(result.keys).must_include blog.target_path

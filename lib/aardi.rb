@@ -14,7 +14,6 @@
 %w[
   version
   config
-  ledger
   metadata
   content
   content_hashes
@@ -53,11 +52,8 @@ module Aardi
   class << self
     def config = @config ||= Config.new
 
-    def ledger = @ledger ||= Ledger.new
-
     def reset!
       @config = Config.new
-      @ledger = Ledger.new
     end
   end
 end

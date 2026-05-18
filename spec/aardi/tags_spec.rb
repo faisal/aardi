@@ -6,7 +6,6 @@ class TagsSpec < Minitest::Spec
   describe Aardi::Tags do
     before do
       setup_config
-      setup_ledger
       @tags = Aardi::Tags.new
     end
 
@@ -124,8 +123,10 @@ class TagsSpec < Minitest::Spec
         @tmpdir = Dir.mktmpdir
         @original_dir = Dir.pwd
         Dir.chdir(@tmpdir)
-        Aardi.ledger[:html_files] = Set.new
-        Aardi.ledger[:content_hashes] = Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
+        @renderer = make_renderer(
+          html_files: Set.new,
+          content_hashes: Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
+        )
       end
 
       after do
@@ -134,7 +135,7 @@ class TagsSpec < Minitest::Spec
       end
 
       it 'does not write the tags index when empty' do
-        capture_io { @tags.send(:write_target) }
+        capture_io { @tags.send(:write_target, @renderer) }
 
         _(File.exist?(File.join(@tmpdir, 'tags', 'index.html'))).must_equal false
       end
@@ -142,7 +143,7 @@ class TagsSpec < Minitest::Spec
       it 'writes the tags index when not empty' do
         @tags << tagged_post(%w[foo])
 
-        capture_io { @tags.send(:write_target) }
+        capture_io { @tags.send(:write_target, @renderer) }
 
         _(File.exist?(File.join(@tmpdir, 'tags', 'index.html'))).must_equal true
       end

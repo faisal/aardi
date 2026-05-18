@@ -6,7 +6,6 @@ class OrphanageSpec < Minitest::Spec
   describe Aardi::Orphanage do
     before do
       setup_config
-      setup_ledger
     end
 
     describe '#report' do

@@ -13,9 +13,9 @@ module Aardi
       "# #{title}\n#{post_days_content}#{content_footer}"
     end
 
-    def render
-      Aardi.ledger[:sitemap].update_mtime('/', mtime) unless @blog_path
-      write_target
+    def render(renderer)
+      renderer.sitemap.update_mtime('/', mtime) unless @blog_path
+      write_target(renderer)
     end
 
     def target_path

@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
 module Aardi
+  # :reek:TooManyInstanceVariables
   class Site < AbstractBlog
     def initialize
-      initialize_ledger
+      @html_files = Dir.glob('./**/*.html').to_set
+      @content_hashes = ContentHashes.new(Aardi.config[:content_hashes_path])
+      @sitemap = Sitemap.new
+      @renderer = Renderer.new(@html_files, @content_hashes, @sitemap)
 
       posts.each do |post|
         blog << post
@@ -15,39 +19,25 @@ module Aardi
     end
 
     def render
-      super
-      save_content_hashes(@result)
-      report_orphans(@result)
+      result = super(@renderer)
+      @content_hashes.save(result)
+      Orphanage.new.report(@html_files, result.keys)
     end
 
     private
 
     def children
-      [Folder.new('.'), blog, Aardi.ledger[:sitemap]]
+      [Folder.new('.'), blog, @sitemap]
     end
 
-    # :reek:DuplicateMethodCall
-    def initialize_ledger
-      ledger = Aardi.ledger
-      ledger[:content_hashes] = ContentHashes.new(Aardi.config[:content_hashes_path])
-      ledger[:renderer] = Renderer.new
-      ledger[:html_files] = Dir.glob('./**/*.html').to_set
-      ledger[:sitemap] = Sitemap.new
+    def post_paths
+      Dir.glob("#{Aardi.config[:blog_posts_path]}/**/*.md")
     end
 
     def posts
-      Dir.glob("#{Aardi.config[:blog_posts_path]}/**/*.md")
-         .map { |path| Post.new(path) }
+      post_paths.map { |path| Post.new(path, @renderer) }
     end
 
-    def report_orphans(result)
-      Orphanage.new.report(Aardi.ledger[:html_files], result.keys)
-    end
-
-    def save_content_hashes(result)
-      Aardi.ledger[:content_hashes].save(result)
-    end
-
-    def write_target = {}
+    def write_target(_renderer) = {}
   end
 end
