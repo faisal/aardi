@@ -51,6 +51,6 @@ module Aardi
 
     def tag = nil
 
-    def write_target = nil
+    def write_target = {}
   end
 end

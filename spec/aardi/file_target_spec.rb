@@ -54,12 +54,32 @@ class FileTargetSpec < Minitest::Spec
       _(File.read(path).strip).must_equal 'New content'
     end
 
-    it 'updates content hash after writing' do
+    it 'returns {path => output_hash} after writing' do
+      path = target_path
+      src = Aardi::Content.new('data')
+      result = nil
+      capture_io { result = Aardi::FileTarget.new(src, path).write }
+
+      _(result).must_equal({ path => src.output_hash })
+    end
+
+    it 'returns {path => output_hash} when file is unchanged' do
+      path = target_path
+      src = Aardi::Content.new('Hello')
+      File.write(path, "Hello\n")
+      Aardi.ledger[:content_hashes][path] = src.output_hash
+      result = nil
+      capture_io { result = Aardi::FileTarget.new(src, path).write }
+
+      _(result).must_equal({ path => src.output_hash })
+    end
+
+    it 'does not modify content_hashes in the ledger' do
       path = target_path
       src = Aardi::Content.new('data')
       capture_io { Aardi::FileTarget.new(src, path).write }
 
-      _(Aardi.ledger[:content_hashes][path]).must_equal src.output_hash
+      _(Aardi.ledger[:content_hashes][path]).must_be_nil
     end
   end
 end

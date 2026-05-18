@@ -15,6 +15,16 @@ module Aardi
       @hashes[path] = hash
     end
 
+    def replace(new_hashes)
+      @hashes = new_hashes
+      @new_hashes = nil
+    end
+
+    def save(new_hashes)
+      replace(new_hashes)
+      write
+    end
+
     def write
       return if new_hashes == @original_hashes
 

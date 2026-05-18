@@ -37,6 +37,45 @@ class ContentHashesSpec < Minitest::Spec
       end
     end
 
+    describe '#save' do
+      it 'replaces stored hashes and writes them to disk in one call' do
+        Dir.mktmpdir do |dir|
+          path = File.join(dir, 'hashes.txt')
+          hashes = Aardi::ContentHashes.new(path)
+          capture_io { hashes.save({ '/saved' => 7 }) }
+
+          _(File.read(path)).must_include '/saved: 7'
+        end
+      end
+    end
+
+    describe '#replace' do
+      it 'replaces stored hashes so they are serialized on the next #write call' do
+        Dir.mktmpdir do |dir|
+          path = File.join(dir, 'hashes.txt')
+          hashes = Aardi::ContentHashes.new(path)
+          hashes.replace({ '/new/path' => 42 })
+          capture_io { hashes.write }
+
+          _(File.read(path)).must_include '/new/path: 42'
+        end
+      end
+
+      it 'discards any previously stored hashes' do
+        Dir.mktmpdir do |dir|
+          path = File.join(dir, 'hashes.txt')
+          hashes = Aardi::ContentHashes.new(path)
+          hashes['/old'] = 1
+          hashes.replace({ '/new' => 2 })
+          capture_io { hashes.write }
+          content = File.read(path)
+
+          _(content).must_include '/new: 2'
+          _(content).wont_include '/old'
+        end
+      end
+    end
+
     describe '#write' do
       it 'does not write when hashes are unchanged' do
         Dir.mktmpdir do |dir|

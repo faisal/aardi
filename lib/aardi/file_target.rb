@@ -10,13 +10,13 @@ module Aardi
 
     # :reek:TooManyStatements
     def write
-      do_write = should_write?
-      update_hash
-      return unless do_write
+      hash = @src.output_hash
+      return { @path => hash } unless should_write?
 
       FileUtils.mkdir_p(File.dirname(@path))
       File.write(@path, "#{@src.output}\n")
       puts("Wrote #{@path}")
+      { @path => hash }
     end
 
     private
@@ -35,10 +35,6 @@ module Aardi
 
       # in case cache missing (or corrupt) yet file good.
       @src.output != File.read(@path).strip
-    end
-
-    def update_hash
-      @content_hashes[@path] = @src.output_hash
     end
   end
 end

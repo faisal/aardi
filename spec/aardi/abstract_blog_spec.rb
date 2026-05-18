@@ -61,6 +61,16 @@ class AbstractBlogSpec < Minitest::Spec
 
         _(File.read(blog.target_path)).must_include 'Heading'
       end
+
+      it 'returns a hash mapping the target path to its output checksum' do
+        blog = TestAbstractBlog.new
+        blog.target_path = File.join(@tmpdir, 'test.html')
+        result = nil
+        capture_io { result = blog.render }
+
+        _(result).must_be_kind_of Hash
+        _(result.keys).must_include blog.target_path
+      end
     end
   end
 end

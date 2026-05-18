@@ -61,6 +61,15 @@ class FolderSpec < Minitest::Spec
         _(File.exist?(File.join(@tmpdir, 'page.html'))).must_equal true
       end
 
+      it 'returns a hash mapping rendered page paths to their checksums' do
+        File.write(File.join(@tmpdir, 'page.md'), "Title: P\n\n----\n# P\n\nText.\n")
+        result = nil
+        capture_io { result = Aardi::Folder.new('.').render }
+
+        _(result).must_be_kind_of Hash
+        _(result.keys).must_include './page.html'
+      end
+
       it "does not record sitemap mtime when path is '.'" do
         File.write(File.join(@tmpdir, 'page.md'), "Title: P\n\n----\n# P\n\nText.\n")
 

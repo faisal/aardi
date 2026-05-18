@@ -9,8 +9,7 @@ module Aardi
     def mtime = children.max_by(&:mtime)&.mtime
 
     def render
-      children.each(&:render)
-      write_target
+      @result = children.map(&:render).reduce({}, :merge).merge(write_target)
     end
 
     def title

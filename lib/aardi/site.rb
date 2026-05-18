@@ -16,8 +16,8 @@ module Aardi
 
     def render
       super
-      Aardi.ledger[:content_hashes].write
-      Orphanage.new.report
+      save_content_hashes(@result)
+      report_orphans(@result)
     end
 
     private
@@ -43,6 +43,14 @@ module Aardi
          .map { |path| Post.new(path) }
     end
 
-    def write_target; end
+    def report_orphans(result)
+      Orphanage.new.report(Aardi.ledger[:html_files], result.keys)
+    end
+
+    def save_content_hashes(result)
+      Aardi.ledger[:content_hashes].save(result)
+    end
+
+    def write_target = {}
   end
 end

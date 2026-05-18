@@ -134,8 +134,8 @@ class BlogSpec < Minitest::Spec
     end
 
     describe '#write_target' do
-      it 'is nil so rendering Blog writes no file of its own' do
-        _(make_blog([]).send(:write_target)).must_be_nil
+      it 'returns {} so rendering Blog writes no file of its own' do
+        _(make_blog([]).send(:write_target)).must_equal({})
       end
     end
   end

@@ -2,11 +2,6 @@
 
 module Aardi
   class PageTarget < FileTarget
-    def write
-      super
-      Aardi.ledger[:html_files].delete(@path)
-    end
-
     private
 
     # Optimization: in PageTarget first check the existing .html

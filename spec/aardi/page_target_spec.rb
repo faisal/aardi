@@ -20,14 +20,23 @@ class PageTargetSpec < Minitest::Spec
       File.join(@tmpdir, name)
     end
 
-    it 'removes the path from html_files after writing' do
+    it 'does not delete the path from html_files' do
       path = target_path
       src = Aardi::PageContent.new("# Title\n", 'Title')
       Aardi.ledger[:html_files].add(path)
       Aardi.ledger[:content_hashes][path] = src.output_hash
       capture_io { Aardi::PageTarget.new(src, path).write }
 
-      _(Aardi.ledger[:html_files]).wont_include path
+      _(Aardi.ledger[:html_files]).must_include path
+    end
+
+    it 'returns {path => output_hash}' do
+      path = target_path
+      src = Aardi::PageContent.new("# Title\n", 'Title')
+      result = nil
+      capture_io { result = Aardi::PageTarget.new(src, path).write }
+
+      _(result).must_equal({ path => src.output_hash })
     end
 
     it 'uses html_files to determine if the file exists (not the filesystem)' do
@@ -41,13 +50,12 @@ class PageTargetSpec < Minitest::Spec
       _(File.exist?(path)).must_equal false
     end
 
-    it 'writes and removes path from html_files when path is not in html_files' do
+    it 'writes when path is not in html_files' do
       path = target_path
       src = Aardi::PageContent.new("# Title\n", 'Title')
       capture_io { Aardi::PageTarget.new(src, path).write }
 
       _(File.exist?(path)).must_equal true
-      _(Aardi.ledger[:html_files]).wont_include path
     end
   end
 end

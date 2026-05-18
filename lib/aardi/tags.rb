@@ -53,7 +53,7 @@ module Aardi
     end
 
     def write_target
-      return if empty?
+      return {} if empty?
 
       super
     end

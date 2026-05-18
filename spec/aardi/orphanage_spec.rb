@@ -10,42 +10,45 @@ class OrphanageSpec < Minitest::Spec
     end
 
     describe '#report' do
-      it 'prints paths that are in html_files but not ignored' do
+      it 'prints paths in html_files that were not generated' do
         setup_config ignore_orphans: []
-        Aardi.ledger[:html_files] = Set.new(['./orphan.html'])
-        _, err = capture_io { Aardi::Orphanage.new.report }
+        _, err = capture_io { Aardi::Orphanage.new.report(Set.new(['./orphan.html']), []) }
 
         _(err).must_include 'Orphan: ./orphan.html'
       end
 
+      it 'does not report paths that appear in generated_paths' do
+        html_files = Set.new(['./orphan.html', './generated.html'])
+        _, err = capture_io { Aardi::Orphanage.new.report(html_files, ['./generated.html']) }
+
+        _(err).must_include 'Orphan: ./orphan.html'
+        _(err).wont_include 'generated.html'
+      end
+
       it 'does not print paths matching an ignore_orphans prefix' do
         setup_config ignore_orphans: ['./ignored/']
-        Aardi.ledger[:html_files] = Set.new(['./ignored/page.html'])
-        _, err = capture_io { Aardi::Orphanage.new.report }
+        _, err = capture_io { Aardi::Orphanage.new.report(Set.new(['./ignored/page.html']), []) }
 
         _(err).must_be_empty
       end
 
       it 'prints non-ignored paths while silencing ignored ones' do
         setup_config ignore_orphans: ['./ignored/']
-        Aardi.ledger[:html_files] = Set.new(['./ignored/page.html', './visible.html'])
-        _, err = capture_io { Aardi::Orphanage.new.report }
+        _, err = capture_io { Aardi::Orphanage.new.report(Set.new(['./ignored/page.html', './visible.html']), []) }
 
         _(err).must_include 'visible.html'
         _(err).wont_include 'ignored/page.html'
       end
 
       it 'does nothing when html_files is empty' do
-        Aardi.ledger[:html_files] = Set.new
-        _, err = capture_io { Aardi::Orphanage.new.report }
+        _, err = capture_io { Aardi::Orphanage.new.report(Set.new, []) }
 
         _(err).must_be_empty
       end
 
       it 'does not crash when ignore_orphans is absent from config' do
         setup_config ignore_orphans: nil
-        Aardi.ledger[:html_files] = Set.new(['./orphan.html'])
-        _, err = capture_io { Aardi::Orphanage.new.report }
+        _, err = capture_io { Aardi::Orphanage.new.report(Set.new(['./orphan.html']), []) }
 
         _(err).must_include 'Orphan: ./orphan.html'
       end
