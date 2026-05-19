@@ -98,7 +98,7 @@ class HomeSpec < Minitest::Spec
         @original_dir = Dir.pwd
         Dir.chdir(@tmpdir)
         @sitemap = Aardi::Sitemap.new
-        @renderer = make_renderer(
+        make_renderer(
           html_files: Set.new,
           content_hashes: Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt')),
           sitemap: @sitemap
@@ -113,7 +113,7 @@ class HomeSpec < Minitest::Spec
       it 'writes ./index.html when no blog_path is given' do
         home = Aardi::Home.new([StubPost.new(Time.now)], 'blog')
 
-        capture_io { home.render(@renderer) }
+        capture_io { home.render }
 
         _(File.exist?(File.join(@tmpdir, 'index.html'))).must_equal true
       end
@@ -121,7 +121,7 @@ class HomeSpec < Minitest::Spec
       it "updates the sitemap mtime for '/' when no blog_path is given" do
         home = Aardi::Home.new([StubPost.new(Time.now)], 'blog')
 
-        capture_io { home.render(@renderer) }
+        capture_io { home.render }
 
         _(@sitemap.urls['/'][:lastmod]).wont_be_nil
       end
@@ -129,7 +129,7 @@ class HomeSpec < Minitest::Spec
       it 'writes the target page when blog_path is given' do
         home = Aardi::Home.new([StubPost.new(Time.now)], 'blog', 'tags/foo')
 
-        capture_io { home.render(@renderer) }
+        capture_io { home.render }
 
         _(File.exist?(File.join(@tmpdir, 'tags', 'foo', 'index.html'))).must_equal true
       end
@@ -137,7 +137,7 @@ class HomeSpec < Minitest::Spec
       it 'does not update the sitemap when blog_path is given' do
         home = Aardi::Home.new([StubPost.new(Time.now)], 'blog', 'tags/foo')
 
-        capture_io { home.render(@renderer) }
+        capture_io { home.render }
 
         _(@sitemap.urls['/'].key?(:lastmod)).must_equal false
       end

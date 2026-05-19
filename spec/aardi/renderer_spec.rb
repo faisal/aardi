@@ -6,10 +6,10 @@ class RendererSpec < Minitest::Spec
   describe Aardi::Renderer do
     before do
       setup_config
-      @renderer = make_renderer
+      make_renderer
     end
 
-    subject { @renderer }
+    subject { Aardi.renderer }
 
     describe '.new' do
       it 'reads markup_options from Aardi.config' do
@@ -23,16 +23,15 @@ class RendererSpec < Minitest::Spec
       end
 
       it 'creates its own Template from the configured template_path' do
-        renderer = make_renderer
-        src = Aardi::PageContent.new('Body.', 'Title', renderer)
+        src = Aardi::PageContent.new('Body.', 'Title')
 
-        _(renderer.render(src)).must_include '<html'
+        _(Aardi.renderer.render(src)).must_include '<html'
       end
     end
 
     describe '#render' do
       it 'returns full-page HTML wrapping the rendered markup in the template' do
-        src = Aardi::PageContent.new("## Hello\n\nWorld.", 'My Title', subject)
+        src = Aardi::PageContent.new("## Hello\n\nWorld.", 'My Title')
         html = subject.render(src)
 
         _(html).must_include '<html'

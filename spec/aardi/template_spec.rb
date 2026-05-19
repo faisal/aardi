@@ -6,9 +6,8 @@ class TemplateSpec < Minitest::Spec
   describe Aardi::Template do
     before do
       setup_config
+      make_renderer
     end
-
-    let(:renderer) { make_renderer }
 
     subject do
       Aardi::Template.new(sample_path('minimal_template.html'))
@@ -16,31 +15,31 @@ class TemplateSpec < Minitest::Spec
 
     describe '#render' do
       it 'inserts rendered markup into the main element' do
-        src = Aardi::PageContent.new("## Hello\n\nWorld.", 'Hello', renderer)
-        html = subject.render(src, renderer)
+        src = Aardi::PageContent.new("## Hello\n\nWorld.", 'Hello')
+        html = subject.render(src)
 
         _(html).must_include '<h2'
         _(html).must_include 'Hello'
       end
 
       it 'appends the page title to the title tag' do
-        src = Aardi::PageContent.new('Body.', 'My Page Title', renderer)
-        html = subject.render(src, renderer)
+        src = Aardi::PageContent.new('Body.', 'My Page Title')
+        html = subject.render(src)
 
         _(html).must_include 'My Page Title'
         _(html).must_match(%r{<title>.*My Page Title.*</title>}m)
       end
 
       it 'sets the meta description when metadata contains Description' do
-        src = Aardi::PageContent.new('Body.', 'Title', renderer, Aardi::Metadata.new("Description: A short desc\n"))
-        html = subject.render(src, renderer)
+        src = Aardi::PageContent.new('Body.', 'Title', Aardi::Metadata.new("Description: A short desc\n"))
+        html = subject.render(src)
 
         _(html).must_include 'content="A short desc"'
       end
 
       it 'leaves the meta description unchanged when no Description metadata' do
-        src = Aardi::PageContent.new('Body.', 'Title', renderer)
-        html = subject.render(src, renderer)
+        src = Aardi::PageContent.new('Body.', 'Title')
+        html = subject.render(src)
 
         _(html).must_include 'name="description"'
       end

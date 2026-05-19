@@ -21,9 +21,9 @@ module Aardi
       update_mtime(path, path_mtime)
     end
 
-    def render(renderer)
+    def render
       source = Content.new(content)
-      FileTarget.new(source, target_path, renderer).write
+      FileTarget.new(source, target_path).write
     end
 
     def target_path = './sitemap.xml'

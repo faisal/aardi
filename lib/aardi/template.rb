@@ -9,10 +9,10 @@ module Aardi
       @dom = Nokogiri::HTML5.parse(@content)
     end
 
-    def render(src, renderer)
+    def render(src)
       dom = @dom.clone
 
-      add_main(dom, src, renderer)
+      add_main(dom, src)
       add_title(dom, src)
       add_description(dom, src)
 
@@ -28,8 +28,8 @@ module Aardi
       dom.at_css('meta[name="description"]')['content'] = description
     end
 
-    def add_main(dom, src, renderer)
-      dom.at_css('main').add_child(renderer.markup(src.content))
+    def add_main(dom, src)
+      dom.at_css('main').add_child(Aardi.renderer.markup(src.content))
     end
 
     def add_title(dom, src)

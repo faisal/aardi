@@ -8,7 +8,7 @@ class FileTargetSpec < Minitest::Spec
       setup_config
       @tmpdir = Dir.mktmpdir
       @content_hashes = Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
-      @renderer = make_renderer(content_hashes: @content_hashes)
+      make_renderer(content_hashes: @content_hashes)
     end
 
     after do
@@ -21,7 +21,7 @@ class FileTargetSpec < Minitest::Spec
 
     it 'writes the file when it does not exist' do
       src = Aardi::Content.new('Hello')
-      out, = capture_io { Aardi::FileTarget.new(src, target_path, @renderer).write }
+      out, = capture_io { Aardi::FileTarget.new(src, target_path).write }
 
       _(File.read(target_path).strip).must_equal 'Hello'
       _(out).must_include 'Wrote'
@@ -30,7 +30,7 @@ class FileTargetSpec < Minitest::Spec
     it 'creates parent directories as needed' do
       path = File.join(@tmpdir, 'sub', 'dir', 'file.html')
       src = Aardi::Content.new('content')
-      capture_io { Aardi::FileTarget.new(src, path, @renderer).write }
+      capture_io { Aardi::FileTarget.new(src, path).write }
 
       _(File.exist?(path)).must_equal true
     end
@@ -40,7 +40,7 @@ class FileTargetSpec < Minitest::Spec
       File.write(path, "Hello\n")
       src = Aardi::Content.new('Hello')
       @content_hashes[path] = src.output_hash
-      out, = capture_io { Aardi::FileTarget.new(src, path, @renderer).write }
+      out, = capture_io { Aardi::FileTarget.new(src, path).write }
 
       _(out).must_be_empty
     end
@@ -50,7 +50,7 @@ class FileTargetSpec < Minitest::Spec
       File.write(path, "Old content\n")
       @content_hashes[path] = 0
       src = Aardi::Content.new('New content')
-      capture_io { Aardi::FileTarget.new(src, path, @renderer).write }
+      capture_io { Aardi::FileTarget.new(src, path).write }
 
       _(File.read(path).strip).must_equal 'New content'
     end
@@ -59,7 +59,7 @@ class FileTargetSpec < Minitest::Spec
       path = target_path
       src = Aardi::Content.new('data')
       result = nil
-      capture_io { result = Aardi::FileTarget.new(src, path, @renderer).write }
+      capture_io { result = Aardi::FileTarget.new(src, path).write }
 
       _(result).must_equal({ path => src.output_hash })
     end
@@ -70,7 +70,7 @@ class FileTargetSpec < Minitest::Spec
       File.write(path, "Hello\n")
       @content_hashes[path] = src.output_hash
       result = nil
-      capture_io { result = Aardi::FileTarget.new(src, path, @renderer).write }
+      capture_io { result = Aardi::FileTarget.new(src, path).write }
 
       _(result).must_equal({ path => src.output_hash })
     end
@@ -78,7 +78,7 @@ class FileTargetSpec < Minitest::Spec
     it 'does not modify the content_hashes passed to renderer' do
       path = target_path
       src = Aardi::Content.new('data')
-      capture_io { Aardi::FileTarget.new(src, path, @renderer).write }
+      capture_io { Aardi::FileTarget.new(src, path).write }
 
       _(@content_hashes[path]).must_be_nil
     end

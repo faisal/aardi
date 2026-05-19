@@ -121,7 +121,7 @@ class SitemapSpec < Minitest::Spec
         @original_dir = Dir.pwd
         Dir.chdir(@tmpdir)
         File.write(File.join(@tmpdir, 'index.html'), '<html></html>')
-        @renderer = make_renderer(
+        make_renderer(
           content_hashes: Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
         )
       end
@@ -132,13 +132,13 @@ class SitemapSpec < Minitest::Spec
       end
 
       it 'writes sitemap.xml in the current directory' do
-        capture_io { subject.render(@renderer) }
+        capture_io { subject.render }
 
         _(File.exist?(File.join(@tmpdir, 'sitemap.xml'))).must_equal true
       end
 
       it 'written sitemap includes the configured site URL' do
-        capture_io { subject.render(@renderer) }
+        capture_io { subject.render }
 
         _(File.read(File.join(@tmpdir, 'sitemap.xml'))).must_include 'http://example.com'
       end

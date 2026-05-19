@@ -6,7 +6,7 @@ class PostSpec < Minitest::Spec
   describe Aardi::Post do
     before do
       setup_config
-      @renderer = make_renderer
+      make_renderer
       @tmpdir = Dir.mktmpdir
     end
 
@@ -19,7 +19,7 @@ class PostSpec < Minitest::Spec
       content = "Creation: #{creation.iso8601}\n#{extra_yaml}\n----\n### #{title}\n\nBody text.\n"
       path = File.join(@tmpdir, "#{name}.md")
       File.write(path, content)
-      Aardi::Post.new(path, @renderer)
+      Aardi::Post.new(path)
     end
 
     describe '#creation' do

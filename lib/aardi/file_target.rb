@@ -2,7 +2,8 @@
 
 module Aardi
   class FileTarget
-    def initialize(src, target_path, renderer)
+    def initialize(src, target_path)
+      renderer = Aardi.renderer
       @src = src
       @path = target_path
       @content_hashes = renderer.content_hashes

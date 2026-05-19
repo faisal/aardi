@@ -4,10 +4,9 @@ module Aardi
   class PageContent < Content
     attr_reader :title, :metadata
 
-    def initialize(src_content, title, renderer, metadata = Metadata.new)
+    def initialize(src_content, title, metadata = Metadata.new)
       super(src_content)
       @title = title
-      @renderer = renderer
       @metadata = metadata
     end
 
@@ -16,7 +15,7 @@ module Aardi
     end
 
     def output
-      @output ||= @renderer.render(self)
+      @output ||= Aardi.renderer.render(self)
     end
   end
 end

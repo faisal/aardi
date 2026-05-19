@@ -6,11 +6,11 @@ class PageContentSpec < Minitest::Spec
   describe Aardi::PageContent do
     before do
       setup_config
-      @renderer = make_renderer
+      make_renderer
     end
 
     subject do
-      Aardi::PageContent.new("## Hello\n\nContent.", 'My Title', @renderer, Aardi::Metadata.new("Description: desc\n"))
+      Aardi::PageContent.new("## Hello\n\nContent.", 'My Title', Aardi::Metadata.new("Description: desc\n"))
     end
 
     it 'stores the title' do

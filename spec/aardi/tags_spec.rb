@@ -123,7 +123,7 @@ class TagsSpec < Minitest::Spec
         @tmpdir = Dir.mktmpdir
         @original_dir = Dir.pwd
         Dir.chdir(@tmpdir)
-        @renderer = make_renderer(
+        make_renderer(
           html_files: Set.new,
           content_hashes: Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
         )
@@ -135,7 +135,7 @@ class TagsSpec < Minitest::Spec
       end
 
       it 'does not write the tags index when empty' do
-        capture_io { @tags.send(:write_target, @renderer) }
+        capture_io { @tags.send(:write_target) }
 
         _(File.exist?(File.join(@tmpdir, 'tags', 'index.html'))).must_equal false
       end
@@ -143,7 +143,7 @@ class TagsSpec < Minitest::Spec
       it 'writes the tags index when not empty' do
         @tags << tagged_post(%w[foo])
 
-        capture_io { @tags.send(:write_target, @renderer) }
+        capture_io { @tags.send(:write_target) }
 
         _(File.exist?(File.join(@tmpdir, 'tags', 'index.html'))).must_equal true
       end

@@ -1,14 +1,8 @@
 # frozen_string_literal: true
 
 module Aardi
-  # :reek:TooManyInstanceVariables
   class Site < AbstractBlog
     def initialize
-      @html_files = Dir.glob('./**/*.html').to_set
-      @content_hashes = ContentHashes.new(Aardi.config[:content_hashes_path])
-      @sitemap = Sitemap.new
-      @renderer = Renderer.new(@html_files, @content_hashes, @sitemap)
-
       posts.each do |post|
         blog << post
       end
@@ -19,15 +13,13 @@ module Aardi
     end
 
     def render
-      result = super(@renderer)
-      @content_hashes.save(result)
-      Orphanage.new.report(@html_files, result.keys)
+      Aardi.renderer.finalize(super)
     end
 
     private
 
     def children
-      [Folder.new('.'), blog, @sitemap]
+      [Folder.new('.'), blog, Aardi.renderer.sitemap]
     end
 
     def post_paths
@@ -35,9 +27,9 @@ module Aardi
     end
 
     def posts
-      post_paths.map { |path| Post.new(path, @renderer) }
+      post_paths.map { |path| Post.new(path) }
     end
 
-    def write_target(_renderer) = {}
+    def write_target = {}
   end
 end

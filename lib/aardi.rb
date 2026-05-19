@@ -52,8 +52,11 @@ module Aardi
   class << self
     def config = @config ||= Config.new
 
+    def renderer = @renderer ||= Renderer.new
+
     def reset!
       @config = Config.new
+      @renderer = nil
     end
   end
 end

@@ -6,7 +6,7 @@ class PageSpec < Minitest::Spec
   describe Aardi::Page do
     before do
       setup_config
-      @renderer = make_renderer
+      make_renderer
       @tmpdir = Dir.mktmpdir
     end
 
@@ -32,7 +32,7 @@ class PageSpec < Minitest::Spec
       it 'writes an HTML file at the target path' do
         page = make_page
 
-        capture_io { page.render(@renderer) }
+        capture_io { page.render }
 
         _(File.exist?(page.target_path)).must_equal true
       end
@@ -40,7 +40,7 @@ class PageSpec < Minitest::Spec
       it 'rendered output includes the source body text' do
         page = make_page(body: "# About\n\nUnique body content.\n")
 
-        capture_io { page.render(@renderer) }
+        capture_io { page.render }
 
         _(File.read(page.target_path)).must_include 'Unique body content'
       end
@@ -48,7 +48,7 @@ class PageSpec < Minitest::Spec
       it 'rendered output includes the page title in the HTML title tag' do
         page = make_page(yaml: 'Title: Specific Title', body: "# Heading\n\nText.\n")
 
-        capture_io { page.render(@renderer) }
+        capture_io { page.render }
 
         _(File.read(page.target_path)).must_match(%r{<title>[^<]*Specific Title[^<]*</title>}m)
       end

@@ -8,8 +8,8 @@ module Aardi
 
     def mtime = children.max_by(&:mtime)&.mtime
 
-    def render(renderer)
-      children.each_with_object({}) { |child, acc| acc.merge!(child.render(renderer)) }.merge!(write_target(renderer))
+    def render
+      children.each_with_object({}) { |child, acc| acc.merge!(child.render) }.merge!(write_target)
     end
 
     def title
@@ -24,9 +24,9 @@ module Aardi
       []
     end
 
-    def write_target(renderer)
-      source = PageContent.new(content, title, renderer, metadata)
-      PageTarget.new(source, target_path, renderer).write
+    def write_target
+      source = PageContent.new(content, title, metadata)
+      PageTarget.new(source, target_path).write
     end
   end
 end

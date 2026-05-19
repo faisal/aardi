@@ -9,7 +9,7 @@ class PageTargetSpec < Minitest::Spec
       @tmpdir = Dir.mktmpdir
       @content_hashes = Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
       @html_files = Set.new
-      @renderer = make_renderer(html_files: @html_files, content_hashes: @content_hashes)
+      make_renderer(html_files: @html_files, content_hashes: @content_hashes)
     end
 
     after do
@@ -22,19 +22,19 @@ class PageTargetSpec < Minitest::Spec
 
     it 'does not delete the path from html_files' do
       path = target_path
-      src = Aardi::PageContent.new("# Title\n", 'Title', @renderer)
+      src = Aardi::PageContent.new("# Title\n", 'Title')
       @html_files.add(path)
       @content_hashes[path] = src.output_hash
-      capture_io { Aardi::PageTarget.new(src, path, @renderer).write }
+      capture_io { Aardi::PageTarget.new(src, path).write }
 
       _(@html_files).must_include path
     end
 
     it 'returns {path => output_hash}' do
       path = target_path
-      src = Aardi::PageContent.new("# Title\n", 'Title', @renderer)
+      src = Aardi::PageContent.new("# Title\n", 'Title')
       result = nil
-      capture_io { result = Aardi::PageTarget.new(src, path, @renderer).write }
+      capture_io { result = Aardi::PageTarget.new(src, path).write }
 
       _(result).must_equal({ path => src.output_hash })
     end
@@ -42,9 +42,9 @@ class PageTargetSpec < Minitest::Spec
     it 'uses html_files to determine if the file exists (not the filesystem)' do
       path = target_path
       @html_files.add(path)
-      src = Aardi::PageContent.new("# Title\n", 'Title', @renderer)
+      src = Aardi::PageContent.new("# Title\n", 'Title')
       @content_hashes[path] = src.output_hash
-      out, = capture_io { Aardi::PageTarget.new(src, path, @renderer).write }
+      out, = capture_io { Aardi::PageTarget.new(src, path).write }
 
       _(out).must_be_empty
       _(File.exist?(path)).must_equal false
@@ -52,8 +52,8 @@ class PageTargetSpec < Minitest::Spec
 
     it 'writes when path is not in html_files' do
       path = target_path
-      src = Aardi::PageContent.new("# Title\n", 'Title', @renderer)
-      capture_io { Aardi::PageTarget.new(src, path, @renderer).write }
+      src = Aardi::PageContent.new("# Title\n", 'Title')
+      capture_io { Aardi::PageTarget.new(src, path).write }
 
       _(File.exist?(path)).must_equal true
     end

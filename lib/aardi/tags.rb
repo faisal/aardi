@@ -52,7 +52,7 @@ module Aardi
       Aardi.config[:blog_tags_path]
     end
 
-    def write_target(renderer)
+    def write_target
       return {} if empty?
 
       super
