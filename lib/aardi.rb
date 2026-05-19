@@ -50,12 +50,10 @@ RubyVM::YJIT.enable if RUBY_ENGINE == 'ruby'
 
 module Aardi
   class << self
-    def config = @config ||= Config.new
-
     def renderer = @renderer ||= Renderer.new
 
     def reset!
-      @config = Config.new
+      Config.reset
       @renderer = nil
     end
   end

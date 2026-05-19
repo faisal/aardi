@@ -26,7 +26,7 @@ module Aardi
 
     private
 
-    def base_title = Aardi.config[:blog_home_title]
+    def base_title = Config[:blog_home_title]
 
     def children
       @posts

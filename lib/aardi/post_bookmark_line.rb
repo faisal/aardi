@@ -20,8 +20,7 @@ module Aardi
     end
 
     def tags_base_url
-      config = Aardi.config
-      "#{config[:site_url]}/#{config[:blog_tags_path]}"
+      "#{Config[:site_url]}/#{Config[:blog_tags_path]}"
     end
   end
 end

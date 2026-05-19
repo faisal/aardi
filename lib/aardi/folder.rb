@@ -26,7 +26,7 @@ module Aardi
     end
 
     def paths
-      @paths ||= FileList["#{@path}/*"].exclude(Aardi.config[:files_to_exclude])
+      @paths ||= FileList["#{@path}/*"].exclude(Config[:files_to_exclude])
     end
 
     def sources

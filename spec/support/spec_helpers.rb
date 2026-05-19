@@ -25,7 +25,7 @@ module SpecHelpers
     Tempfile.create(['config', '.yml']) do |file|
       file.write(config_data.to_yaml)
       file.flush
-      Aardi.config.load(file.path)
+      Aardi::Config.load(file.path)
     end
   end
 

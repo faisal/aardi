@@ -16,7 +16,7 @@ module Aardi
     # rubocop:disable Metrics/MethodLength
     def feed_details(feed)
       feed.author do
-        name(Aardi.config[:site_author])
+        name(Config[:site_author])
       end
 
       subnodes = { id: feed_url, link: { href: feed_url, rel: 'self' },

@@ -35,7 +35,7 @@ module Aardi
     end
 
     def month_link(month)
-      "- [#{Date::MONTHNAMES[month.key]}](#{Aardi.config[:site_url]}/#{@archive_path}/#{self}/#{month}/)"
+      "- [#{Date::MONTHNAMES[month.key]}](#{Config[:site_url]}/#{@archive_path}/#{self}/#{month}/)"
     end
 
     def months

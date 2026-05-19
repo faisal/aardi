@@ -5,7 +5,7 @@ module Aardi
     def initialize
       @posts = []
       @blog_path = nil
-      @archive_path = Aardi.config[:blog_archive_path]
+      @archive_path = Config[:blog_archive_path]
       @tags = Tags.new
     end
 
@@ -46,7 +46,7 @@ module Aardi
     end
 
     def recent_posts(conf_key)
-      @posts.max_by(Aardi.config[conf_key], &:creation)
+      @posts.max_by(Config[conf_key], &:creation)
     end
 
     def tag = nil

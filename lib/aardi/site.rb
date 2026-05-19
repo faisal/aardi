@@ -23,7 +23,7 @@ module Aardi
     end
 
     def post_paths
-      Dir.glob("#{Aardi.config[:blog_posts_path]}/**/*.md")
+      Dir.glob("#{Config[:blog_posts_path]}/**/*.md")
     end
 
     def posts

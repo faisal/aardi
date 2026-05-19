@@ -15,7 +15,7 @@ module Aardi
 
     def content
       year_fmt = "| %<year>s | %<months>s \n"
-      month_fmt = "[&nbsp;%<count>s&nbsp;](#{Aardi.config[:site_url]}/%<archive_path>s/%<year>s/%<month>s/)"
+      month_fmt = "[&nbsp;%<count>s&nbsp;](#{Config[:site_url]}/%<archive_path>s/%<year>s/%<month>s/)"
 
       rows = years.map { |year| year.archive_row(year_fmt, month_fmt) }.join
       "#{title_heading}#{tag_list}**When**:\n\n#{table_header}#{rows}"
@@ -25,7 +25,7 @@ module Aardi
 
     private
 
-    def base_title = Aardi.config[:blog_archive_title]
+    def base_title = Config[:blog_archive_title]
 
     def children
       years

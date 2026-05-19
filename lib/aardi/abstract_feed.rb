@@ -24,7 +24,7 @@ module Aardi
 
     private
 
-    def base_title = Aardi.config[:site_title]
+    def base_title = Config[:site_title]
 
     def children
       @posts
@@ -32,7 +32,7 @@ module Aardi
 
     def creation = children.max_by(&:creation)&.creation
 
-    def feed_url = "#{Aardi.config[:site_url]}#{target_path[1..]}"
+    def feed_url = "#{Config[:site_url]}#{target_path[1..]}"
 
     def updated = children.max_by(&:updated)&.updated
 

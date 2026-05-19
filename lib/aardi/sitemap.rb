@@ -46,7 +46,7 @@ module Aardi
     end
 
     def urls
-      @urls ||= Aardi.config[:sitemap_entries].to_h { |path, cf| [path, url_values(path, cf)] }
+      @urls ||= Config[:sitemap_entries].to_h { |path, cf| [path, url_values(path, cf)] }
     end
 
     private
@@ -57,7 +57,7 @@ module Aardi
     end
 
     def url_values(path, changefreq)
-      { loc: "#{Aardi.config[:site_url]}#{path}", changefreq: }
+      { loc: "#{Config[:site_url]}#{path}", changefreq: }
     end
   end
 end

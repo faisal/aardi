@@ -7,13 +7,12 @@ module Aardi
 
     # :reek:ControlParameter
     def initialize(html_files: nil, content_hashes: nil, sitemap: nil)
-      config = Aardi.config
       @html_files = html_files || Dir.glob('./**/*.html').to_set
-      @content_hashes = content_hashes || ContentHashes.new(config[:content_hashes_path])
+      @content_hashes = content_hashes || ContentHashes.new(Config[:content_hashes_path])
       @sitemap = sitemap || Sitemap.new
-      @template = Template.new(config[:template_path])
+      @template = Template.new(Config[:template_path])
       @custom_renderer = CustomRenderer.new
-      @markup_renderer = Redcarpet::Markdown.new(@custom_renderer, config[:markup_options] || {})
+      @markup_renderer = Redcarpet::Markdown.new(@custom_renderer, Config[:markup_options] || {})
     end
 
     def finalize(result)

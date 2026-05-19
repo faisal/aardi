@@ -30,14 +30,11 @@ class AardiSpec < Minitest::Spec
     end
 
     describe '.reset!' do
-      it 'clears config so the next access re-runs the writer/lazy-default' do
-        before_reset = Aardi.config
-        before_reset.load File.join(SpecHelpers::SAMPLES_DIR, 'minimal_config.yml')
+      it 'clears config so it can be reloaded' do
+        Aardi::Config.load File.join(SpecHelpers::SAMPLES_DIR, 'minimal_config.yml')
         Aardi.reset!
 
-        Aardi.config.load File.join(SpecHelpers::SAMPLES_DIR, 'minimal_config.yml')
-
-        _(Aardi.config).wont_be_same_as before_reset
+        _(proc { Aardi::Config.load File.join(SpecHelpers::SAMPLES_DIR, 'minimal_config.yml') }).must_be_silent
       end
 
       it 'clears renderer so the next access creates a fresh instance' do

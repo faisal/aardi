@@ -36,12 +36,12 @@ module Aardi
 
     def updated = metadata.updated || creation
 
-    def url = "#{Aardi.config[:site_url]}/#{short_target}"
+    def url = "#{Config[:site_url]}/#{short_target}"
 
     private
 
     def short_target
-      "#{Aardi.config[:blog_archive_path]}/#{creation.strftime('%Y/%m/%d')}/#{name}"
+      "#{Config[:blog_archive_path]}/#{creation.strftime('%Y/%m/%d')}/#{name}"
     end
   end
 end

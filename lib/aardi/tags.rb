@@ -49,7 +49,7 @@ module Aardi
     end
 
     def tags_base_path
-      Aardi.config[:blog_tags_path]
+      Config[:blog_tags_path]
     end
 
     def write_target
