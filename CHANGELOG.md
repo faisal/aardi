@@ -1,9 +1,16 @@
-# v2.0.0
+# main
 
 - Support post tags, and automatic reation of sub-blogs based on their `Tags:` directive
 - API removals or changes:
-  - Intantiation of a Aardi::Blog object no longer takes a posts path. Intantiate the Blog and then build its posts list instead.
-  - Post no longer has #day, #month, and #year methods. use creation.day, creation.month, and creation.year instead.
+  - Intantiation of a Blog object no longer takes a posts path.
+    Intantiate the Blog and then build its posts list instead.
+  - A new Render class deals with walking the content trees, recursively tracking site manipulation, updating content hashes, and reporting on any orphans.
+    Aardi.renderer is a module-level singleton of the renderer.
+    With this, the Ledger class is removed.
+  - Config is now in a class singleton.
+    It raises when selecting for a missing key.
+  - Post no longer has #day, #month, and #year methods.
+    Use creation.day, creation.month, and creation.year instead.
 
 # v1.0.0
 
