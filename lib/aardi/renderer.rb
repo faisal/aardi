@@ -12,7 +12,7 @@ module Aardi
       @sitemap = sitemap || Sitemap.new
       @template = Template.new(Config[:template_path])
       @custom_renderer = CustomRenderer.new
-      @markup_renderer = Redcarpet::Markdown.new(@custom_renderer, Config[:markup_options] || {})
+      @markup_renderer = Redcarpet::Markdown.new(@custom_renderer, markup_options)
     end
 
     def finalize(result)
@@ -31,6 +31,12 @@ module Aardi
 
     def render(src)
       @template.render(src)
+    end
+
+    private
+
+    def markup_options
+      (Config.fetch(:markup_options) || {}).transform_keys(&:to_sym)
     end
   end
 end

@@ -45,8 +45,15 @@ class OrphanageSpec < Minitest::Spec
         _(err).must_be_empty
       end
 
-      it 'does not crash when ignore_orphans is absent from config' do
+      it 'does not crash when :ignore_orphans is present with a nil value' do
         setup_config ignore_orphans: nil
+        _, err = capture_io { Aardi::Orphanage.new.report(Set.new(['./orphan.html']), []) }
+
+        _(err).must_include 'Orphan: ./orphan.html'
+      end
+
+      it 'does not crash when :ignore_orphans is absent from config' do
+        setup_config ignore_orphans: SpecHelpers::OMIT
         _, err = capture_io { Aardi::Orphanage.new.report(Set.new(['./orphan.html']), []) }
 
         _(err).must_include 'Orphan: ./orphan.html'

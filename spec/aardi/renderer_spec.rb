@@ -16,10 +16,22 @@ class RendererSpec < Minitest::Spec
         _(make_renderer.markup('## Hello')).must_include '<h2'
       end
 
-      it 'does not crash when config has no :markup_options' do
+      it 'does not crash when :markup_options is present with a nil value' do
         setup_config(markup_options: nil)
 
         _(make_renderer).must_be_instance_of Aardi::Renderer
+      end
+
+      it 'does not crash when :markup_options is absent from config' do
+        setup_config(markup_options: SpecHelpers::OMIT)
+
+        _(make_renderer).must_be_instance_of Aardi::Renderer
+      end
+
+      it 'passes markup_options to Redcarpet with symbol keys (YAML loads them as strings)' do
+        setup_config markup_options: { 'fenced_code_blocks' => true }
+
+        _(make_renderer.markup("```\nx\n```")).must_include '<code>'
       end
 
       it 'creates its own Template from the configured template_path' do

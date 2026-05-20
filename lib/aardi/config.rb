@@ -2,29 +2,23 @@
 
 module Aardi
   class Config
-    @data = {}
+    RAISE_ON_MISS = ->(_, key) { raise KeyError, "Key not found: #{key.inspect}" }
+
+    @data = Hash.new(&RAISE_ON_MISS)
 
     class << self
       def [](key) = @data[key]
+      def fetch(key, default = nil) = @data.fetch(key, default)
+      def load(path) = prepare(File.read(path))
 
-      def load(path)
-        config_yaml = File.read path
-        prepare config_yaml
-      end
-
-      # :reek:TooManyStatements
       def prepare(config_yaml)
-        config_hash = YAML.safe_load config_yaml
-        config_hash.transform_keys!(&:to_sym)
-        config_hash[:markup_options]&.transform_keys!(&:to_sym)
-        @data.merge!(config_hash)
-        @data.default_proc = ->(_, key) { raise KeyError, "Key not found: #{key.inspect}" }
+        @data.merge!(YAML.safe_load(config_yaml).transform_keys(&:to_sym))
         @data.freeze
         self
       end
 
       def reset
-        @data = {}
+        @data = Hash.new(&RAISE_ON_MISS)
       end
     end
   end
