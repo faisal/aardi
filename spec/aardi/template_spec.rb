@@ -43,6 +43,42 @@ class TemplateSpec < Minitest::Spec
 
         _(html).must_include 'name="description"'
       end
+
+      it 'HTML-escapes the page title' do
+        src = Aardi::PageContent.new('Body.', '<script>alert(1)</script>')
+        html = subject.render(src)
+
+        _(html).wont_include '<script>alert(1)</script>'
+        _(html).must_include '&lt;script&gt;alert(1)&lt;/script&gt;'
+      end
+
+      it 'HTML-escapes the meta description content' do
+        src = Aardi::PageContent.new('Body.', 'Title',
+                                     Aardi::Metadata.new(%(Description: A "quoted" & <tagged> desc\n)))
+        html = subject.render(src)
+
+        _(html).must_include 'A &quot;quoted&quot; &amp; <tagged> desc'
+      end
+    end
+
+    describe '.new' do
+      it 'raises when the template has no main element' do
+        Tempfile.create(['tpl', '.html']) do |file|
+          file.write('<!DOCTYPE html><html><head><title></title>' \
+                     '<meta name="description" content=""></head><body></body></html>')
+          file.flush
+          _(-> { Aardi::Template.new(file.path) }).must_raise NoMethodError
+        end
+      end
+
+      it 'raises when the template has no title element' do
+        Tempfile.create(['tpl', '.html']) do |file|
+          file.write('<!DOCTYPE html><html><head>' \
+                     '<meta name="description" content=""></head><body><main></main></body></html>')
+          file.flush
+          _(-> { Aardi::Template.new(file.path) }).must_raise NoMethodError
+        end
+      end
     end
   end
 end
