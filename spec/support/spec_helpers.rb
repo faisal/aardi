@@ -5,7 +5,7 @@ module SpecHelpers
   OMIT = Object.new.freeze
 
   def make_renderer(html_files: Set.new, content_hashes: stub_content_hashes, sitemap: stub_sitemap)
-    Aardi.instance_variable_set(:@renderer, Aardi::Renderer.new(html_files:, content_hashes:, sitemap:))
+    Aardi.renderer = Aardi::Renderer.new(html_files:, content_hashes:, sitemap:)
   end
 
   def page_by_sample_path(filename)
