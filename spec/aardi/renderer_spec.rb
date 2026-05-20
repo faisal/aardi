@@ -12,7 +12,7 @@ class RendererSpec < Minitest::Spec
     subject { Aardi.renderer }
 
     describe '.new' do
-      it 'reads markup_options from Aardi.config' do
+      it 'reads markup_options from Aardi::Config' do
         _(make_renderer.markup('## Hello')).must_include '<h2'
       end
 
