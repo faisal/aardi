@@ -2,5 +2,5 @@
 
 desc('Visit home page')
 task homepage: [:load_config] do
-  system("open #{Aardi::Config[:site_url]}")
+  system('open', Aardi::Config[:site_url])
 end

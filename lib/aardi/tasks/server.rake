@@ -13,6 +13,6 @@ task :server do
   server.mount('/', Aardi::PathServlet)
 
   trap('INT') { server.shutdown }
-  system("(open '#{url}')&")
+  system('open', url)
   server.start
 end
