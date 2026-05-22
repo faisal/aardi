@@ -3,13 +3,21 @@
 require 'bundler/gem_tasks'
 require 'rake/testtask'
 require 'rubocop/rake_task'
+require 'reek/rake/task'
 
-RuboCop::RakeTask.new(:lint)
+RuboCop::RakeTask.new(:rubocop)
 
-Rake::TestTask.new(:spec) do |t|
-  t.pattern = 'spec/**/*_spec.rb'
-  t.libs << 'spec'
-  t.libs << 'lib'
+Rake::TestTask.new(:spec) do |task|
+  task.pattern = 'spec/**/*_spec.rb'
+  task.libs << 'spec'
+  task.libs << 'lib'
 end
 
-task default: :spec
+Reek::Rake::Task.new(:reek)
+
+desc('Alias for spec')
+task test: :spec
+
+task all: %i[spec rubocop reek]
+
+task default: :all
