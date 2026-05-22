@@ -12,6 +12,7 @@
 ].each { |lib| require lib }
 
 %w[
+  errors
   version
   config
   metadata

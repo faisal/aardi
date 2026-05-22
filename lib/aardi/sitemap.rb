@@ -52,8 +52,7 @@ module Aardi
     private
 
     def missing_path(path)
-      puts("FATAL: #{path} missing")
-      exit
+      raise MissingPathError, "#{path} is missing"
     end
 
     def url_values(path, changefreq)

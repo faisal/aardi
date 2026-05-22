@@ -101,16 +101,10 @@ class SitemapSpec < Minitest::Spec
           FileUtils.rm_rf(@tmpdir)
         end
 
-        it 'prints FATAL and calls exit' do
+        it 'raises MissingPathError naming the missing path' do
           sitemap = Aardi::Sitemap.new
-          sitemap.define_singleton_method(:exit) { |*| raise SystemExit }
-
-          out, = capture_io do
-            assert_raises(SystemExit) { sitemap.content }
-          end
-
-          _(out).must_include 'FATAL'
-          _(out).must_include '/missing/'
+          err = assert_raises(Aardi::MissingPathError) { sitemap.content }
+          _(err.message).must_include '/missing/'
         end
       end
     end
