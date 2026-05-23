@@ -2,4 +2,5 @@
 
 module Aardi
   class MissingPathError < StandardError; end
+  class MissingTemplateElementError < StandardError; end
 end

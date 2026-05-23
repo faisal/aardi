@@ -7,12 +7,12 @@ module Aardi
     PLACEHOLDER_TITLE = '__PLACEHOLDER_TITLE__'
     PLACEHOLDER_DESCRIPTION = '__PLACEHOLDER_DESCRIPTION__'
 
-    # :reek:FeatureEnvy
     def initialize(path)
+      @path = path
       dom = Nokogiri::HTML5.parse(File.read(path).strip)
-      dom.at_css('main').add_child(PLACEHOLDER_MAIN)
-      dom.at_css('title').content += PLACEHOLDER_TITLE
-      find_description(dom.at_css('meta[name="description"]'))
+      required(dom, 'main').add_child(PLACEHOLDER_MAIN)
+      required(dom, 'title').content += PLACEHOLDER_TITLE
+      update_description_if_present(dom.at_css('meta[name="description"]'))
       @compiled = dom.to_html.strip
     end
 
@@ -34,16 +34,22 @@ module Aardi
       str.gsub('&', '&amp;').gsub('"', '&quot;')
     end
 
-    # :reek:FeatureEnvy
-    def find_description(meta)
-      return unless meta
-
-      @default_description = meta['content'] || ''
-      meta['content'] = PLACEHOLDER_DESCRIPTION
+    def required(dom, selector)
+      dom.at_css(selector) ||
+        raise(MissingTemplateElementError,
+              "Template missing required <#{selector}> element in #{@path}")
     end
 
     def text_escape(str)
       str.gsub('&', '&amp;').gsub('<', '&lt;').gsub('>', '&gt;')
+    end
+
+    # :reek:FeatureEnvy
+    def update_description_if_present(meta)
+      return unless meta
+
+      @default_description = meta['content'] || ''
+      meta['content'] = PLACEHOLDER_DESCRIPTION
     end
   end
 end

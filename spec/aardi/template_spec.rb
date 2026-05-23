@@ -62,21 +62,27 @@ class TemplateSpec < Minitest::Spec
     end
 
     describe '.new' do
-      it 'raises when the template has no main element' do
+      it 'raises a named error when the template has no main element' do
         Tempfile.create(['tpl', '.html']) do |file|
           file.write('<!DOCTYPE html><html><head><title></title>' \
                      '<meta name="description" content=""></head><body></body></html>')
           file.flush
-          _(-> { Aardi::Template.new(file.path) }).must_raise NoMethodError
+          err = _(-> { Aardi::Template.new(file.path) })
+                .must_raise Aardi::MissingTemplateElementError
+          _(err.message).must_match(/Template missing required <main> element/)
+          _(err.message).must_include file.path
         end
       end
 
-      it 'raises when the template has no title element' do
+      it 'raises a named error when the template has no title element' do
         Tempfile.create(['tpl', '.html']) do |file|
           file.write('<!DOCTYPE html><html><head>' \
                      '<meta name="description" content=""></head><body><main></main></body></html>')
           file.flush
-          _(-> { Aardi::Template.new(file.path) }).must_raise NoMethodError
+          err = _(-> { Aardi::Template.new(file.path) })
+                .must_raise Aardi::MissingTemplateElementError
+          _(err.message).must_match(/Template missing required <title> element/)
+          _(err.message).must_include file.path
         end
       end
     end
