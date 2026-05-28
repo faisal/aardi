@@ -1,4 +1,4 @@
-# main
+# v2.0.0
 
 - Support post tags, and automatic reation of sub-blogs based on their `Tags:` directive
 - API removals or changes:
