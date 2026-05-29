@@ -1,3 +1,13 @@
+# v2.0.2
+
+- No longer enable YJIT by default.
+  YJIT is still supported, so you can enable it in calling code or via the `RUBY_YJIT_ENABLE` environment variable if desired.
+- For future backward compatibility, added allowed keywords that we expect to use in v2.1.
+
+# v2.0.1
+
+- Fixed mention of incorrect version in README.md.
+
 # v2.0.0
 
 - Support post tags, and automatic reation of sub-blogs based on their `Tags:` directive

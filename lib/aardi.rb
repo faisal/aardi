@@ -47,8 +47,6 @@
   site
 ].each { |name| require_relative "aardi/#{name}" }
 
-RubyVM::YJIT.enable if RUBY_ENGINE == 'ruby'
-
 module Aardi
   class << self
     # :reek:Attribute
