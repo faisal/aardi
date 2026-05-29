@@ -1,3 +1,10 @@
+- Stopped enabling YJIT by default, since library users may wish to control that.
+  Enable YJIT in your wrapping code if desired.
+
+# v2.0.1
+
+- Corrected text in README. No functional change.
+
 # v2.0.0
 
 - Support post tags, and automatic reation of sub-blogs based on their `Tags:` directive
