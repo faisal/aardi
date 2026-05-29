@@ -3,11 +3,9 @@
 # Config: https://github.com/rubocop/rubocop/blob/master/config/default.yml
 
 ---
-require:
-  - rubocop-ordered_methods
-
 plugins:
   - rubocop-minitest
+  - rubocop-ordered_methods
   - rubocop-performance
   - rubocop-rake
 
