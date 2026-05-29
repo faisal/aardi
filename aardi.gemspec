@@ -25,4 +25,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'rake'
   s.add_dependency 'redcarpet'
   s.add_dependency 'webrick'
+  s.add_dependency 'xmlrpc'
 end
