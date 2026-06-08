@@ -2,9 +2,6 @@
 
 module Aardi
   class FeedMenu
-    SITE_RSS_PATH = '/index.xml'
-    SITE_JSON_PATH = '/index.json'
-
     def initialize(blog)
       @blog = blog
     end
@@ -27,7 +24,9 @@ module Aardi
     def menu_data = { 'feed-menu' => site_title, 'items' => items }
 
     def site_item
-      { 'feed-title' => site_title, 'rss' => SITE_RSS_PATH, 'json' => SITE_JSON_PATH }
+      { 'feed-title' => site_title,
+        'rss' => "/#{ATOMFeed::FEED_FILE}",
+        'json' => "/#{JSONFeed::FEED_FILE}" }
     end
 
     def site_title = Config[:site_title]

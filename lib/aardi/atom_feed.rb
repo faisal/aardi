@@ -2,6 +2,8 @@
 
 module Aardi
   class ATOMFeed < AbstractFeed
+    FEED_FILE = 'index.xml'
+
     def content
       atom_feed = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do
         feed('xmlns' => 'http://www.w3.org/2005/Atom') do |feed|
@@ -34,9 +36,7 @@ module Aardi
 
     private
 
-    def feed_file
-      'index.xml'
-    end
+    def feed_file = FEED_FILE
 
     # :reek:FeatureEnvy
     # :reek:TooManyStatements

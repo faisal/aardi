@@ -2,6 +2,8 @@
 
 module Aardi
   class JSONFeed < AbstractFeed
+    FEED_FILE = 'index.json'
+
     def content
       feed_content = { version: 'https://jsonfeed.org/version/1.1', title:,
                        home_page_url: Config[:site_url], feed_url: }
@@ -12,9 +14,7 @@ module Aardi
 
     private
 
-    def feed_file
-      'index.json'
-    end
+    def feed_file = FEED_FILE
 
     def post_details(post)
       post_updated = post.updated

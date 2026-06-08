@@ -15,7 +15,7 @@ module Aardi
     def archive_url  = "#{base_url}/#{Config[:blog_archive_path]}/"
     def base_url     = "#{Config[:site_url]}#{feed_base}"
     def feed_base    = @blog_path ? "/#{@blog_path}" : ''
-    def json_url     = "#{base_url}/index.json"
-    def rss_url      = "#{base_url}/index.xml"
+    def json_url     = "#{base_url}/#{JSONFeed::FEED_FILE}"
+    def rss_url      = "#{base_url}/#{ATOMFeed::FEED_FILE}"
   end
 end

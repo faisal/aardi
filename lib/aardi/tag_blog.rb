@@ -20,8 +20,9 @@ module Aardi
     end
 
     def feed_menu_item
-      { 'feed-title' => title, 'rss' => "/#{@blog_path}/index.xml",
-        'json' => "/#{@blog_path}/index.json" }
+      { 'feed-title' => title,
+        'rss' => "/#{@blog_path}/#{ATOMFeed::FEED_FILE}",
+        'json' => "/#{@blog_path}/#{JSONFeed::FEED_FILE}" }
     end
 
     def index_line
