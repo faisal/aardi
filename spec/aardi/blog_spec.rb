@@ -138,5 +138,18 @@ class BlogSpec < Minitest::Spec
         _(make_blog([]).send(:write_target)).must_equal({})
       end
     end
+
+    describe '#tag_blogs' do
+      it 'is empty when no tagged posts have been added' do
+        _(make_blog([]).tag_blogs).must_equal []
+      end
+
+      it 'returns a TagBlog for each tag present on added posts' do
+        tag_blogs = make_blog(posts_across_years).tag_blogs
+
+        _(tag_blogs.map(&:class).uniq).must_equal [Aardi::TagBlog]
+        _(tag_blogs.length).must_equal 2
+      end
+    end
   end
 end

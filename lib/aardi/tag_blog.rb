@@ -19,6 +19,11 @@ module Aardi
       @posts.count
     end
 
+    def feed_menu_item
+      { 'feed-title' => title, 'rss' => "/#{@blog_path}/index.xml",
+        'json' => "/#{@blog_path}/index.json" }
+    end
+
     def index_line
       "- #{inline_link_text}"
     end

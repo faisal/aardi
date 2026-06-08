@@ -19,6 +19,8 @@ module Aardi
       recent_posts(:blog_recent_posts).each(&:report_field_summary)
     end
 
+    def tag_blogs = @tags.tag_blogs
+
     private
 
     def archive

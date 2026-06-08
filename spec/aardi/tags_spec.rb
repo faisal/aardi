@@ -118,6 +118,19 @@ class TagsSpec < Minitest::Spec
       end
     end
 
+    describe '#tag_blogs' do
+      it 'is empty when no tagged posts have been added' do
+        _(@tags.tag_blogs).must_equal []
+      end
+
+      it 'returns a TagBlog for each tag present on added posts' do
+        @tags << tagged_post(%w[foo bar])
+
+        _(@tags.tag_blogs.map(&:class).uniq).must_equal [Aardi::TagBlog]
+        _(@tags.tag_blogs.length).must_equal 2
+      end
+    end
+
     describe '#write_target (private)' do
       before do
         @tmpdir = Dir.mktmpdir

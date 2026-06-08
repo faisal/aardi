@@ -24,8 +24,6 @@ module Aardi
 
     private
 
-    def base_title = Config[:site_title]
-
     def children
       @posts
     end

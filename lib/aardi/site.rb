@@ -19,7 +19,7 @@ module Aardi
     private
 
     def children
-      [Folder.new('.'), blog, Aardi.renderer.sitemap]
+      [Folder.new('.'), blog, Aardi.renderer.sitemap, FeedMenu.new(blog)]
     end
 
     def post_paths

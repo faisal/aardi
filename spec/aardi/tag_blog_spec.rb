@@ -50,5 +50,19 @@ class TagBlogSpec < Minitest::Spec
         _(children.map(&:class)).wont_include Aardi::Tags
       end
     end
+
+    describe '#feed_menu_item' do
+      it 'titles itself "<site_title> - <tag>"' do
+        _(make_tag_blog([], 'news').feed_menu_item['feed-title']).must_equal 'Test Site - news'
+      end
+
+      it 'points rss at the tag atom feed path' do
+        _(make_tag_blog([], 'news').feed_menu_item['rss']).must_equal '/tags/news/index.xml'
+      end
+
+      it 'points json at the tag json feed path' do
+        _(make_tag_blog([], 'news').feed_menu_item['json']).must_equal '/tags/news/index.json'
+      end
+    end
   end
 end

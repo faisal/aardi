@@ -24,6 +24,8 @@ module Aardi
       counts.map { |_tag, tag_blog| tag_blog.inline_link_text }.join(', ')
     end
 
+    def tag_blogs = @index.values
+
     def target_path
       "./#{tags_base_path}/index.html"
     end

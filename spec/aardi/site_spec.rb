@@ -57,13 +57,14 @@ class SiteSpec < Minitest::Spec
       end
 
       describe '#children (private)' do
-        it 'includes a Folder, the Blog, and the Sitemap' do
+        it 'includes a Folder, the Blog, the Sitemap, and a FeedMenu' do
           site = Aardi::Site.new
           children_classes = site.send(:children).map(&:class)
 
           _(children_classes).must_include Aardi::Folder
           _(children_classes).must_include Aardi::Blog
           _(children_classes).must_include Aardi::Sitemap
+          _(children_classes).must_include Aardi::FeedMenu
         end
       end
 
@@ -90,6 +91,12 @@ class SiteSpec < Minitest::Spec
           capture_io { Aardi::Site.new.render }
 
           _(File.exist?(File.join(@tmpdir, 'hashes.txt'))).must_equal true
+        end
+
+        it 'writes the feed-menu under .well-known/' do
+          capture_io { Aardi::Site.new.render }
+
+          _(File.exist?(File.join(@tmpdir, '.well-known', 'feed-menu.json'))).must_equal true
         end
       end
     end
