@@ -2,7 +2,7 @@
 
 module Aardi
   class Metadata
-    KNOWN_KEYS = %w[Title Description Creation Updated Tags].freeze
+    KNOWN_KEYS = %w[Title Description Creation Updated Tags HomePriority TagPriority].freeze
 
     def initialize(yaml_str = '', source = nil)
       yaml = YAML.safe_load(yaml_str, permitted_classes: [Time])
