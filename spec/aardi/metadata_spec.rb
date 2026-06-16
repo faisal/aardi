@@ -74,6 +74,24 @@ class MetadataSpec < Minitest::Spec
       end
     end
 
+    describe '#draft?' do
+      it 'returns false when the Draft key is absent' do
+        _(Aardi::Metadata.new("Title: T\n").draft?).must_equal false
+      end
+
+      it 'returns true when Draft key has a truthy value' do
+        _(Aardi::Metadata.new("Title: T\nDraft: true\n").draft?).must_equal true
+      end
+
+      it 'returns true when Draft key has a falsy value (presence, not truthiness)' do
+        _(Aardi::Metadata.new("Title: T\nDraft: false\n").draft?).must_equal true
+      end
+
+      it 'returns true when Draft key is present with no value' do
+        _(Aardi::Metadata.new("Title: T\nDraft:\n").draft?).must_equal true
+      end
+    end
+
     describe '#empty?' do
       it 'is true for empty input and false otherwise' do
         _(Aardi::Metadata.new.empty?).must_equal true

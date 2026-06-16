@@ -148,6 +148,20 @@ class PostSpec < Minitest::Spec
       end
     end
 
+    describe '#draft?' do
+      it 'returns false when the Draft key is not in frontmatter' do
+        _(make_post.draft?).must_equal false
+      end
+
+      it 'returns true when the Draft key is present in frontmatter' do
+        _(make_post(extra_yaml: 'Draft: true').draft?).must_equal true
+      end
+
+      it 'returns true when Draft key is present with no value' do
+        _(make_post(extra_yaml: 'Draft:').draft?).must_equal true
+      end
+    end
+
     describe '#report_field_summary' do
       it 'prints creation, path, and title separated by pipes' do
         post = make_post(creation: Time.utc(2024, 1, 5, 0, 0, 0), name: 'my-post', title: 'My Title')

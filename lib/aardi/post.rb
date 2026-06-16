@@ -16,6 +16,7 @@ module Aardi
     end
 
     def creation = metadata.creation
+    def draft?   = metadata.draft?
 
     def feed_snippet
       @feed_snippet ||= Aardi.renderer.markup_feed_snippet(@src_content)

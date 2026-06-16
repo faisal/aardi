@@ -1,18 +1,24 @@
 # frozen_string_literal: true
 
 module Aardi
+  # :reek:TooManyInstanceVariables
   class Blog < AbstractBlog
     def initialize
       @posts = []
+      @draft_posts = []
       @blog_path = nil
       @archive_path = Config[:blog_archive_path]
       @tags = Tags.new
     end
 
     def <<(post)
-      @posts << post
-      archive << post
-      @tags << post
+      if post.draft?
+        @draft_posts << post
+      else
+        @posts << post
+        archive << post
+        @tags << post
+      end
     end
 
     def report_recent
@@ -32,7 +38,7 @@ module Aardi
     end
 
     def children
-      [archive, home, atom_feed, json_feed, *@tags]
+      [archive, home, atom_feed, json_feed, *@tags, *@draft_posts]
     end
 
     def feed_posts

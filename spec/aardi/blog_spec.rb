@@ -133,6 +133,43 @@ class BlogSpec < Minitest::Spec
       end
     end
 
+    describe 'draft post handling' do
+      def make_draft_post(creation)
+        post = StubPost.new(creation, name: 'draft-post', title: 'Draft Post', tags: %w[foo])
+        post.define_singleton_method(:draft?) { true }
+        post
+      end
+
+      it 'does not include a draft post in recent_posts (home page / feeds)' do
+        setup_config(blog_home_posts: 10)
+        draft = make_draft_post(Time.utc(2024, 6, 1))
+        blog = make_blog([draft])
+
+        _(blog.send(:recent_posts, :blog_home_posts)).must_be_empty
+      end
+
+      it 'does not route a draft post to the archive' do
+        draft = make_draft_post(Time.utc(2024, 6, 1))
+        archive = make_blog([draft]).send(:children).grep(Aardi::Archive).first
+
+        _(archive.content).wont_include 'Draft Post'
+      end
+
+      it 'does not route a draft post to tag listings' do
+        draft = make_draft_post(Time.utc(2024, 6, 1))
+        blog = make_blog([draft])
+
+        _(blog.tag_blogs).must_be_empty
+      end
+
+      it 'includes a draft post in children so it is still rendered' do
+        draft = make_draft_post(Time.utc(2024, 6, 1))
+        blog = make_blog([draft])
+
+        _(blog.send(:children)).must_include draft
+      end
+    end
+
     describe '#write_target' do
       it 'returns {} so rendering Blog writes no file of its own' do
         _(make_blog([]).send(:write_target)).must_equal({})

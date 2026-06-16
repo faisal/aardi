@@ -16,6 +16,7 @@ module Aardi
 
     def creation    = @yaml['Creation']
     def description = @yaml['Description']
+    def draft?      = @yaml.key?('Draft')
     def empty?      = @yaml.empty?
     def title       = @yaml['Title']
     def updated     = @yaml['Updated']

@@ -19,6 +19,8 @@ class StubPost
     "### #{@title}\n\nContent here.\n"
   end
 
+  def draft? = false
+
   def feed_snippet
     "<p>Snippet for #{@title}</p>"
   end
