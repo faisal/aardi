@@ -2,7 +2,7 @@
 
 module Aardi
   class Metadata
-    KNOWN_KEYS = %w[Title Description Creation Updated Tags HomePriority TagPriority].freeze
+    KNOWN_KEYS = %w[Title Description Creation Updated Tags HomePriority TagPriority Draft].freeze
 
     attr_reader :tags
 
