@@ -12,13 +12,11 @@ module Aardi
     end
 
     def <<(post)
-      if post.draft?
-        @draft_posts << post
-      else
-        @posts << post
-        archive << post
-        @tags << post
-      end
+      return @draft_posts << post if post.draft?
+
+      @posts << post
+      archive << post
+      @tags << post
     end
 
     def report_recent
