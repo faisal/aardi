@@ -42,7 +42,7 @@ module Aardi
     attr_reader :tag
 
     def children
-      [archive, home, atom_feed, json_feed]
+      [archive, home, feed(ATOMFeed), feed(JSONFeed)]
     end
   end
 end

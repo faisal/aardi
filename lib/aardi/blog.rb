@@ -35,12 +35,12 @@ module Aardi
       @archive ||= Archive.new(@archive_path, tag, @tags)
     end
 
-    def atom_feed
-      ATOMFeed.new(feed_posts, @blog_path, tag)
+    def children
+      [archive, home, feed(ATOMFeed), feed(JSONFeed), *@tags, *@draft_posts]
     end
 
-    def children
-      [archive, home, atom_feed, json_feed, *@tags, *@draft_posts]
+    def feed(feed_klass)
+      feed_klass.new(feed_posts, @blog_path, tag)
     end
 
     def feed_posts
@@ -49,10 +49,6 @@ module Aardi
 
     def home
       Home.new(recent_posts(:blog_home_posts), @archive_path, @blog_path, tag)
-    end
-
-    def json_feed
-      JSONFeed.new(feed_posts, @blog_path, tag)
     end
 
     def recent_posts(conf_key)
