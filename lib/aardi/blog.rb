@@ -19,8 +19,12 @@ module Aardi
       @tags << post
     end
 
+    def report_drafts
+      report_posts @draft_posts
+    end
+
     def report_recent
-      recent_posts(:blog_recent_posts).each(&:report_field_summary)
+      report_posts recent_posts(:blog_recent_posts)
     end
 
     def tag_blogs = @tags.tag_blogs
@@ -53,6 +57,10 @@ module Aardi
 
     def recent_posts(conf_key)
       @posts.max_by(Config[conf_key], &:creation)
+    end
+
+    def report_posts(posts)
+      posts.each(&:report_field_summary)
     end
 
     def tag = nil

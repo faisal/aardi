@@ -133,6 +133,45 @@ class BlogSpec < Minitest::Spec
       end
     end
 
+    describe '#report_drafts' do
+      def make_report_draft(name)
+        post = StubPost.new(Time.utc(2024, 6, 1), name: name, title: name, tags: [])
+        post.define_singleton_method(:draft?) { true }
+        post
+      end
+
+      it 'calls report_field_summary on every draft, in insertion order' do
+        reported = []
+        drafts = %w[first second third].map { |name| make_report_draft(name) }
+        drafts.each do |post|
+          post.define_singleton_method(:report_field_summary) { reported << name }
+        end
+
+        make_blog(drafts).report_drafts
+
+        _(reported).must_equal %w[first second third]
+      end
+
+      it 'reports only drafts, not published posts' do
+        reported = []
+        published = posts_across_years.each do |post|
+          post.define_singleton_method(:report_field_summary) { reported << name }
+        end
+        drafts = %w[draft-a draft-b].map { |name| make_report_draft(name) }
+        drafts.each do |post|
+          post.define_singleton_method(:report_field_summary) { reported << name }
+        end
+
+        make_blog(published + drafts).report_drafts
+
+        _(reported).must_equal %w[draft-a draft-b]
+      end
+
+      it 'is a no-op when there are no drafts' do
+        make_blog([]).report_drafts
+      end
+    end
+
     describe 'draft post handling' do
       def make_draft_post(creation)
         post = StubPost.new(creation, name: 'draft-post', title: 'Draft Post', tags: %w[foo])
