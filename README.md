@@ -60,6 +60,7 @@ Aardi implements as few features as reasonably possible.
   - `Title:` The page title, overriding what was in the first line of the content.
   - `Description:` The page description, for the HTML `<meta name="description" ...` block.
   - `Tags:` a space-delimited list of keywords for the post
+  - `Draft:` indicates this is a draft blog post. Draft post pages will publish but the post will not be included in day, month, year, or archive pages.
 - Aardi won't write out a file if the content is unchanged.
 - Aardi records checksums of rendered files in .content_hashes.txt, and won't write a file whose checksum maches its existing checksum. Deleting the .content_hashes.txt file may result in a more complete render pass on the next run.
 - I will attempt to follow [semver](https://semver.org) numbering.

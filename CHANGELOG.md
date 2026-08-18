@@ -1,3 +1,7 @@
+# v2.1.0
+
+- Add support for draft posts.
+
 # v2.0.2
 
 - No longer enable YJIT by default.
