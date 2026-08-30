@@ -15,7 +15,7 @@ module Aardi
     end
 
     # :reek:TooManyStatements
-    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable-next Metrics/MethodLength
     def feed_details(feed)
       feed.author do
         name(Config[:site_author])
@@ -32,7 +32,6 @@ module Aardi
         post_details(post, feed)
       end
     end
-    # rubocop:enable Metrics/MethodLength
 
     private
 
