@@ -6,7 +6,7 @@ module Aardi
   class Timekeeper
     def initialize
       repo = Git.open(Dir.pwd)
-      @commit_log = repo.log(:all).all
+      @commits = repo.log(:all).all
       @files = repo.ls_files.keys.sort_by { |file| File.mtime(file) }.reverse!
       @updated = 0
       @prior_summary_length = 0
@@ -25,7 +25,7 @@ module Aardi
     private
 
     def author_date(path)
-      @commit_log.path(path).execute.first&.author_date
+      @commits.path(path).execute.first&.author_date
     end
 
     def fix_mtime?(path, author_date)
