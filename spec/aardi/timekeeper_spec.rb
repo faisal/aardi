@@ -72,6 +72,16 @@ class TimekeeperSpec < Minitest::Spec
       _(File.mtime('staged.txt')).must_equal staged_mtime
     end
 
+    it 'filters the log by path when a tracked file shares a name with a branch' do
+      author_date = commit_file('release', 'r', Time.utc(2024, 8, 8, 12, 0, 0))
+      system('git', 'branch', 'release')
+      FileUtils.touch('release', mtime: author_date + 3600)
+
+      capture_io { Aardi::Timekeeper.new.run }
+
+      _(File.mtime('release')).must_equal author_date
+    end
+
     it 'iterates files in descending mtime order' do
       commit_file('older.txt', 'o', Time.utc(2024, 7, 1, 12, 0, 0))
       commit_file('newer.txt', 'n', Time.utc(2024, 7, 2, 12, 0, 0))

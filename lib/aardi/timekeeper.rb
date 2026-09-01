@@ -25,7 +25,7 @@ module Aardi
     private
 
     def author_date(path)
-      @commit_log.object(path).execute.first&.author_date
+      @commit_log.path(path).execute.first&.author_date
     end
 
     def fix_mtime?(path, author_date)
