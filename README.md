@@ -45,6 +45,7 @@ Aardi implements as few features as reasonably possible.
   - Blog commands:
     - `rake new` creates a new empty blog post and reports the path
     - `rake recent` lists recent blog post dates, source paths, and titles
+    - `rake drafts` lists draft blog post dates, source paths, and titles
   - Utility commands:
     - `rake now` produces an Updated header with current timestamp, for use in blog post metadata
     - `rake fixtimes` fixes the timestamps of files based on the latest `git` modification timestamp.
@@ -54,13 +55,15 @@ Aardi implements as few features as reasonably possible.
     - _Note:_ list the blog path and posts path in `files_to_exclude` to prevent them being rendered in place as well. This is in the default config.yml.
     - The blog will also have sub-blogs for any and all keywords you add to a Tags: directive on posts.
 - The title of the page is extracted from the first line of the .md file content. You can override this with a Title: directive in the metadata.
-- Pages can have metadata, which is a key-value block followed by an empty line and then `----` on a line by itself. See the results of `rake new` for a basic example. Useful keywords there are:
-  - `Creation:` The creation date and time for a blog posts.
+-   Pages can have metadata, which is a YAML key-value block followed by `----` on a line by itself. By convention there is an empty line before the `----`. See the results of `rake new` for a basic example. The full file format is specified in [docs/file-format.md](docs/file-format.md). The recognized keywords are:
+  - `Creation:` The creation date and time for a blog post. Required for blog posts.
   - `Updated:` The updated date and time for a blog post. You can get this information easily with `rake now`.
   - `Title:` The page title, overriding what was in the first line of the content.
   - `Description:` The page description, for the HTML `<meta name="description" ...` block.
-  - `Tags:` a space-delimited list of keywords for the post
-  - `Draft:` indicates this is a draft blog post. Draft post pages will publish but the post will not be included in day, month, year, or archive pages.
+  - `Tags:` a space-delimited list of keywords for the post. Each tag gets a sub-blog under `blog_tags_path`, and the post links to its tags after its bookmark link.
+  - `Draft:` indicates this is a draft blog post. Any value (even `false`) makes the post a draft. Draft post pages will publish but the post will not be included in the blog home page, day, month, year, or archive pages, feeds, or tag sub-blogs.
+  - Aardi ignores other keywords, and prints a warning for each one.
+- Do not put a line that is exactly `----` in the content of a page or post. Aardi uses the last `----` line in the file as the metadata separator.
 - Aardi won't write out a file if the content is unchanged.
 - Aardi records checksums of rendered files in .content_hashes.txt, and won't write a file whose checksum maches its existing checksum. Deleting the .content_hashes.txt file may result in a more complete render pass on the next run.
 - I will attempt to follow [semver](https://semver.org) numbering.
