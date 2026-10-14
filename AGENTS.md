@@ -30,3 +30,5 @@ NEVER commit unless directed to do so by the developer.
 - Use Flog (for example, `bundle exec flog -da lib`) to monitor for complexity when the developer requires.
 - Use hyperfine (for example, `hyperfine -w 1 -r 16 rake`) to confirm process runtime.
 - Prefer use of an LSP (for example Ruby-LSP) over `grep` or `read` when navigating code.
+
+@RTK.md

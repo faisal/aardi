@@ -7,3 +7,5 @@ doc/
 tmp/
 docs/superpowers/
 coverage/
+
+/.claude/
