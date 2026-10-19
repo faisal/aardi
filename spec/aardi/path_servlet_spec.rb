@@ -19,7 +19,6 @@ class PathServletSpec < Minitest::Spec
       FileUtils.rm_rf(@tmpdir)
     end
 
-    # :reek:TooManyStatements
     def fake_server
       server = Object.new
       logger = WEBrick::Log.new(File::NULL)

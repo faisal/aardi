@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Aardi
-  # :reek:DataClump
   class Template
     PLACEHOLDER_MAIN = '__PLACEHOLDER_MAIN__'
     PLACEHOLDER_TITLE = '__PLACEHOLDER_TITLE__'
@@ -44,7 +43,6 @@ module Aardi
       str.gsub('&', '&amp;').gsub('<', '&lt;').gsub('>', '&gt;')
     end
 
-    # :reek:FeatureEnvy
     def update_description_if_present(meta)
       return unless meta
 

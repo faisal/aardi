@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 module Aardi
-  # :reek:TooManyInstanceVariables
   class Renderer
     attr_reader :content_hashes, :html_files, :sitemap
 
-    # :reek:ControlParameter
     def initialize(html_files: nil, content_hashes: nil, sitemap: nil)
       @html_files = html_files || Dir.glob('./**/*.html').to_set
       @content_hashes = content_hashes || ContentHashes.new(Config[:content_hashes_path])

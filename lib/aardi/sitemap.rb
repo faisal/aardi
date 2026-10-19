@@ -2,7 +2,6 @@
 
 module Aardi
   class Sitemap
-    # :reek:NestedIterators
     def content
       sitemap = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do
         urlset(xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9') do |urlset|
@@ -34,7 +33,6 @@ module Aardi
 
     # Absent a block variable on Nokogiri::XML::Builder.new, this
     # is called by the builder, not sitemap itself, and must be public.
-    # :reek:FeatureEnvy
     def url_details(path, details, urlset)
       missing_path(path) unless File.exist?("./#{path}")
 

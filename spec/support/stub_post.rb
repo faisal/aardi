@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# :reek:TooManyInstanceVariables
 class StubPost
   attr_reader :mtime, :creation, :updated, :title, :name, :url, :path, :tags
 

@@ -31,8 +31,14 @@ Metrics/ClassLength:
     - "spec/**/*"
 
 Metrics/MethodLength:
+  AllowedPatterns:
+    - '\Afeed_details\z'
   Exclude:
     - "spec/**/*"
+
+Rake/Desc:
+  Exclude:
+    - "lib/aardi/tasks/load_config.rake"
 
 Style/Documentation:
   Enabled: false

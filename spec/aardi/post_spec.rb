@@ -14,7 +14,6 @@ class PostSpec < Minitest::Spec
       FileUtils.rm_rf(@tmpdir)
     end
 
-    # :reek:LongParameterList
     def make_post(creation: Time.now, title: 'My Post', name: 'my-post', extra_yaml: '')
       content = "Creation: #{creation.iso8601}\n#{extra_yaml}\n----\n### #{title}\n\nBody text.\n"
       path = File.join(@tmpdir, "#{name}.md")

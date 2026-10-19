@@ -10,7 +10,6 @@ module Aardi
       @html_files = renderer.html_files
     end
 
-    # :reek:TooManyStatements
     def write
       hash = @src.output_hash
       return { @path => hash } unless should_write?

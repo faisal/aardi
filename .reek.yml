@@ -1,7 +1,44 @@
+---
 detectors:
+  Attribute:
+    exclude:
+      - "Aardi#renderer"
+      - "TestAbstractBlog#target_path"
+  ControlParameter:
+    exclude:
+      - "Aardi::Renderer#initialize"
+  FeatureEnvy:
+    exclude:
+      - "Aardi::ATOMFeed#post_details"
+      - "Aardi::Sitemap#url_details"
+      - "Aardi::Template#update_description_if_present"
+      - "SpecHelpers#setup_config"
+  InstanceVariableAssumption:
+    enabled: false
   IrresponsibleModule:
     enabled: false
+  LongParameterList:
+    exclude:
+      - "PostSpec#make_post"
+  NestedIterators:
+    exclude:
+      - "Aardi::Sitemap#content"
+  TooManyInstanceVariables:
+    exclude:
+      - "Aardi::Blog"
+      - "Aardi::Day"
+      - "Aardi::Month"
+      - "Aardi::Renderer"
+      - "StubPost"
+  TooManyStatements:
+    exclude:
+      - "initialize"
+      - "Aardi::ATOMFeed#feed_details"
+      - "Aardi::ATOMFeed#post_details"
+      - "Aardi::FileTarget#write"
+      - "ArchiveSpec#make_archive_with_tags"
+      - "PathServletSpec#fake_server"
+      - "SpecHelpers#setup_config"
+      - "TimekeeperSpec#commit_file"
   UtilityFunction:
-    enabled: false
-  InstanceVariableAssumption:
     enabled: false

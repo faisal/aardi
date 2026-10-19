@@ -3,7 +3,6 @@
 require 'spec_helper'
 
 class TestAbstractBlog < Aardi::AbstractBlog
-  # :reek:Attribute
   attr_accessor :target_path
 
   def content = "# Heading\n\nBody.\n"

@@ -50,7 +50,6 @@
 
 module Aardi
   class << self
-    # :reek:Attribute
     attr_writer :renderer
 
     def renderer = @renderer ||= Renderer.new

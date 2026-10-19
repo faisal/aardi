@@ -16,8 +16,6 @@ module SpecHelpers
     File.join(SAMPLES_DIR, filename)
   end
 
-  # :reek:TooManyStatements
-  # :reek:FeatureEnvy
   def setup_config(overrides = {})
     Aardi.reset!
     base = YAML.safe_load_file(File.join(SAMPLES_DIR, 'minimal_config.yml'))
@@ -37,7 +35,6 @@ module SpecHelpers
     Aardi::ContentHashes.new('/nonexistent_test_hashes')
   end
 
-  # :reek:TooManyStatements
   def stub_sitemap
     Object.new.tap do |stub|
       stub.define_singleton_method(:record_mtime) { |*| nil }

@@ -14,8 +14,6 @@ module Aardi
       atom_feed.to_xml
     end
 
-    # :reek:TooManyStatements
-    # rubocop:disable-next Metrics/MethodLength
     def feed_details(feed)
       feed.author do
         name(Config[:site_author])
@@ -37,8 +35,6 @@ module Aardi
 
     def feed_file = FEED_FILE
 
-    # :reek:FeatureEnvy
-    # :reek:TooManyStatements
     def post_details(post, feed)
       feed.entry do
         post_url = post.url

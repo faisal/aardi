@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Aardi
-  # :reek:TooManyInstanceVariables
   class Blog < AbstractBlog
     def initialize
       @posts = []

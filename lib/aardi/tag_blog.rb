@@ -2,7 +2,6 @@
 
 module Aardi
   class TagBlog < Blog
-    # :reek:DuplicateMethodCall
     def initialize(tag)
       super()
       @tag = tag

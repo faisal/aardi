@@ -96,7 +96,6 @@ class TimekeeperSpec < Minitest::Spec
 
   private
 
-  # :reek:TooManyStatements
   def commit_file(path, content, author_date)
     File.write(path, content)
     system('git', 'add', path)

@@ -27,7 +27,6 @@ class ArchiveSpec < Minitest::Spec
     end
 
     describe 'with tags' do
-      # :reek:TooManyStatements
       def make_archive_with_tags(posts)
         tags = Aardi::Tags.new
         [StubPost.new(Time.utc(2024, 1, 1), tags: ['foo']),

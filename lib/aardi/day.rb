@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Aardi
-  # :reek:TooManyInstanceVariables
   class Day < AbstractBlog
     def initialize(year, month, key, archive_path, tag = nil)
       @year = year
