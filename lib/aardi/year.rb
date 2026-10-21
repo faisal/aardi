@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module Aardi
-  class Year < AbstractBlog
+  class Year
+    include Renderable
+
     def initialize(key, archive_path, tag = nil)
       @key = key
       @archive_path = archive_path

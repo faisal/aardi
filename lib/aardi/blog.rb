@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module Aardi
-  class Blog < AbstractBlog
+  class Blog
+    include Renderable
+
     def initialize
       @posts = []
       @draft_posts = []

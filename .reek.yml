@@ -3,7 +3,7 @@ detectors:
   Attribute:
     exclude:
       - "Aardi#renderer"
-      - "TestAbstractBlog#target_path"
+      - "TestRenderable#target_path"
   ControlParameter:
     exclude:
       - "Aardi::Renderer#initialize"

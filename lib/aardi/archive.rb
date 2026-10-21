@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module Aardi
-  class Archive < AbstractBlog
+  class Archive
+    include Renderable
+
     def initialize(archive_path, tag = nil, tags = nil)
       @archive_path = archive_path
       @tag = tag

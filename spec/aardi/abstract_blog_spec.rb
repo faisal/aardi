@@ -2,74 +2,25 @@
 
 require 'spec_helper'
 
-class TestAbstractBlog < Aardi::AbstractBlog
-  attr_accessor :target_path
-
-  def content = "# Heading\n\nBody.\n"
-
-  def title = 'Test Blog'
-end
-
 class AbstractBlogSpec < Minitest::Spec
   describe Aardi::AbstractBlog do
-    before do
-      setup_config
-      @tmpdir = Dir.mktmpdir
-      make_renderer(
-        html_files: Set.new,
-        content_hashes: Aardi::ContentHashes.new(File.join(@tmpdir, 'hashes.txt'))
-      )
+    let(:expected_warning) { deprecation_message('Aardi::AbstractBlog', 'Aardi::Renderable') }
+
+    it 'includes Renderable' do
+      _(Aardi::AbstractBlog.include?(Aardi::Renderable)).must_equal true
     end
 
-    after do
-      FileUtils.rm_rf(@tmpdir)
-    end
+    describe 'deprecation warning' do
+      it 'names the caller location when a subclass is instantiated' do
+        klass = Class.new(Aardi::AbstractBlog)
 
-    describe '#metadata' do
-      it 'returns a Metadata instance' do
-        _(TestAbstractBlog.new.metadata).must_be_kind_of Aardi::Metadata
+        _ { klass.new }.must_output '', deprecation_warning_at(__FILE__, __LINE__, expected_warning)
       end
 
-      it 'memoizes the same Metadata instance' do
-        blog = TestAbstractBlog.new
+      it 'is issued when a subclass #initialize does not call super' do
+        klass = Class.new(Aardi::AbstractBlog) { define_method(:initialize) { |posts| @posts = posts } }
 
-        _(blog.metadata).must_be_same_as blog.metadata
-      end
-    end
-
-    describe '#mtime' do
-      it 'returns nil when default #children is empty' do
-        _(TestAbstractBlog.new.mtime).must_be_nil
-      end
-    end
-
-    describe '#render' do
-      it 'writes the target file via the default #write_target' do
-        blog = TestAbstractBlog.new
-        blog.target_path = File.join(@tmpdir, 'test.html')
-
-        capture_io { blog.render }
-
-        _(File.exist?(blog.target_path)).must_equal true
-      end
-
-      it 'rendered output includes the content body' do
-        blog = TestAbstractBlog.new
-        blog.target_path = File.join(@tmpdir, 'test.html')
-
-        capture_io { blog.render }
-
-        _(File.read(blog.target_path)).must_include 'Heading'
-      end
-
-      it 'returns a hash mapping the target path to its output checksum' do
-        blog = TestAbstractBlog.new
-        blog.target_path = File.join(@tmpdir, 'test.html')
-        result = nil
-        capture_io { result = blog.render }
-
-        _(result).must_be_kind_of Hash
-        _(result.keys).must_include blog.target_path
+        _(deprecation_count(expected_warning) { klass.new([]) }).must_equal 1
       end
     end
   end

@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module Aardi
-  class Site < AbstractBlog
+  class Site
+    include Renderable
+
     def initialize
       posts.each do |post|
         blog << post

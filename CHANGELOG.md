@@ -1,3 +1,8 @@
+# Unreleased
+
+- Move shared render behavior from AbstractBlog class to Renderable module.
+  AbstractBlog remains as a temporary compatibility shim but prints a deprecation warning on use.
+
 # v2.1.0
 
 - Add support for draft posts.

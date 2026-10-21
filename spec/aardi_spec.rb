@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'open3'
+require 'rbconfig'
 
 class AardiSpec < Minitest::Spec
   describe Aardi do
@@ -44,6 +46,29 @@ class AardiSpec < Minitest::Spec
         make_renderer
 
         _(Aardi.renderer).wont_be_same_as before_reset
+      end
+    end
+
+    describe "require 'aardi'" do
+      def run_script(script)
+        lib_dir = File.expand_path('../lib', __dir__)
+        Open3.capture3(RbConfig.ruby, '-I', lib_dir, '-e', script)
+      end
+
+      %w[AbstractBlog].each do |shim|
+        it "loads #{shim}" do
+          output, _err, status = run_script("require 'aardi'; print defined?(Aardi::#{shim}).inspect")
+
+          _(status.success?).must_equal true
+          _(output).must_equal '"constant"'
+        end
+      end
+
+      it 'prints no warnings on load' do
+        _output, err, status = run_script("require 'aardi'")
+
+        _(status.success?).must_equal true
+        _(err).must_be_empty
       end
     end
   end

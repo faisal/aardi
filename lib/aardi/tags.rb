@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module Aardi
-  class Tags < AbstractBlog
+  class Tags
+    include Renderable
+
     def initialize
       @index = Hash.new { |hash, tag| hash[tag] = TagBlog.new(tag) }
     end

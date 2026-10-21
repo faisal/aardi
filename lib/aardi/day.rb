@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module Aardi
-  class Day < AbstractBlog
+  class Day
+    include Renderable
+
     def initialize(year, month, key, archive_path, tag = nil)
       @year = year
       @month = month

@@ -2,33 +2,11 @@
 
 module Aardi
   class AbstractBlog
-    attr_reader :key
+    include Renderable
 
-    def metadata = (@metadata ||= Metadata.new)
-
-    def mtime = children.max_by(&:mtime)&.mtime
-
-    def render
-      children.each_with_object({}) { |child, acc| acc.merge!(child.render) }.merge!(write_target)
-    end
-
-    def title
-      return "#{base_title} - #{@tag}" if @tag
-
-      base_title
-    end
-
-    private
-
-    def base_title = Config[:site_title]
-
-    def children
-      []
-    end
-
-    def write_target
-      source = PageContent.new(content, title, metadata)
-      PageTarget.new(source, target_path).write
+    def self.new(...)
+      Deprecation.warn_once(AbstractBlog, self, 'Aardi::Renderable')
+      super
     end
   end
 end

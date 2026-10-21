@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 module Aardi
-  class Post < AbstractBlog
+  class Post
+    include Renderable
     include AbstractPageSupport
 
     def initialize(path)

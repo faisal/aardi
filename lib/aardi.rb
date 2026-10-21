@@ -13,6 +13,7 @@
 
 %w[
   errors
+  deprecation
   version
   config
   metadata
@@ -20,6 +21,7 @@
   content_hashes
   custom_renderer
   renderer
+  renderable
   abstract_blog
   abstract_page_support
   abstract_feed

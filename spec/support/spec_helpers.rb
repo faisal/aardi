@@ -4,6 +4,16 @@ module SpecHelpers
   SAMPLES_DIR = File.expand_path('../samples', __dir__)
   OMIT = Object.new.freeze
 
+  def deprecation_count(message, &) = capture_io(&).last.scan(message).size
+
+  def deprecation_message(shim, replacement)
+    "#{shim} is deprecated and will be removed in a future release; use #{replacement} instead."
+  end
+
+  def deprecation_warning_at(file, line, message)
+    /\A#{Regexp.escape(file)}:#{line}: warning: #{Regexp.escape(message)}\n\z/
+  end
+
   def make_renderer(html_files: Set.new, content_hashes: stub_content_hashes, sitemap: stub_sitemap)
     Aardi.renderer = Aardi::Renderer.new(html_files:, content_hashes:, sitemap:)
   end
