@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Aardi
-  class ATOMFeed < AbstractFeed
+  class ATOMFeed < Feed
     FEED_FILE = 'index.xml'
 
     def content

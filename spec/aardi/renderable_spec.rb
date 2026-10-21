@@ -76,7 +76,7 @@ class RenderableSpec < Minitest::Spec
     end
 
     describe 'classes that include Renderable directly' do
-      [Aardi::AbstractFeed, Aardi::Archive, Aardi::Blog, Aardi::Day, Aardi::Home,
+      [Aardi::Archive, Aardi::Blog, Aardi::Day, Aardi::Feed, Aardi::Home,
        Aardi::Month, Aardi::Post, Aardi::Site, Aardi::Tags, Aardi::Year].each do |klass|
         it "#{klass} includes Renderable" do
           _(klass.include?(Aardi::Renderable)).must_equal true

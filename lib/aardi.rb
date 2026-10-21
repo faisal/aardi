@@ -25,6 +25,7 @@
   abstract_blog
   page_support
   abstract_page_support
+  feed
   abstract_feed
   file_target
   page_target

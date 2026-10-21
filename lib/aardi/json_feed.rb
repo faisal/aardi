@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Aardi
-  class JSONFeed < AbstractFeed
+  class JSONFeed < Feed
     FEED_FILE = 'index.json'
 
     def content

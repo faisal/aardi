@@ -1,9 +1,10 @@
 # Unreleased
 
 - Updated objects:
-  Shared render logic moved from AbstractBlog class to Renderable module.
-  Page and post logic from AbstractPageSupport to PageSupport.
-  AbstractBlog and AbstractPageSupport remain as temporary compatibility shims (emiting deprecation warnings), but will be removed in the future.
+  Shared render logic moved from AbstractBlog class to new Renderable module.
+  Page and post logic moved AbstractPageSupport to PageSupport.
+  Feed logic moved from AbstractFeed to Feed.
+  The old names remain as temporary compatibility shims (emiting deprecation warnings), but will be removed in the future.
 
 # v2.1.0
 
