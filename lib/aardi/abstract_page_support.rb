@@ -2,25 +2,13 @@
 
 module Aardi
   module AbstractPageSupport
-    def metadata
-      @metadata
-    end
+    include PageSupport
 
-    def mtime
-      @mtime
-    end
+    def self.deprecated_by(user) = Deprecation.warn_once(self, user, 'Aardi::PageSupport')
+    private_class_method :deprecated_by
 
-    def parse_source(path)
-      File.open(path, encoding: 'utf-8') do |file|
-        parts = file.read.rpartition("\n----\n")
-        @metadata = Metadata.new(parts.first, path)
-        @src_content = parts.last
-        @mtime = file.mtime.utc
-      end
-    end
+    def self.extended(base) = deprecated_by(base.class)
 
-    def title
-      metadata.title || @src_content[/\A(?:#+ +)?([^\n]+)/, 1]
-    end
+    def self.included(base) = deprecated_by(base)
   end
 end

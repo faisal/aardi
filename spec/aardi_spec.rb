@@ -55,7 +55,7 @@ class AardiSpec < Minitest::Spec
         Open3.capture3(RbConfig.ruby, '-I', lib_dir, '-e', script)
       end
 
-      %w[AbstractBlog].each do |shim|
+      %w[AbstractBlog AbstractPageSupport].each do |shim|
         it "loads #{shim}" do
           output, _err, status = run_script("require 'aardi'; print defined?(Aardi::#{shim}).inspect")
 

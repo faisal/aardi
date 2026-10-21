@@ -3,7 +3,7 @@
 module Aardi
   class Post
     include Renderable
-    include AbstractPageSupport
+    include PageSupport
 
     def initialize(path)
       @path = path

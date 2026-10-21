@@ -1,7 +1,9 @@
 # Unreleased
 
-- Move shared render behavior from AbstractBlog class to Renderable module.
-  AbstractBlog remains as a temporary compatibility shim but prints a deprecation warning on use.
+- Updated objects:
+  Shared render logic moved from AbstractBlog class to Renderable module.
+  Page and post logic from AbstractPageSupport to PageSupport.
+  AbstractBlog and AbstractPageSupport remain as temporary compatibility shims (emiting deprecation warnings), but will be removed in the future.
 
 # v2.1.0
 

@@ -97,10 +97,10 @@ class RenderableSpec < Minitest::Spec
     end
 
     describe 'Post' do
-      it 'puts AbstractPageSupport before Renderable in its ancestors' do
+      it 'puts PageSupport before Renderable in its ancestors' do
         ancestors = Aardi::Post.ancestors
 
-        _(ancestors.index(Aardi::AbstractPageSupport)).must_be :<, ancestors.index(Aardi::Renderable)
+        _(ancestors.index(Aardi::PageSupport)).must_be :<, ancestors.index(Aardi::Renderable)
       end
     end
   end

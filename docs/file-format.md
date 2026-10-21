@@ -4,7 +4,7 @@ This document describes the structure and content rules for `.md` files in this 
 
 ## File Format Overview
 
-Every `.md` file is split into two sections — optional YAML frontmatter and markdown content — separated by a four-dash delimiter. The parsing is performed in `AbstractPageSupport#parse_source` using Ruby's `String#rpartition`:
+Every `.md` file is split into two sections — optional YAML frontmatter and markdown content — separated by a four-dash delimiter. The parsing is performed in `PageSupport#parse_source` using Ruby's `String#rpartition`:
 
 ```
 [YAML frontmatter]
@@ -27,7 +27,7 @@ Frontmatter is parsed by `Metadata` with `YAML.safe_load` with `Time` as a permi
 |---------------|--------|----------------|---------|
 | `Creation`    | `Time` | `Post`         | The post's publication date. Determines the output path (`{blog_archive_path}/YYYY/MM/DD/{name}.html`) and sort order. **Required for blog posts**; a post without it raises `<path>: missing Creation metadata`. |
 | `Updated`     | `Time` | `Post`         | Last-modified date. Falls back to `Creation` if absent. Used in ATOM and JSON feeds. |
-| `Title`       | String | `AbstractPageSupport`, `Template` | Explicit page/post title. If omitted, the title is extracted from the first line of content by stripping any leading `#+ ` heading prefix. |
+| `Title`       | String | `PageSupport`, `Template` | Explicit page/post title. If omitted, the title is extracted from the first line of content by stripping any leading `#+ ` heading prefix. |
 | `Description` | String | `Template`     | Sets the `content` of the template's `<meta name="description">` tag. If absent, the template's own `content` value is kept. Has no effect if the template has no such tag. |
 | `Tags`        | String | `Post`, `Tags`, `TagBlog` | A space-delimited list of tags, e.g. `Tags: covid science`. The list is split on whitespace and sorted. Each tag gets a sub-blog (see [Tags](#tags)). Must be a string, not a YAML list. |
 | `Draft`       | any    | `Post`, `Blog` | Marks a post as a draft (see [Drafts](#drafts)). Only the presence of the key matters: `Draft: false` also marks a draft. |

@@ -2,7 +2,7 @@
 
 module Aardi
   class Page
-    include AbstractPageSupport
+    include PageSupport
 
     def initialize(path)
       @path = path

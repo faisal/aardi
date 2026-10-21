@@ -4,46 +4,30 @@ require 'spec_helper'
 
 class AbstractPageSupportSpec < Minitest::Spec
   describe Aardi::AbstractPageSupport do
-    describe '#parse_source' do
-      it 'splits out YAML frontmatter and content at the ---- separator' do
-        page = page_by_sample_path 'page_with_title.md'
+    let(:expected_warning) { deprecation_message('Aardi::AbstractPageSupport', 'Aardi::PageSupport') }
 
-        _(page.metadata).wont_be_empty
-        _(page.content).wont_be_empty
-      end
-
-      it 'treats the entire file as content when there is no separator' do
-        page = page_by_sample_path 'page_no_frontmatter.md'
-
-        _(page.metadata).must_be_empty
-        _(page.content).wont_be_empty
-      end
-
-      it 'parses Time values in frontmatter when permitted' do
-        page = page_by_sample_path 'post_with_creation.md'
-
-        _(page.metadata.creation).must_be_kind_of Time
-      end
-
-      it 'records the file mtime' do
-        page_path = sample_path 'page_with_title.md'
-        page = page_by_sample_path 'page_with_title.md'
-
-        _(page.mtime).must_equal File.mtime(page_path).utc
-      end
+    it 'includes PageSupport' do
+      _(Aardi::AbstractPageSupport.include?(Aardi::PageSupport)).must_equal true
     end
 
-    describe 'title' do
-      it 'extracts title from the first markup heading when no metadata Title' do
-        page = page_by_sample_path 'page_heading_title.md'
+    describe 'deprecation warning' do
+      it 'names the caller location when included in a class' do
+        klass = Class.new
 
-        _(page.title).must_equal 'My Heading'
+        _ { klass.include(Aardi::AbstractPageSupport) }
+          .must_output '', deprecation_warning_at(__FILE__, __LINE__ - 1, expected_warning)
       end
 
-      it 'returns the metadata Title when present' do
-        page = page_by_sample_path 'page_explicit_title.md'
+      it 'is issued when an object is extended' do
+        klass = Class.new
 
-        _(page.title).must_equal 'Explicit Title'
+        _(deprecation_count(expected_warning) { klass.new.extend(Aardi::AbstractPageSupport) }).must_equal 1
+      end
+
+      it 'is issued only once for each class of extended objects' do
+        klass = Class.new
+
+        _(deprecation_count(expected_warning) { 2.times { klass.new.extend(Aardi::AbstractPageSupport) } }).must_equal 1
       end
     end
   end

@@ -23,6 +23,7 @@
   renderer
   renderable
   abstract_blog
+  page_support
   abstract_page_support
   abstract_feed
   file_target
